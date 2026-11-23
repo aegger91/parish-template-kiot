@@ -1,6 +1,6 @@
 ---
 /* Orthodox pictograms on a 24px grid, stroked in currentColor.
-   Forms: onion-dome church, chalice with Orthodox cross, chained censer,
+   Forms: rounded Byzantine-dome church, chalice with Orthodox cross, chained censer,
    beeswax taper, komboskini, Gospel book with cross, icon frame, bells. */
 import Cross from './Cross.astro';
 
@@ -22,10 +22,10 @@ const knots = Array.from({ length: 12 }, (_, i) => {
   <svg class:list={['pictogram', cls]} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
     {name === 'church' && (
       <>
-        {/* Cross atop onion dome */}
+        {/* Cross atop rounded Byzantine dome */}
         <path d="M12 1.1v2.6M10.7 2.4h2.6" stroke-width="1.35" />
-        {/* Onion dome on drum */}
-        <path d="M8.1 9.4C7.1 8.2 7.3 6.3 9 5.2C10.3 4.35 11.15 3.35 12 2.85C12.85 3.35 13.7 4.35 15 5.2C16.7 6.3 16.9 8.2 15.9 9.4" />
+        {/* Hemispherical dome on drum (Greek form — not onion) */}
+        <path d="M8.1 9.4A3.9 5.5 0 0 1 15.9 9.4" />
         <path d="M8.1 9.4v2.6h7.8V9.4" />
         <path d="M10.2 10.2v1M12 10.2v1M13.8 10.2v1" stroke-width="1.2" />
         {/* Nave and side bays */}
@@ -93,9 +93,9 @@ const knots = Array.from({ length: 12 }, (_, i) => {
     )}
     {name === 'bells' && (
       <>
-        {/* Belfry with onion cupola, not a Western steeple */}
+        {/* Belfry with rounded Byzantine cupola, not onion / not a Western steeple */}
         <path d="M12 1.2v1.8M11 2.1h2" stroke-width="1.2" />
-        <path d="M9.2 6.2C8.6 5.4 8.7 4.2 9.8 3.6C10.6 3.1 11.3 2.4 12 2.1C12.7 2.4 13.4 3.1 14.2 3.6C15.3 4.2 15.4 5.4 14.8 6.2" />
+        <path d="M9.2 6.2A2.8 3.2 0 0 1 14.8 6.2" />
         <path d="M9.2 6.2v1.6h5.6V6.2" />
         <path d="M3.6 21.2V9.4a8.4 8.4 0 0 1 16.8 0v11.8" />
         <path d="M12 9.2c-2.4 0-3.4 1.9-3.4 4.3v2.5l-1.2 1.7h9.2l-1.2-1.7v-2.5c0-2.4-1-4.3-3.4-4.3Z" />

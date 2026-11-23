@@ -1,13 +1,34 @@
 /*
   The single cross used everywhere in the template (Cross.astro and client-rendered markup).
-  - byzantine: equal-armed Greek cross with flared arms and bead finials (default)
+  - byzantine: equal-armed Greek cross with flared arms and bead finials (default for Greek/non-Slavic)
   - icxc: the Byzantine cross with IC XC / NI KA in the quadrants, titla over IC and XC
-  - slavic: eight-pointed (three-bar) Russian cross:
+  - slavic: eight-pointed (three-bar) Russian cross — ONLY when a Slavic locale is active:
       short top titulus bar, long middle crossbar, lower footrest (suppedaneum)
       slanting UP on the viewer's LEFT and DOWN on the viewer's RIGHT.
       Never mirrored: no scaleX(-1), no RTL flip, no dir="rtl" transform.
 */
 export type CrossVariant = 'byzantine' | 'icxc' | 'slavic';
+
+/** Language codes that traditionally use the three-bar (Slavic) cross. */
+const SLAVIC_LANGS = new Set([
+  'ru', 'uk', 'be', 'sr', 'bg', 'mk', 'cu', 'cs', 'sk', 'hr', 'bs', 'cnr', 'sla',
+]);
+
+/** True when `lang` is a Slavic Orthodox locale (ru, uk, sr, bg, …). */
+export function isSlavicLang(lang?: string | null): boolean {
+  if (!lang) return false;
+  const code = lang.toLowerCase().split(/[-_]/)[0];
+  return SLAVIC_LANGS.has(code);
+}
+
+/**
+ * Default cross variant for a page language.
+ * Greek / English / other non-Slavic → Byzantine; Slavic locales → three-bar.
+ * Explicit `icxc` / `byzantine` / `slavic` props still win when callers pass them.
+ */
+export function defaultCrossVariant(lang?: string | null): CrossVariant {
+  return isSlavicLang(lang) ? 'slavic' : 'byzantine';
+}
 
 const ARM = 'M-5.2 -7 L-8.6 -36 Q0 -39.5 8.6 -36 L5.2 -7 Z';
 

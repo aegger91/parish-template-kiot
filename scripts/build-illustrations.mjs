@@ -205,26 +205,23 @@ function cypress(x, h, base = GROUND) {
 }
 
 /**
- * Orthodox onion (bulbous) dome sitting on a drum base.
+ * Rounded Byzantine (hemispherical) dome on a drum — Greek form, not onion/bulbous.
  * `h` is tip-to-base height; base width is `2 * dx`.
  */
-function onionDome(cx, baseY, dx, h, a = fill(LIGHT)) {
+function byzantineDome(cx, baseY, dx, h, a = fill(LIGHT)) {
   const tip = baseY - h;
-  const bulgeX = dx * 1.22;
   let s = path(
     `M${pt(cx - dx, baseY)}` +
-      `C${pt(cx - bulgeX, baseY - h * 0.06)} ${pt(cx - bulgeX, tip + h * 0.52)} ${pt(cx - dx * 0.32, tip + h * 0.2)}` +
-      `Q${pt(cx, tip)} ${pt(cx + dx * 0.32, tip + h * 0.2)}` +
-      `C${pt(cx + bulgeX, tip + h * 0.52)} ${pt(cx + bulgeX, baseY - h * 0.06)} ${pt(cx + dx, baseY)}Z`,
+      `A${r2(dx)} ${r2(h)} 0 0 1 ${pt(cx + dx, baseY)}Z`,
     a,
   );
-  // soft highlight ridges (not a Western steeple silhouette)
-  s += path(`M${pt(cx, tip)}Q${pt(cx - dx * 0.55, tip + h * 0.28)} ${pt(cx - dx * 0.72, baseY - h * 0.08)}`, join_(sw(1.5), 'stroke-opacity="0.55"'));
-  s += path(`M${pt(cx, tip)}Q${pt(cx + dx * 0.55, tip + h * 0.28)} ${pt(cx + dx * 0.72, baseY - h * 0.08)}`, join_(sw(1.5), 'stroke-opacity="0.55"'));
+  // soft meridian highlight
+  s += path(`M${pt(cx, tip)}Q${pt(cx - dx * 0.45, tip + h * 0.45)} ${pt(cx - dx * 0.85, baseY - 1)}`, join_(sw(1.5), 'stroke-opacity="0.5"'));
+  s += path(`M${pt(cx, tip)}Q${pt(cx + dx * 0.45, tip + h * 0.45)} ${pt(cx + dx * 0.85, baseY - 1)}`, join_(sw(1.5), 'stroke-opacity="0.5"'));
   return s;
 }
 
-/** Onion dome on a drum with arched windows and a Byzantine cross. */
+/** Rounded Byzantine dome on a drum with arched windows and a Greek cross. */
 function domeOnDrum(cx, drumTop, drumBottom, drumW, domeH, crossSize = 10) {
   const dx = drumW / 2;
   let s = rect(cx - dx, drumTop, drumW, drumBottom - drumTop, fill(LIGHT));
@@ -234,7 +231,7 @@ function domeOnDrum(cx, drumTop, drumBottom, drumW, domeH, crossSize = 10) {
     s += path(arch(cx + k * gap - winW / 2, cx + k * gap + winW / 2, drumTop + 8, drumTop + 28), join_(fill(CLOTH), sw(2)));
   }
   s += line(cx - dx - 5, drumTop, cx + dx + 5, drumTop);
-  s += onionDome(cx, drumTop, dx + 1, domeH);
+  s += byzantineDome(cx, drumTop, dx + 1, domeH);
   const tip = drumTop - domeH;
   s += byzantineCross(cx, tip - crossSize - 1, crossSize, INK);
   return s;
@@ -306,7 +303,7 @@ function iconPanel(x1, x2, top, bottom) {
 const subjects = {};
 
 subjects.church = {
-  title: 'Orthodox cross-in-square church with a central onion dome on a drum, two lower side bays and cypress trees',
+  title: 'Orthodox cross-in-square church with a central rounded Byzantine dome on a drum, two lower side bays and cypress trees',
   body() {
     let s = ground(84, 316);
     s += cypress(96, 74) + cypress(304, 74);
@@ -390,7 +387,7 @@ subjects['candle-stand'] = {
 };
 
 subjects['bell-tower'] = {
-  title: 'Orthodox bell tower with two bells in round arched openings, an onion dome on a drum and a cross (not a Western steeple)',
+  title: 'Orthodox bell tower with two bells in round arched openings, a rounded Byzantine dome on a drum and a cross (not a Western steeple)',
   body() {
     let s = ground(84, 316);
     s += cypress(116, 64) + cypress(284, 64);
@@ -409,9 +406,9 @@ subjects['bell-tower'] = {
     }
     s += line(166, 156, 234, 156, sw(2));
     s += rect(158, 94, 84, 8, fill(LIGHT));
-    // onion cupola on the drum (never a pointed Gothic/Western steeple)
-    s += onionDome(200, 94, 30, 32);
-    s += byzantineCross(200, 50, 11, INK);
+    // rounded Byzantine cupola on the drum (never onion, never a pointed Gothic/Western steeple)
+    s += byzantineDome(200, 94, 30, 28);
+    s += byzantineCross(200, 54, 11, INK);
     return s;
   },
 };
@@ -614,7 +611,7 @@ subjects.incense = {
 };
 
 subjects.censer = {
-  title: 'An Orthodox censer (thurible) hanging from three chains, its onion-domed lid topped with a cross, with gentle wisps of smoke',
+  title: 'An Orthodox censer (thurible) hanging from three chains, its rounded Byzantine-domed lid topped with a cross, with gentle wisps of smoke',
   body() {
     let s = '';
     s += circle(200, 32, 5, sw(2.5));
@@ -624,13 +621,13 @@ subjects.censer = {
     s += chain(sampleLine(186, 45, 160, rimY), 7) + chain(sampleLine(200, 46, 200, 122), 7) + chain(sampleLine(214, 45, 240, rimY), 7);
     s += smoke('M180 150C166 138 176 122 162 108S154 86 164 74', 2, 0.38);
     s += smoke('M220 150C234 138 224 122 238 108S246 86 236 74', 2, 0.38);
-    // lid: short drum with onion cupola (not a Latin-style lid)
+    // lid: short drum with rounded Byzantine cupola (not onion, not a Latin-style lid)
     s += path(`M160 ${rimY}L164 168H236L240 ${rimY}Z`, join_(fill(GOLD_PALE)));
     s += rect(174, 144, 52, 24, join_(fill(GOLD_PALE)));
     for (const x of [186, 200, 214]) s += path(arch(x - 3.5, x + 3.5, 149, 163), join_(fill(LIGHT), sw(1.5)));
     s += line(170, 144, 230, 144);
-    s += onionDome(200, 144, 24, 22, join_(fill(GOLD_PALE)));
-    s += byzantineCross(200, 110, 10, INK);
+    s += byzantineDome(200, 144, 24, 20, join_(fill(GOLD_PALE)));
+    s += byzantineCross(200, 112, 10, INK);
     // bowl
     s += path(bowlPath(200, rimY, 42, 6, 38), join_(fill(GOLD_PALE)));
     s += line(156, rimY, 244, rimY);
@@ -679,26 +676,24 @@ subjects['icon-stand'] = {
 };
 
 subjects.baptism = {
-  title: 'A baptismal font: a raised round basin of water on a pedestal with three lit tapers on its rim',
+  title: 'A baptismal font: a raised stone basin of water on a pedestal, with a small cross on the basin (no candles on the rim)',
   body() {
     let s = ground(110, 290);
-    s += path(`M164 ${GROUND - 1}Q168 248 188 242H212Q232 248 236 ${GROUND - 1}Z`, join_(fill(GOLD_PALE)));
-    s += path('M188 242L192 214H208L212 242Z', join_(fill(GOLD_PALE)));
-    s += ellipse(200, 228, 14, 5, join_(fill(GOLD_PALE), sw(2.5)));
-    s += path(bowlPath(200, 168, 78, 16, 52), join_(fill(GOLD_PALE)));
-    s += ellipse(200, 168, 78, 16, join_(fill(GOLD_PALE)));
-    s += ellipse(200, 168, 70, 12, join_(fill(LIGHT), sw(2)));
-    s += path('M150 166Q160 162 170 166T190 166', join_(stroke(GOLD), sw(1.5)));
-    s += path('M206 172Q216 168 226 172T246 172', join_(stroke(GOLD), sw(1.5)));
-    s += path('M174 176Q184 172 194 176T214 176', join_(stroke(GOLD), sw(1.5)));
-    s += taper(200, 151, 54);
-    s += path('M130 190Q200 214 270 190', sw(1.5));
-    s += byzantineCross(200, 202, 9, INK);
-    for (const x of [126, 274]) {
-      s += taper(x, 166, 54);
-      s += rect(x - 5, 162, 10, 6, join_(fill(GOLD_MID), sw(1.8)));
-    }
-    s += rect(195, 148, 10, 5, join_(fill(GOLD_MID), sw(1.8)));
+    // pedestal base and stem
+    s += path(`M156 ${GROUND - 1}Q162 250 184 244H216Q238 250 244 ${GROUND - 1}Z`, join_(fill(GOLD_PALE)));
+    s += path('M186 244L190 210H210L214 244Z', join_(fill(GOLD_PALE)));
+    s += ellipse(200, 226, 16, 5, join_(fill(GOLD_PALE), sw(2.5)));
+    // font basin (wide cup), no rim tapers
+    s += path(bowlPath(200, 156, 72, 14, 58), join_(fill(GOLD_PALE)));
+    s += ellipse(200, 156, 72, 14, join_(fill(GOLD_PALE)));
+    s += ellipse(200, 156, 64, 11, join_(fill(LIGHT), sw(2)));
+    // water ripples
+    s += path('M154 154Q164 150 174 154T194 154', join_(stroke(GOLD), sw(1.5)));
+    s += path('M202 160Q212 156 222 160T242 160', join_(stroke(GOLD), sw(1.5)));
+    s += path('M168 168Q184 164 200 168T232 168', join_(stroke(GOLD), sw(1.5)));
+    s += path('M136 178Q200 200 264 178', sw(1.5));
+    // small Byzantine cross on the basin face
+    s += byzantineCross(200, 192, 11, INK);
     return s;
   },
 };
@@ -750,33 +745,29 @@ subjects.chrismation = {
 };
 
 subjects.wedding = {
-  title: 'Two Greek wedding crowns (stefana) of flowers joined by a ribbon, resting on a cloth',
+  title: 'Two Greek wedding crowns (stefana) joined by a ribbon — open crowns with crosses, not rings',
   body() {
     let s = '';
     s += path(`M94 ${GROUND}L114 160H286L306 ${GROUND}Z`, join_(fill(CLOTH), sw(2.5)));
     s += path(`M104 ${GROUND - 6}L121 166H279L296 ${GROUND - 6}`, join_(stroke(GOLD), sw(1.5)));
-    // satin ribbon joining the crowns at their backs
-    s += path('M158 197C172 184 186 180 200 180C214 180 228 184 242 197L238 202C226 190 213 186 200 186C187 186 174 190 162 202Z', join_(fill(LIGHT), sw(2)));
-    const crown = (cx, cy) => {
-      let c = ellipse(cx, cy, 44, 24, join_(stroke(GOLD_PALE), sw(10)));
-      c += ellipse(cx, cy, 49, 29, sw(2)) + ellipse(cx, cy, 39, 19, sw(2));
-      const n = 14;
-      for (let k = 0; k < n; k++) {
-        const th = (k * 2 * Math.PI) / n + 0.1;
-        const x = cx + 44 * Math.cos(th);
-        const y = cy + 24 * Math.sin(th);
-        let f = '';
-        for (let p = 0; p < 5; p++) {
-          const a = (p * 2 * Math.PI) / 5 - Math.PI / 2;
-          f += circle(x + 3.3 * Math.cos(a), y + 3.3 * Math.sin(a), 2.6, join_(fill(LIGHT), sw(1.2)));
-        }
-        f += circle(x, y, 1.8, join_(fill(GOLD_MID), 'stroke="none"'));
-        c += f;
-      }
+    const stefanon = (cx) => {
+      // open crown: band + arched top + cross finial (reads as a crown, not a ring)
+      let c = '';
+      c += path(`M${cx - 36} 230Q${cx - 40} 210 ${cx - 34} 196H${cx + 34}Q${cx + 40} 210 ${cx + 36} 230Z`, join_(fill(GOLD_PALE), sw(2.5)));
+      c += path(`M${cx - 30} 196Q${cx - 22} 168 ${cx} 162Q${cx + 22} 168 ${cx + 30} 196`, join_(fill(LIGHT), sw(2.5)));
+      c += path(`M${cx - 22} 196Q${cx - 14} 178 ${cx} 174Q${cx + 14} 178 ${cx + 22} 196`, sw(1.5));
+      // jewel dots on the band
+      for (const dx of [-22, -8, 8, 22]) c += circle(cx + dx, 212, 2.4, join_(fill(GOLD_MID), sw(1.2)));
+      c += byzantineCross(cx, 148, 9, INK);
       return c;
     };
-    s += crown(144, 218);
-    s += crown(256, 218);
+    s += stefanon(152);
+    s += stefanon(248);
+    // ribbon joining the crowns (drawn on top so it reads clearly)
+    s += path('M186 188C196 176 204 176 214 188', join_(fill('none'), sw(5), stroke(LIGHT)));
+    s += path('M186 188C196 176 204 176 214 188', join_(fill('none'), sw(2), stroke(GOLD_PALE)));
+    s += path('M198 182Q200 198 204 208', join_(fill('none'), sw(3.5), stroke(LIGHT)));
+    s += path('M202 182Q200 198 196 208', join_(fill('none'), sw(3.5), stroke(LIGHT)));
     return s;
   },
 };

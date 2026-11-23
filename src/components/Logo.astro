@@ -20,7 +20,8 @@ const uid = `seal-${lang}-${inverse ? 'i' : 'n'}`;
 ---
 <span class:list={['logo', `logo--${style}`, { 'logo--inverse': inverse }, cls]}>
   {style === 'kiot' && (
-    <svg class="logo-mark" viewBox="0 -9 48 69" aria-hidden="true">
+    /* Simplified kiot mark: arched shrine + large Byzantine cross — readable at ~40px. */
+    <svg class="logo-mark" viewBox="0 0 48 60" aria-hidden="true">
       <defs>
         <linearGradient id={`gl-${uid}`} x1="0" y1="0" x2="1" y2="1">
           <stop offset="0" stop-color="#9c7124" />
@@ -30,17 +31,11 @@ const uid = `seal-${lang}-${inverse ? 'i' : 'n'}`;
           <stop offset="1" stop-color="#a87a2a" />
         </linearGradient>
       </defs>
-      <g transform="translate(24 -3.6) scale(.105)" fill={`url(#gl-${uid})`}>
-        <Fragment set:html={crossShapes(false)} />
-      </g>
       <path d="M3 59V23a21 21 0 0 1 42 0v36Z" fill={`url(#gl-${uid})`} />
       <path d="M7 55.5V23.5a17 17 0 0 1 34 0v32Z" fill="#561524" />
-      <path d="M9.6 53V24a14.4 14.4 0 0 1 28.8 0v29Z" fill="none" stroke="#e6cd8c" stroke-width=".8" opacity=".75" />
-      <circle cx="24" cy="29" r="8.4" fill="none" stroke={`url(#gl-${uid})`} stroke-width="1.8" />
-      <path d="M24 20.6v5.2M15.6 29h5.2M27.2 29h5.2" stroke={`url(#gl-${uid})`} stroke-width="2.2" />
-      <path d="M17.5 48.5q6.5-9 13 0" fill="none" stroke="#e6cd8c" stroke-width="1.4" opacity=".9" />
-      <text x="13.4" y="22.2" font-size="5.4" fill="#e6cd8c" font-family="var(--font-display)" text-anchor="middle">IC</text>
-      <text x="34.6" y="22.2" font-size="5.4" fill="#e6cd8c" font-family="var(--font-display)" text-anchor="middle">XC</text>
+      <g transform="translate(24 36) scale(.3)" fill={`url(#gl-${uid})`}>
+        <Fragment set:html={crossShapes(false)} />
+      </g>
     </svg>
   )}
   {style === 'seal' && (
@@ -58,7 +53,7 @@ const uid = `seal-${lang}-${inverse ? 'i' : 'n'}`;
     </svg>
   )}
   {style === 'square' && <img class="logo-mark logo-mark--square" src={asset(site.logo?.image)} alt={showName ? '' : alt} width="48" height="48" />}
-  {style === 'wordmark' && <Cross size={18} class="logo-wordmark-cross" />}
+  {style === 'wordmark' && <Cross lang={lang} size={18} class="logo-wordmark-cross" />}
   {showName && (
     <span class="logo-text">
       <span class="logo-name">{name}</span>

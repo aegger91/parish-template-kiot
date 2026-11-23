@@ -1,11 +1,15 @@
 ---
-import { crossSvg, type CrossVariant } from '../lib/cross';
+import { crossSvg, defaultCrossVariant, type CrossVariant } from '../lib/cross';
 interface Props {
+  /** Explicit variant. When omitted, Byzantine for non-Slavic langs; three-bar only for Slavic locales. */
   variant?: CrossVariant;
+  /** Page language — used to pick Slavic vs Byzantine when `variant` is omitted. */
+  lang?: string;
   size?: number | string;
   class?: string;
   title?: string;
 }
-const { variant = 'byzantine', size = 24, class: cls = '', title } = Astro.props;
+const { variant, lang, size = 24, class: cls = '', title } = Astro.props;
+const resolved = variant ?? defaultCrossVariant(lang);
 ---
-<Fragment set:html={crossSvg(variant, size, cls, title)} />
+<Fragment set:html={crossSvg(resolved, size, cls, title)} />
