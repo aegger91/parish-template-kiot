@@ -6,9 +6,14 @@
     "node": ">=22.23.4"
   },
   "scripts": {
-    "dev": "astro dev",
-    "build": "astro build",
-    "preview": "astro preview",
+    "dev": "astro dev --host 127.0.0.1 --port 4327",
+    "build": "node scripts/validate-content.mjs && astro build",
+    "preview": "astro preview --host 127.0.0.1 --port 4328",
+    "validate": "node scripts/validate-content.mjs",
+    "check:layout": "node scripts/check-layout.mjs http://127.0.0.1:4328",
+    "screenshots": "node scripts/screenshots.mjs http://127.0.0.1:4328 screenshots",
+    "illustrations": "node scripts/build-illustrations.mjs",
+    "zip": "rm -f parish-template-kiot-dist.zip && cd dist && zip -qr ../parish-template-kiot-dist.zip .",
     "astro": "astro"
   },
   "dependencies": {

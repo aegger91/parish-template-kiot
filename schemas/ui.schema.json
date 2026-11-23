@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "ui.schema.json",
+  "title": "Interface text",
+  "description": "Labels and messages used by the template, per language.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "strings": {
+      "type": "object",
+      "additionalProperties": {
+        "$ref": "common.schema.json#/$defs/localized"
+      }
+    }
+  },
+  "required": [
+    "strings"
+  ],
+  "additionalProperties": false
+}

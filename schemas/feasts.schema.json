@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "feasts.schema.json",
+  "title": "Feasts",
+  "description": "Fixed feasts (month/day on the church calendar) and movable feasts (days from Pascha). The full daily calendar comes from OrthodoxConnect.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "note": {
+      "type": "string"
+    },
+    "fixed": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "month": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 12
+          },
+          "day": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 31
+          },
+          "rank": {
+            "enum": [
+              "great",
+              "major",
+              "saint"
+            ]
+          },
+          "name": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "image": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "month",
+          "day",
+          "rank",
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "movable": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "offset": {
+            "type": "integer",
+            "description": "Days from Pascha."
+          },
+          "rank": {
+            "enum": [
+              "great",
+              "major",
+              "saint"
+            ]
+          },
+          "name": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "image": {
+            "type": "string"
+          },
+          "suppressWeekly": {
+            "type": "array",
+            "items": {
+              "type": "integer"
+            },
+            "description": "Day offsets (from this feast) on which regular weekly services are replaced."
+          },
+          "services": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "common.schema.json#/$defs/id"
+                },
+                "offsetDays": {
+                  "type": "integer"
+                },
+                "time": {
+                  "$ref": "common.schema.json#/$defs/time"
+                },
+                "duration": {
+                  "type": "integer"
+                },
+                "type": {
+                  "enum": [
+                    "liturgy",
+                    "vespers",
+                    "orthros",
+                    "prayer",
+                    "class",
+                    "confession",
+                    "meeting",
+                    "other"
+                  ]
+                },
+                "streamed": {
+                  "type": "boolean"
+                },
+                "title": {
+                  "$ref": "common.schema.json#/$defs/localized"
+                }
+              },
+              "required": [
+                "id",
+                "time",
+                "title"
+              ],
+              "additionalProperties": false
+            }
+          }
+        },
+        "required": [
+          "id",
+          "offset",
+          "rank",
+          "name"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "fixed",
+    "movable"
+  ],
+  "additionalProperties": false
+}

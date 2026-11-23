@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "image-sources.schema.json",
+  "title": "Image sources",
+  "description": "Credits for public domain images.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "sources": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "file": {
+            "type": "string"
+          },
+          "work": {
+            "type": "string"
+          },
+          "author": {
+            "type": "string"
+          },
+          "license": {
+            "type": "string"
+          },
+          "url": {
+            "$ref": "common.schema.json#/$defs/url"
+          }
+        },
+        "required": [
+          "id",
+          "work",
+          "author",
+          "license",
+          "url"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "sources"
+  ],
+  "additionalProperties": false
+}

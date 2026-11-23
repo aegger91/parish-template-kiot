@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "history.schema.json",
+  "title": "Parish history",
+  "description": "Timeline entries, oldest first.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "year": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "text": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "image": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "id",
+          "year",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "events"
+  ],
+  "additionalProperties": false
+}

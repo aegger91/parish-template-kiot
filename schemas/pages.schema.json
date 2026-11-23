@@ -1,0 +1,271 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "pages.schema.json",
+  "title": "Pages and sections",
+  "description": "Page tree (menu order) and the sections on each page.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "pages": {
+      "type": "array",
+      "items": {
+        "$ref": "#/$defs/page"
+      },
+      "minItems": 1
+    }
+  },
+  "required": [
+    "pages"
+  ],
+  "additionalProperties": false,
+  "$defs": {
+    "page": {
+      "type": "object",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/id"
+        },
+        "slug": {
+          "type": "string",
+          "pattern": "^([a-z0-9-]+)?$"
+        },
+        "title": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "summary": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "navLabel": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "navOverviewLabel": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "nav": {
+          "type": "boolean",
+          "description": "Show in the menu (default true)."
+        },
+        "navButton": {
+          "type": "boolean",
+          "description": "Show as the gold button in the header (Donate)."
+        },
+        "navOverview": {
+          "type": "boolean",
+          "description": "Add a link to this page at the top of its dropdown (default true)."
+        },
+        "requires": {
+          "enum": [
+            "livestream",
+            "store",
+            "requestService",
+            "zapiski",
+            "getInvolved",
+            "donations",
+            "newsletter"
+          ],
+          "description": "Page exists only when this module is on."
+        },
+        "headerImage": {
+          "type": "string"
+        },
+        "cardImage": {
+          "type": "string"
+        },
+        "seo": {
+          "type": "object",
+          "properties": {
+            "description": {
+              "$ref": "common.schema.json#/$defs/localized"
+            }
+          },
+          "required": [],
+          "additionalProperties": false
+        },
+        "sections": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/section"
+          }
+        },
+        "children": {
+          "type": "array",
+          "items": {
+            "$ref": "#/$defs/page"
+          }
+        }
+      },
+      "required": [
+        "id",
+        "slug",
+        "title",
+        "sections"
+      ],
+      "additionalProperties": false
+    },
+    "section": {
+      "type": "object",
+      "description": "A page section. Reorder by moving it in the list; hide with enabled false.",
+      "properties": {
+        "id": {
+          "$ref": "common.schema.json#/$defs/id"
+        },
+        "type": {
+          "enum": [
+            "hero",
+            "pictogramCards",
+            "schedulePreview",
+            "livestreamPromo",
+            "newsList",
+            "quote",
+            "ctaBand",
+            "richText",
+            "facts",
+            "subpageCards",
+            "clergy",
+            "timeline",
+            "iconCarousel",
+            "gallery",
+            "schedule",
+            "livestream",
+            "sermons",
+            "donate",
+            "contact",
+            "directions",
+            "credits",
+            "storeGrid",
+            "cart",
+            "checkout",
+            "requestService",
+            "zapiski",
+            "events",
+            "volunteer"
+          ],
+          "description": "richText is the optional Welcome / About text block."
+        },
+        "enabled": {
+          "type": "boolean"
+        },
+        "requires": {
+          "enum": [
+            "livestream",
+            "store",
+            "requestService",
+            "zapiski",
+            "getInvolved",
+            "donations",
+            "newsletter"
+          ]
+        },
+        "eyebrow": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "heading": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "intro": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "text": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "lead": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "source": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "body": {
+          "$ref": "common.schema.json#/$defs/localizedList"
+        },
+        "image": {
+          "type": "string",
+          "description": "Gallery image id."
+        },
+        "pictogram": {
+          "$ref": "common.schema.json#/$defs/pictogram"
+        },
+        "primaryCta": {
+          "$ref": "common.schema.json#/$defs/pageLink"
+        },
+        "secondaryCta": {
+          "$ref": "common.schema.json#/$defs/pageLink"
+        },
+        "cta": {
+          "$ref": "common.schema.json#/$defs/pageLink"
+        },
+        "servicesCount": {
+          "type": "integer",
+          "minimum": 1,
+          "maximum": 6
+        },
+        "showCommemorationShortcut": {
+          "type": "boolean"
+        },
+        "days": {
+          "type": "integer",
+          "minimum": 3,
+          "maximum": 14
+        },
+        "limit": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "showFilters": {
+          "type": "boolean"
+        },
+        "of": {
+          "$ref": "common.schema.json#/$defs/id"
+        },
+        "muted": {
+          "type": "boolean"
+        },
+        "items": {
+          "type": "array",
+          "description": "pictogramCards: cards. facts: label and value. iconCarousel: gallery image ids.",
+          "items": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "$ref": "common.schema.json#/$defs/id"
+                  },
+                  "pictogram": {
+                    "$ref": "common.schema.json#/$defs/pictogram"
+                  },
+                  "title": {
+                    "$ref": "common.schema.json#/$defs/localized"
+                  },
+                  "text": {
+                    "$ref": "common.schema.json#/$defs/localized"
+                  },
+                  "link": {
+                    "$ref": "common.schema.json#/$defs/pageLink"
+                  },
+                  "label": {
+                    "$ref": "common.schema.json#/$defs/localized"
+                  },
+                  "value": {
+                    "$ref": "common.schema.json#/$defs/localized"
+                  }
+                },
+                "required": [],
+                "additionalProperties": false
+              }
+            ]
+          }
+        }
+      },
+      "required": [
+        "id",
+        "type"
+      ],
+      "additionalProperties": false
+    }
+  }
+}

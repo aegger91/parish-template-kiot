@@ -1,0 +1,435 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "site.schema.json",
+  "title": "Site settings",
+  "description": "Parish identity, languages, contact details and module switches.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "id": {
+      "$ref": "common.schema.json#/$defs/id"
+    },
+    "template": {
+      "const": "parish-template-kiot"
+    },
+    "name": {
+      "$ref": "common.schema.json#/$defs/localized"
+    },
+    "shortName": {
+      "$ref": "common.schema.json#/$defs/localized"
+    },
+    "tagline": {
+      "$ref": "common.schema.json#/$defs/localized"
+    },
+    "description": {
+      "$ref": "common.schema.json#/$defs/localized"
+    },
+    "sampleNotice": {
+      "type": "boolean",
+      "description": "Show the thin \"sample site\" banner. Turn off for a real parish."
+    },
+    "languages": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "code": {
+            "type": "string",
+            "pattern": "^[a-z]{2,3}$"
+          },
+          "label": {
+            "type": "string"
+          },
+          "nativeLabel": {
+            "type": "string"
+          },
+          "locale": {
+            "type": "string"
+          },
+          "dir": {
+            "enum": [
+              "ltr",
+              "rtl"
+            ]
+          },
+          "hourCycle": {
+            "enum": [
+              "h12",
+              "h23"
+            ]
+          }
+        },
+        "required": [
+          "code",
+          "nativeLabel",
+          "locale",
+          "dir"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 1,
+      "description": "One or more languages. The switcher adapts to the count."
+    },
+    "defaultLanguage": {
+      "type": "string"
+    },
+    "timeZone": {
+      "type": "string",
+      "description": "IANA time zone, for example America/Chicago."
+    },
+    "calendar": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "enum": [
+            "julian",
+            "revised-julian",
+            "gregorian"
+          ],
+          "description": "Calendar for fixed feasts. Pascha always follows the Orthodox Paschalion unless style is gregorian."
+        }
+      },
+      "required": [
+        "style"
+      ],
+      "additionalProperties": false
+    },
+    "logo": {
+      "type": "object",
+      "properties": {
+        "style": {
+          "enum": [
+            "kiot",
+            "seal",
+            "square",
+            "wordmark"
+          ],
+          "description": "kiot: arched icon frame. seal: round seal with the name. square: your image. wordmark: name only."
+        },
+        "image": {
+          "$ref": "common.schema.json#/$defs/path"
+        },
+        "alt": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "sealText": {
+          "$ref": "common.schema.json#/$defs/localized"
+        }
+      },
+      "required": [
+        "style"
+      ],
+      "additionalProperties": false
+    },
+    "contact": {
+      "type": "object",
+      "properties": {
+        "address": {
+          "type": "object",
+          "properties": {
+            "street": {
+              "type": "string"
+            },
+            "city": {
+              "type": "string"
+            },
+            "region": {
+              "type": "string"
+            },
+            "postalCode": {
+              "type": "string"
+            },
+            "country": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "street",
+            "city"
+          ],
+          "additionalProperties": false
+        },
+        "phone": {
+          "type": "string"
+        },
+        "email": {
+          "type": "string"
+        },
+        "officeHours": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "directionsQuery": {
+          "type": "string"
+        },
+        "mapEmbedUrl": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "parking": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "transit": {
+          "$ref": "common.schema.json#/$defs/localized"
+        },
+        "accessibility": {
+          "$ref": "common.schema.json#/$defs/localized"
+        }
+      },
+      "required": [
+        "address",
+        "phone",
+        "email"
+      ],
+      "additionalProperties": false
+    },
+    "socials": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "network": {
+            "enum": [
+              "facebook",
+              "youtube",
+              "instagram"
+            ]
+          },
+          "label": {
+            "type": "string"
+          },
+          "url": {
+            "$ref": "common.schema.json#/$defs/url"
+          }
+        },
+        "required": [
+          "id",
+          "network",
+          "url"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "currency": {
+      "type": "string",
+      "pattern": "^[A-Z]{3}$"
+    },
+    "features": {
+      "type": "object",
+      "properties": {
+        "store": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "shipping": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "flatRate": {
+                  "$ref": "common.schema.json#/$defs/money"
+                },
+                "freeOver": {
+                  "$ref": "common.schema.json#/$defs/money"
+                }
+              },
+              "required": [
+                "enabled"
+              ],
+              "additionalProperties": false
+            },
+            "pickup": {
+              "type": "object",
+              "properties": {
+                "enabled": {
+                  "type": "boolean"
+                },
+                "note": {
+                  "$ref": "common.schema.json#/$defs/localized"
+                }
+              },
+              "required": [
+                "enabled"
+              ],
+              "additionalProperties": false
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        },
+        "requestService": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        },
+        "zapiski": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        },
+        "getInvolved": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        },
+        "payments": {
+          "type": "object",
+          "properties": {
+            "provider": {
+              "enum": [
+                "none",
+                "stripe",
+                "authorize-net"
+              ],
+              "description": "Payment provider wired in src/lib/handlers.ts."
+            }
+          },
+          "required": [
+            "provider"
+          ],
+          "additionalProperties": false
+        },
+        "livestream": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "liveNow": {
+              "type": "boolean",
+              "description": "Force the Live now badge on. Otherwise it shows during streamed services."
+            },
+            "watchUrl": {
+              "$ref": "common.schema.json#/$defs/url"
+            },
+            "embedUrl": {
+              "$ref": "common.schema.json#/$defs/url"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        },
+        "donations": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean"
+            },
+            "amounts": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/money"
+              },
+              "minItems": 1
+            },
+            "defaultAmount": {
+              "$ref": "common.schema.json#/$defs/money"
+            },
+            "allowMonthly": {
+              "type": "boolean"
+            },
+            "funds": {
+              "type": "array",
+              "items": {
+                "$ref": "common.schema.json#/$defs/labelled"
+              },
+              "minItems": 1
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "store",
+        "requestService",
+        "zapiski",
+        "getInvolved",
+        "livestream",
+        "donations"
+      ],
+      "additionalProperties": false,
+      "description": "Modules. Turning one off removes its pages, menu items and sections."
+    },
+    "orthodoxConnect": {
+      "type": "object",
+      "properties": {
+        "parishId": {
+          "type": "string"
+        },
+        "apiBase": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "appLinkBase": {
+          "$ref": "common.schema.json#/$defs/url"
+        },
+        "newsletter": {
+          "type": "object",
+          "properties": {
+            "enabled": {
+              "type": "boolean",
+              "description": "Shows the footer newsletter form."
+            },
+            "listId": {
+              "type": "string"
+            }
+          },
+          "required": [
+            "enabled"
+          ],
+          "additionalProperties": false
+        }
+      },
+      "required": [
+        "parishId"
+      ],
+      "additionalProperties": false
+    }
+  },
+  "required": [
+    "id",
+    "name",
+    "languages",
+    "defaultLanguage",
+    "timeZone",
+    "calendar",
+    "logo",
+    "contact",
+    "currency",
+    "features"
+  ],
+  "additionalProperties": false
+}

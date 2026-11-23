@@ -23,3 +23,5 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 scripts/.*-tmp.mjs
+screenshots/
+parish-template-kiot-dist.zip

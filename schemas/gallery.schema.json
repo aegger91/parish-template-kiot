@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "gallery.schema.json",
+  "title": "Gallery",
+  "description": "Images. Icons must never be mirrored or cropped through a face. Public domain icons list their source in image-sources.json.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/labelled"
+      }
+    },
+    "images": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "src": {
+            "$ref": "common.schema.json#/$defs/path"
+          },
+          "width": {
+            "type": "integer"
+          },
+          "height": {
+            "type": "integer"
+          },
+          "category": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "source": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "placeholder": {
+            "type": "boolean"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "alt": {
+            "$ref": "common.schema.json#/$defs/localized"
+          }
+        },
+        "required": [
+          "id",
+          "src",
+          "width",
+          "height",
+          "category",
+          "title",
+          "alt"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "categories",
+    "images"
+  ],
+  "additionalProperties": false
+}

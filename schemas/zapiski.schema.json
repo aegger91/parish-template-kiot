@@ -1,0 +1,141 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "zapiski.schema.json",
+  "title": "Commemorations and candles",
+  "description": "Commemoration notes (zapiski): note types, services, candles and name prefixes.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "maxNames": {
+      "type": "integer",
+      "minimum": 1,
+      "maximum": 20
+    },
+    "noteTypes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "enum": [
+              "health",
+              "repose"
+            ]
+          },
+          "label": {
+            "$ref": "common.schema.json#/$defs/localized"
+          }
+        },
+        "required": [
+          "id",
+          "label"
+        ],
+        "additionalProperties": false
+      },
+      "minItems": 2,
+      "maxItems": 2
+    },
+    "commemorations": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "appliesTo": {
+            "type": "array",
+            "items": {
+              "enum": [
+                "health",
+                "repose"
+              ]
+            },
+            "minItems": 1
+          },
+          "suggested": {
+            "$ref": "common.schema.json#/$defs/money"
+          },
+          "label": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "description": {
+            "$ref": "common.schema.json#/$defs/localized",
+            "description": "Optional one-line note under the label."
+          }
+        },
+        "required": [
+          "id",
+          "appliesTo",
+          "suggested",
+          "label"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "candles": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "label": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "price": {
+            "$ref": "common.schema.json#/$defs/money"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "price"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "donationPresets": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/money"
+      }
+    },
+    "prefixes": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "label": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "short": {
+            "$ref": "common.schema.json#/$defs/localized"
+          }
+        },
+        "required": [
+          "id",
+          "label",
+          "short"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "hint": {
+      "$ref": "common.schema.json#/$defs/localizedList",
+      "description": "Optional notes shown in a fold-out panel above the form. Leave empty to hide the panel."
+    }
+  },
+  "required": [
+    "maxNames",
+    "noteTypes",
+    "commemorations"
+  ],
+  "additionalProperties": false
+}
