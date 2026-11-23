@@ -157,15 +157,15 @@ const addr = site.contact.address;
   const moreList = header.querySelector<HTMLUListElement>('[data-more-list]')!;
   const items = [...list.querySelectorAll<HTMLLIElement>('[data-nav-item]')];
 
-  /* Condense on scroll; hide while scrolling down, reveal on scroll up. */
-  let lastY = window.scrollY;
+  /* Condense quietly on scroll — no hide/show so the bar never flickers. */
+  let ticking = false;
   const onScroll = () => {
-    const y = window.scrollY;
-    header.classList.toggle('is-condensed', y > 24);
-    const busy = header.matches(':focus-within') || header.querySelector('[aria-expanded="true"]');
-    header.classList.toggle('is-hidden', !busy && y > 420 && y > lastY + 4);
-    if (y < lastY - 4 || y < 420) header.classList.remove('is-hidden');
-    lastY = y;
+    if (ticking) return;
+    ticking = true;
+    requestAnimationFrame(() => {
+      header.classList.toggle('is-condensed', window.scrollY > 40);
+      ticking = false;
+    });
   };
   window.addEventListener('scroll', onScroll, { passive: true });
   onScroll();

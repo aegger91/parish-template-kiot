@@ -7,12 +7,16 @@ export interface KiotContext {
   dir: string;
   timeZone: string;
   currency: string;
-  calendar: { style: any; paschalion?: any; weekStartsOn: number };
+  calendar: { calendarStyle?: 'new' | 'old'; style?: any; paschalion?: any; weekStartsOn?: number };
   base: string;
   ui: Record<string, string>;
   paymentProvider: any;
   parishId: string;
+  parishName: string;
   appLinkBase: string;
+  liveUrl?: string;
+  address: { street: string; city: string; region: string; postalCode: string; country?: string };
+  directionsQuery: string;
   links: Record<string, string>;
 }
 

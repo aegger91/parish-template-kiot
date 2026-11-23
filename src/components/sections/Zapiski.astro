@@ -106,7 +106,7 @@ const firstType = zapiski.noteTypes[0].id;
       const candle = d.candles.find((c) => c.id === candleIn?.value);
       const other = Number(el.querySelector<HTMLInputElement>('[data-gift-other]')!.value) || 0;
       const gift = other > 0 ? other : Number(el.querySelector<HTMLInputElement>(`[name="z${idx}-gift"]:checked`)?.value ?? 0);
-      const total = (comm?.suggested ?? 0) + (candle?.price ?? 0) + gift;
+      const total = (candle?.price ?? 0) + gift;
       return { idx, type, typeLabel: d.noteTypes.find((n) => n.id === type)?.label ?? '', names, comm, candle, gift, total };
     };
 

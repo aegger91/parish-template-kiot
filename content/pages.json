@@ -503,12 +503,18 @@
           "slug": "commemorations-and-candles",
           "requires": "zapiski",
           "title": {
-            "en": "Commemorations and Candles",
-            "el": "Ονόματα και κεριά"
+            "en": "Commemoration names",
+            "el": "Ονόματα και κεριά",
+            "ru": "Записки",
+            "uk": "Записки",
+            "sr": "Записке"
           },
           "navLabel": {
-            "en": "Commemorations and Candles",
-            "el": "Ονόματα και κεριά"
+            "en": "Prayer requests",
+            "el": "Ονόματα",
+            "ru": "Записки",
+            "uk": "Записки",
+            "sr": "Записке"
           },
           "summary": {
             "en": "Send names to be remembered in prayer and ask for a candle to be lit.",
@@ -521,8 +527,11 @@
               "type": "zapiski",
               "enabled": true,
               "heading": {
-                "en": "Commemoration notes",
-                "el": "Χαρτάκια μνημόνευσης"
+                "en": "Commemoration names",
+                "el": "Ονόματα για μνημόνευση",
+                "ru": "Записки",
+                "uk": "Записки",
+                "sr": "Записке"
               },
               "intro": {
                 "en": "Names to be remembered in prayer.",

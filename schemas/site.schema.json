@@ -82,17 +82,16 @@
     "calendar": {
       "type": "object",
       "properties": {
-        "style": {
+        "calendarStyle": {
           "enum": [
-            "julian",
-            "revised-julian",
-            "gregorian"
+            "new",
+            "old"
           ],
-          "description": "Calendar for fixed feasts. Pascha always follows the Orthodox Paschalion unless style is gregorian."
+          "description": "Fixed feast dates and saint-of-the-day labels. 'new' = Revised Julian (civil date). 'old' = Julian, showing civil date plus Old Style (e.g. Dec 19 (Dec 6 O.S.)). Movable Pascha-based feasts are the same in both. Default for this Greek Orthodox template: new."
         }
       },
       "required": [
-        "style"
+        "calendarStyle"
       ],
       "additionalProperties": false
     },

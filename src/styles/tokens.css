@@ -6,10 +6,10 @@
     --font-body      running text
 */
 :root {
-  /* Font roles */
-  --font-display: 'GFS Didot', 'Didot', 'Bodoni 72', 'Times New Roman', serif;
-  --font-ui: 'GFS Didot', 'Didot', 'Times New Roman', serif;
-  --font-ornament: 'GFS Didot', 'Times New Roman', serif;
+  /* Font roles — Literata covers Latin-ext / Greek / Cyrillic where GFS Didot lacks glyphs */
+  --font-display: 'GFS Didot', 'Literata Variable', 'Literata', 'Times New Roman', serif;
+  --font-ui: 'GFS Didot', 'Literata Variable', 'Literata', 'Times New Roman', serif;
+  --font-ornament: 'GFS Didot', 'Literata Variable', 'Times New Roman', serif;
   --font-body: 'Literata Variable', 'Literata', Georgia, 'Times New Roman', serif;
 
   /* Type scale (fluid) */
@@ -21,9 +21,9 @@
   --text-2xl: clamp(1.6rem, 1.3rem + 1vw, 2.1rem);
   --text-3xl: clamp(1.95rem, 1.5rem + 1.6vw, 2.8rem);
   --text-4xl: clamp(2.3rem, 1.6rem + 2.6vw, 3.9rem);
-  --leading-tight: 1.15;
+  --leading-tight: 1.25;
   --leading-body: 1.7;
-  --tracking-caps: 0.12em;
+  --tracking-caps: 0.06em;
 
   /* Palette: burgundy, gold, ivory, ink */
   --burgundy-950: #2a0910;
@@ -82,7 +82,7 @@
   /* Layout */
   --container: 76rem;
   --gutter: clamp(1rem, 0.6rem + 2vw, 2rem);
-  --section-space: clamp(3.5rem, 2.5rem + 4vw, 6.5rem);
+  --section-space: clamp(3rem, 2.2rem + 3.5vw, 5.5rem);
   --header-h: 5rem;
   --header-h-condensed: 3.75rem;
 

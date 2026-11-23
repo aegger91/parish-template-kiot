@@ -39,7 +39,7 @@ export function slip(idx: number, type: string, d: ZapData, f: ZapFmt): string {
   const comms = d.commemorations
     .map(
       (c, i) => `<label class="opt-row" data-applies="${esc(c.appliesTo.join(' '))}" ${c.appliesTo.includes(type) ? '' : 'hidden'}>
-    <input type="radio" name="${name('comm')}" value="${esc(c.id)}" data-price="${c.suggested}" ${i === 0 ? 'checked' : ''} ${c.appliesTo.includes(type) ? '' : 'disabled'} />
+    <input type="radio" name="${name('comm')}" value="${esc(c.id)}" data-suggested="${c.suggested}" ${i === 0 ? 'checked' : ''} ${c.appliesTo.includes(type) ? '' : 'disabled'} />
     <span class="opt-main"><span class="opt-label">${esc(c.label)}</span>${c.description ? `<span class="opt-desc">${esc(c.description)}</span>` : ''}</span>
     <span class="opt-price">${esc(f.t('zap.suggested', { amount: f.money(c.suggested) }))}</span>
   </label>`,
@@ -84,7 +84,7 @@ export function slip(idx: number, type: string, d: ZapData, f: ZapFmt): string {
   <fieldset class="slip-section">
     <legend>${esc(f.t('zap.extraDonation'))}</legend>
     <div class="pill-list">${presets}
-      <label class="pill pill--input"><span class="visually-hidden">${esc(f.t('otherAmount'))}</span><input type="number" min="0" step="1" inputmode="decimal" placeholder="${esc(f.t('otherAmount'))}" data-gift-other /></label>
+      <label class="pill pill--input"><span class="visually-hidden">${esc(f.t('otherAmount'))}</span><input type="number" step="1" inputmode="decimal" placeholder="${esc(f.t('otherAmount'))}" value="" data-gift-other /></label>
     </div>
   </fieldset>
   <footer class="slip-foot"><span>${esc(f.t('store.subtotal'))}</span><strong data-slip-total></strong></footer>

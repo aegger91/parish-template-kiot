@@ -13,13 +13,15 @@ const L = getLanguage(lang);
 const now = nowIn(site.timeZone);
 const days = s.days ?? 7;
 const occ = occurrences(now.day, now.day + days - 1, services, feasts, site.calendar);
-const fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, t: (k: string, v?: any) => t(k, lang, v), tr: (v: any) => tr(v, lang) };
+const style = site.calendar?.calendarStyle === 'old' || site.calendar?.style === 'old' || site.calendar?.style === 'julian' ? 'old' : 'new';
+const fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, calendar: site.calendar, t: (k: string, v?: any) => t(k, lang, v), tr: (v: any) => tr(v, lang) };
 ---
 <section class="section section--muted" id={s.id}>
   <div class="container">
     <SectionHead lang={lang} heading={s.heading} intro={s.intro}>
       {pageExists('services') && <a class="text-link" href={pageHref(lang, 'services')}>{t('fullSchedule', lang)} <Icon name="arrow-right" size={15} directional /></a>}
     </SectionHead>
+    <p class="sched-cal-label sched-cal-label--preview">{t(style === 'old' ? 'calendarStyle.old' : 'calendarStyle.new', lang)}</p>
     <ol class="week-strip" data-week-preview data-days={days} data-reveal set:html={weekPreview(now.day, days, occ, now.day, fmt)} />
   </div>
 </section>
@@ -34,6 +36,6 @@ const fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, t: (k: string, v?:
     const days = Number(el.dataset.days) || 7;
     const now = nowIn(c.timeZone);
     const occ = occurrences(now.day, now.day + days - 1, data, data.feasts, c.calendar);
-    el.innerHTML = weekPreview(now.day, days, occ, now.day, { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, t, tr });
+    el.innerHTML = weekPreview(now.day, days, occ, now.day, { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, calendar: c.calendar, t, tr });
   });
 </script>

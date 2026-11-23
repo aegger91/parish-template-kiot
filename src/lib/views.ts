@@ -1,6 +1,7 @@
 /* HTML renderers for schedule views, shared by the build and the browser. */
-import { dayNum, formatDay, formatTime, fromDayNum, weekday } from './calendar';
+import { dayNum, formatDay, formatFeastCivilDate, formatTime, fromDayNum, resolveCalendarStyle, weekday } from './calendar';
 import type { Feast } from './content';
+import { detailAttrs } from './event-detail';
 import type { Fmt } from './format';
 import type { Occurrence } from './schedule';
 
@@ -11,16 +12,36 @@ type Occ = { items: Occurrence[]; feasts: Map<number, Feast[]> };
 
 const streamIcon = `<svg class="chip-stream" aria-hidden="true" width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><path d="M4.9 19.1a10 10 0 0 1 0-14.2M7.8 16.2a6 6 0 0 1 0-8.4M16.2 7.8a6 6 0 0 1 0 8.4M19.1 4.9a10 10 0 0 1 0 14.2"/></svg>`;
 
-function feastTags(list: Feast[] | undefined, f: Fmt, max = 2) {
+function feastTags(list: Feast[] | undefined, f: Fmt, day: number, max = 2) {
   if (!list?.length) return '';
+  const style = resolveCalendarStyle(f.calendar ?? { calendarStyle: 'new' });
   return list
     .slice(0, max)
-    .map((x) => `<span class="feast-tag feast-tag--${x.rank}">${x.rank === 'great' ? `<span class="visually-hidden">${esc(f.t('greatFeast'))}: </span>` : ''}${esc(f.tr(x.name))}</span>`)
+    .map((x) => {
+      const name = esc(f.tr(x.name));
+      const date =
+        style === 'old' && x.month != null
+          ? ` <span class="feast-os">${esc(formatFeastCivilDate(day, x, style, f.locale, f.t('oldStyleAbbrev')))}</span>`
+          : '';
+      return `<span class="feast-tag feast-tag--${x.rank}">${x.rank === 'great' ? `<span class="visually-hidden">${esc(f.t('greatFeast'))}: </span>` : ''}${name}${date}</span>`;
+    })
     .join('');
 }
 
 function chip(o: Occurrence, f: Fmt) {
-  return `<li class="svc-chip svc-chip--${esc(o.type)}${o.feast ? ' is-feast' : ''}"><span class="chip-time">${esc(formatTime(o.start, f.locale, f.hourCycle))}</span> <span class="chip-title">${esc(f.tr(o.title))}</span>${o.streamed ? `${streamIcon}<span class="visually-hidden">${esc(f.t('streamed'))}</span>` : ''}</li>`;
+  const title = f.tr(o.title);
+  const attrs = detailAttrs({
+    title,
+    day: o.day,
+    start: o.start,
+    duration: o.duration,
+    streamed: o.streamed,
+  });
+  return `<li><button type="button" class="svc-chip svc-chip--${esc(o.type)}${o.feast ? ' is-feast' : ''}" ${attrs}>
+  <span class="chip-time">${esc(formatTime(o.start, f.locale, f.hourCycle))}</span>
+  <span class="chip-title">${esc(title)}</span>
+  ${o.streamed ? `${streamIcon}<span class="visually-hidden">${esc(f.t('streamed'))}</span>` : ''}
+</button></li>`;
 }
 
 function dayClass(day: number, today: number, feasts?: Feast[]) {
@@ -39,7 +60,7 @@ export function weekPreview(start: number, days: number, occ: Occ, today: number
     const fe = occ.feasts.get(d);
     html += `<li class="ws-day ${dayClass(d, today, fe)}">
   <p class="ws-date"><span class="ws-dow">${esc(d === today ? f.t('today') : formatDay(d, f.locale, { weekday: 'short' }))}</span><span class="ws-num">${esc(formatDay(d, f.locale, { day: 'numeric' }))}</span><span class="ws-mon">${esc(formatDay(d, f.locale, { month: 'short' }))}</span></p>
-  ${fe ? `<div class="ws-feasts">${feastTags(fe, f, 1)}</div>` : ''}
+  ${fe ? `<div class="ws-feasts">${feastTags(fe, f, d, 1)}</div>` : ''}
   ${items.length ? `<ul class="chip-list">${items.map((o) => chip(o, f)).join('')}</ul>` : `<p class="ws-empty">${esc(f.t('noServices'))}</p>`}
 </li>`;
   }
@@ -53,7 +74,7 @@ export function weekView(start: number, occ: Occ, today: number, f: Fmt) {
     const fe = occ.feasts.get(d);
     html += `<li class="wk-day ${dayClass(d, today, fe)}">
   <h3 class="wk-head"><span class="wk-dow">${esc(formatDay(d, f.locale, { weekday: 'long' }))}</span><span class="wk-date">${esc(formatDay(d, f.locale, { month: 'short', day: 'numeric' }))}</span>${d === today ? `<span class="today-pill">${esc(f.t('today'))}</span>` : ''}</h3>
-  ${fe ? `<div class="wk-feasts">${feastTags(fe, f, 3)}</div>` : ''}
+  ${fe ? `<div class="wk-feasts">${feastTags(fe, f, d, 3)}</div>` : ''}
   ${items.length ? `<ul class="chip-list">${items.map((o) => chip(o, f)).join('')}</ul>` : `<p class="wk-empty">${esc(f.t('noServices'))}</p>`}
 </li>`;
   }
@@ -79,7 +100,7 @@ export function monthView(year: number, month: number, occ: Occ, today: number, 
       const fe = inMonth ? occ.feasts.get(d) : undefined;
       body += `<td class="mo-cell ${inMonth ? '' : 'is-outside'} ${dayClass(d, today, fe)}">${
         inMonth
-          ? `<span class="mo-num">${fromDayNum(d).d}</span>${fe ? `<div class="mo-feasts">${feastTags(fe, f, 1)}</div>` : ''}${items.length ? `<ul class="chip-list chip-list--tight">${items.map((o) => chip(o, f)).join('')}</ul>` : ''}`
+          ? `<span class="mo-num">${fromDayNum(d).d}</span>${fe ? `<div class="mo-feasts">${feastTags(fe, f, d, 1)}</div>` : ''}${items.length ? `<ul class="chip-list chip-list--tight">${items.map((o) => chip(o, f)).join('')}</ul>` : ''}`
           : ''
       }</td>`;
     }
@@ -93,7 +114,7 @@ export function monthView(year: number, month: number, occ: Occ, today: number, 
     const items = occ.items.filter((o) => o.day === d);
     const fe = occ.feasts.get(d);
     if (!items.length && !fe) continue;
-    list += `<li class="ml-day ${dayClass(d, today, fe)}"><p class="ml-date"><span class="ml-num">${fromDayNum(d).d}</span><span class="ml-dow">${esc(formatDay(d, f.locale, { weekday: 'short' }))}</span></p><div class="ml-body">${fe ? `<div class="wk-feasts">${feastTags(fe, f, 3)}</div>` : ''}${items.length ? `<ul class="chip-list">${items.map((o) => chip(o, f)).join('')}</ul>` : ''}</div></li>`;
+    list += `<li class="ml-day ${dayClass(d, today, fe)}"><p class="ml-date"><span class="ml-num">${fromDayNum(d).d}</span><span class="ml-dow">${esc(formatDay(d, f.locale, { weekday: 'short' }))}</span></p><div class="ml-body">${fe ? `<div class="wk-feasts">${feastTags(fe, f, d, 3)}</div>` : ''}${items.length ? `<ul class="chip-list">${items.map((o) => chip(o, f)).join('')}</ul>` : ''}</div></li>`;
   }
   list += '</ol>';
   return table + list;

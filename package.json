@@ -11,6 +11,7 @@
     "preview": "astro preview --host 127.0.0.1 --port 4328",
     "validate": "node scripts/validate-content.mjs",
     "check:layout": "node scripts/check-layout.mjs http://127.0.0.1:4328",
+    "check:fit": "node scripts/check-layout.mjs http://127.0.0.1:4328",
     "screenshots": "node scripts/screenshots.mjs http://127.0.0.1:4328 screenshots",
     "illustrations": "node scripts/build-illustrations.mjs",
     "zip": "rm -f parish-template-kiot-dist.zip && cd dist && zip -qr ../parish-template-kiot-dist.zip .",

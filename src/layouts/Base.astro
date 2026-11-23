@@ -1,6 +1,9 @@
 ---
-import '@fontsource/gfs-didot/400.css';
-import '@fontsource-variable/literata';
+/* Self-hosted subsets: Latin, Latin-ext, Greek, Greek-ext, Cyrillic, Cyrillic-ext. */
+import '@fontsource/gfs-didot/latin-400.css';
+import '@fontsource/gfs-didot/greek-400.css';
+import '@fontsource/gfs-didot/greek-ext-400.css';
+import '@fontsource-variable/literata/wght.css';
 import '@fontsource-variable/literata/wght-italic.css';
 import '../styles/global.css';
 import Header from '../components/Header.astro';
@@ -22,6 +25,7 @@ const L = getLanguage(lang);
 const siteName = tr(site.name, lang);
 const fullTitle = title ? `${title} | ${siteName}` : siteName;
 const desc = description || tr(site.description, lang);
+const addr = site.contact.address;
 const links: Record<string, string> = {};
 for (const id of ['home', 'store', 'cart', 'checkout', 'zapiski', 'livestream', 'services', 'donate', 'contact', 'events', 'volunteer']) {
   if (pageExists(id)) links[id] = pageHref(lang, id);
@@ -38,9 +42,13 @@ const ctx = {
   ui: uiFor(lang),
   paymentProvider: site.features?.payments?.provider ?? 'none',
   parishId: site.orthodoxConnect?.parishId,
+  parishName: siteName,
   appLinkBase: site.orthodoxConnect?.appLinkBase,
   newsletterListId: site.orthodoxConnect?.newsletter?.listId,
   liveNow: !!site.features?.livestream?.enabled && !!site.features?.livestream?.liveNow,
+  liveUrl: site.features?.livestream?.watchUrl || '',
+  address: addr,
+  directionsQuery: site.contact.directionsQuery || `${addr.street}, ${addr.city}`,
   links,
 };
 const scheduleData = { weekly: services.weekly, feastServices: services.feastServices, special: services.special, feasts };
@@ -73,6 +81,7 @@ const scheduleData = { weekly: services.weekly, feastServices: services.feastSer
     <script>
       import '../scripts/reveal';
       import '../scripts/live';
+      import '../scripts/event-detail';
     </script>
   </body>
 </html>

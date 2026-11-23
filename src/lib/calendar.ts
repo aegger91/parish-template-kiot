@@ -74,18 +74,42 @@ export function paschaFor(year: number, paschalion: Paschalion): number {
   return paschalion === 'gregorian' ? gregorianPascha(year) : orthodoxPascha(year);
 }
 
+/** Resolve calendarStyle ('new' | 'old'); accepts legacy style names from older content. */
+export function resolveCalendarStyle(cfg: CalendarConfig | { calendarStyle?: string; style?: string }): CalendarStyle {
+  const raw = (cfg as any).calendarStyle ?? (cfg as any).style;
+  if (raw === 'old' || raw === 'julian') return 'old';
+  return 'new';
+}
+
 /** Civil day on which a fixed church-calendar date falls in a given church year. */
 export function fixedFeastDay(style: CalendarStyle, year: number, month: number, day: number): number {
-  return style === 'julian' ? julianToDayNum(year, month, day) : dayNum(year, month, day);
+  return style === 'old' ? julianToDayNum(year, month, day) : dayNum(year, month, day);
 }
 
 export interface CalendarConfig {
-  style: CalendarStyle;
+  /** 'new' = Revised Julian; 'old' = Julian (Old Style). */
+  calendarStyle?: CalendarStyle;
+  /** @deprecated Use calendarStyle. Kept for reading older content. */
+  style?: CalendarStyle | 'julian' | 'revised-julian' | 'gregorian';
   paschalion?: Paschalion;
 }
 
 export function defaultPaschalion(cfg: CalendarConfig): Paschalion {
-  return cfg.paschalion ?? (cfg.style === 'gregorian' ? 'gregorian' : 'orthodox');
+  return cfg.paschalion ?? 'orthodox';
+}
+
+/** Format a civil feast day; on Old Calendar include the church date, e.g. "Dec 19 (Dec 6 O.S.)". */
+export function formatFeastCivilDate(
+  civilDay: number,
+  feast: Feast,
+  style: CalendarStyle,
+  locale: string,
+  osAbbrev: string,
+): string {
+  const civil = formatDay(civilDay, locale, { month: 'short', day: 'numeric' });
+  if (style !== 'old' || feast.month == null || feast.day == null) return civil;
+  const os = formatDay(dayNum(2000, feast.month, feast.day), locale, { month: 'short', day: 'numeric' });
+  return `${civil} (${os} ${osAbbrev})`;
 }
 
 /** All feasts falling between two day numbers (inclusive), keyed by day number. */
@@ -104,9 +128,10 @@ export function feastsInRange(
   };
   const y0 = fromDayNum(start).y - 1;
   const y1 = fromDayNum(end).y + 1;
+  const style = resolveCalendarStyle(cfg);
   const paschalion = defaultPaschalion(cfg);
   for (let y = y0; y <= y1; y++) {
-    for (const f of data.fixed) push(fixedFeastDay(cfg.style, y, f.month!, f.day!), f);
+    for (const f of data.fixed) push(fixedFeastDay(style, y, f.month!, f.day!), f);
     const pascha = paschaFor(y, paschalion);
     for (const f of data.movable) push(pascha + (f.offset ?? 0), f);
   }

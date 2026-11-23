@@ -13,7 +13,7 @@ interface Props { lang: string; section: any }
 const { lang, section: s } = Astro.props;
 const L = getLanguage(lang);
 const img = galleryImage(s.image);
-const fmt: Fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, t: (k, v) => t(k, lang, v), tr: (v) => tr(v, lang) };
+const fmt: Fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, calendar: site.calendar, t: (k, v) => t(k, lang, v), tr: (v) => tr(v, lang) };
 const now = nowIn(site.timeZone);
 const { items, feasts: fmap } = occurrences(now.day, now.day + 14, services, feasts, site.calendar);
 const next = upcoming(items, now, s.servicesCount ?? 3);
@@ -102,7 +102,7 @@ const secondary = cta(s.secondaryCta);
   if (list && slot) {
     const c = ctx();
     const data = readJson('kiot-schedule');
-    const fmt = { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, t, tr };
+    const fmt = { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, calendar: c.calendar, t, tr };
     const paint = () => {
       const now = nowIn(c.timeZone);
       const { items, feasts } = occurrences(now.day, now.day + 14, data, data.feasts, c.calendar);

@@ -2,7 +2,8 @@
 import SectionHead from '../SectionHead.astro';
 import Icon from '../Icon.astro';
 import { feasts, services, site } from '../../lib/content';
-import { formatDay, formatDayRange, formatTime, nowIn, parseTime, weekday } from '../../lib/calendar';
+import { formatDay, formatDayRange, formatTime, nowIn, parseTime, resolveCalendarStyle, weekday } from '../../lib/calendar';
+import { detailAttrs } from '../../lib/event-detail';
 import { getLanguage, t, tr } from '../../lib/i18n';
 import { occurrences } from '../../lib/schedule';
 import { weekView } from '../../lib/views';
@@ -12,11 +13,24 @@ const L = getLanguage(lang);
 const now = nowIn(site.timeZone);
 const weekStart = now.day - weekday(now.day);
 const occ = occurrences(weekStart, weekStart + 6, services, feasts, site.calendar);
-const fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, t: (k: string, v?: any) => t(k, lang, v), tr: (v: any) => tr(v, lang) };
-const paschalion = site.calendar.style === 'gregorian' ? 'gregorian' : 'orthodox';
-const note = t('calendarNote', lang, { calendar: t(`calendar.${site.calendar.style}`, lang), paschalion: t(`paschalion.${paschalion}`, lang) });
-const weekly = [...services.weekly].sort((a, b) => (a.day ?? 0) - (b.day ?? 0) || a.time.localeCompare(b.time));
+const style = resolveCalendarStyle(site.calendar);
+const fmt = {
+  lang,
+  locale: L.locale,
+  hourCycle: L.hourCycle,
+  calendar: site.calendar,
+  t: (k: string, v?: any) => t(k, lang, v),
+  tr: (v: any) => tr(v, lang),
+};
+const calLabel = t(style === 'old' ? 'calendarStyle.old' : 'calendarStyle.new', lang);
 const label = formatDayRange(weekStart, weekStart + 6, L.locale);
+const place = `${site.contact.address.street}, ${site.contact.address.city}, ${site.contact.address.region} ${site.contact.address.postalCode}`;
+const weekly = [...services.weekly].sort((a, b) => (a.day ?? 0) - (b.day ?? 0) || a.time.localeCompare(b.time));
+const nextWeeklyDay = (wd: number) => {
+  const cur = weekday(now.day);
+  const delta = (wd - cur + 7) % 7;
+  return now.day + delta;
+};
 ---
 <section class="section" id={s.id}>
   <div class="container">
@@ -34,22 +48,23 @@ const label = formatDayRange(weekStart, weekStart + 6, L.locale);
           <button type="button" class="btn btn-ghost btn-sm" data-today>{t('goToToday', lang)}</button>
         </div>
       </div>
+      <p class="sched-cal-label">{calLabel}</p>
       <div class="sched-legend">
         <span><i class="legend-dot legend-dot--great"></i>{t('legendGreat', lang)}</span>
         <span><i class="legend-dot legend-dot--feast"></i>{t('legendFeast', lang)}</span>
         <span><Icon name="radio" size={14} /> {t('streamed', lang)}</span>
       </div>
       <div class="sched-body" data-body set:html={weekView(weekStart, occ, now.day, fmt)} />
-      <p class="sched-note">{note}</p>
     </div>
 
     <div class="weekly-summary" data-reveal>
       <h3 class="weekly-title">{t('weeklyServices', lang)}</h3>
-      <ul>
-        {weekly.map((w) => (
-          <li><span class="ws-d">{formatDay(3 + (w.day ?? 0), L.locale, { weekday: 'long' })}</span><span class="ws-t">{formatTime(parseTime(w.time), L.locale, L.hourCycle)}</span><span class="ws-n">{tr(w.title, lang)}</span></li>
-        ))}
-      </ul>
+      <ul set:html={weekly.map((w) => {
+        const day = nextWeeklyDay(w.day ?? 0);
+        const title = tr(w.title, lang);
+        const attrs = detailAttrs({ title, day, start: parseTime(w.time), duration: w.duration, streamed: !!w.streamed, place });
+        return `<li><button type="button" class="ws-row" ${attrs}><span class="ws-d">${formatDay(3 + (w.day ?? 0), L.locale, { weekday: 'long' })}</span><span class="ws-t">${formatTime(parseTime(w.time), L.locale, L.hourCycle)}</span><span class="ws-n">${title.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[c]!)}</span></button></li>`;
+      }).join('')} />
     </div>
   </div>
 </section>
@@ -63,7 +78,7 @@ const label = formatDayRange(weekStart, weekStart + 6, L.locale);
   document.querySelectorAll<HTMLElement>('[data-schedule]').forEach((root) => {
     const c = ctx();
     const data = readJson('kiot-schedule');
-    const fmt = { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, t, tr };
+    const fmt = { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, calendar: c.calendar, t, tr };
     const body = root.querySelector<HTMLElement>('[data-body]')!;
     const label = root.querySelector<HTMLElement>('[data-label]')!;
     const steps = root.querySelectorAll<HTMLButtonElement>('[data-step]');

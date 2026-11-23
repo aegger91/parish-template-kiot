@@ -26,7 +26,8 @@ export interface Language {
   hourCycle?: 'h12' | 'h23';
 }
 
-export type CalendarStyle = 'julian' | 'revised-julian' | 'gregorian';
+/** Site-level calendar: 'new' = Revised Julian, 'old' = Julian (Old Style). */
+export type CalendarStyle = 'new' | 'old';
 export type Paschalion = 'orthodox' | 'gregorian';
 export type LogoStyle = 'seal' | 'kiot' | 'square' | 'wordmark';
 export type FeatureKey = 'livestream' | 'store' | 'requestService' | 'zapiski' | 'getInvolved' | 'donations' | 'newsletter';

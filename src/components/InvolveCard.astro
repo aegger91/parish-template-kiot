@@ -10,6 +10,10 @@ const n = Math.min(x.signups, x.capacity);
 const left = x.capacity - n;
 const full = left <= 0;
 const spots = kind === 'event' ? `${t('gi.going', lang, { count: n })} · ${full ? t('gi.full', lang) : t('gi.spotsLeft', lang, { count: left })}` : t('gi.spots', lang, { signups: n, capacity: x.capacity });
+const title = tr(x.title, lang);
+const place = tr(x.location, lang);
+const note = x.description ? tr(x.description, lang) : '';
+const start = parseTime(x.time);
 ---
 <article
   class:list={['involve-card', `involve-card--${kind}`, { 'is-full': full }]}
@@ -34,19 +38,35 @@ const spots = kind === 'event' ? `${t('gi.going', lang, { count: n })} · ${full
       <span class="oc-badge"><span class="oc-mark" aria-hidden="true"></span>{t('gi.onConnect', lang)}</span>
       <span class="ic-past" data-past hidden>{t('gi.past', lang)}</span>
     </p>
-    <h3 class="ic-title">{tr(x.title, lang)}</h3>
+    {kind === 'event' ? (
+      <h3 class="ic-title">
+        <button
+          type="button"
+          class="ic-title-btn"
+          data-event-detail
+          data-title={title}
+          data-day={day}
+          data-start={start}
+          data-duration={x.duration ?? 90}
+          data-place={place}
+          data-note={note || undefined}
+        >{title}</button>
+      </h3>
+    ) : (
+      <h3 class="ic-title">{title}</h3>
+    )}
     <ul class="ic-meta">
-      <li><Icon name="clock" size={15} /> {formatTime(parseTime(x.time), L.locale, L.hourCycle)}</li>
-      <li><Icon name="map-pin" size={15} /> <span class="visually-hidden">{t('gi.location', lang)}: </span>{tr(x.location, lang)}</li>
+      <li><Icon name="clock" size={15} /> {formatTime(start, L.locale, L.hourCycle)}</li>
+      <li><Icon name="map-pin" size={15} /> <span class="visually-hidden">{t('gi.location', lang)}: </span>{place}</li>
       <li><Icon name="user" size={15} /> <span class="visually-hidden">{t('gi.organizer', lang)}: </span>{x.organizer}</li>
     </ul>
-    {x.description && <p class="ic-desc">{tr(x.description, lang)}</p>}
+    {note && <p class="ic-desc">{note}</p>}
     <div class="ic-foot">
       <div class="ic-capacity">
         <span class="ic-spots" data-spots>{spots}</span>
         <span class="cap-bar" aria-hidden="true"><span data-bar style={`inline-size:${Math.round((n / x.capacity) * 100)}%`}></span></span>
       </div>
-      <button type="button" class:list={['btn', 'btn-sm', kind === 'event' ? 'btn-burgundy' : 'btn-gold']} data-signup={x.id} data-kind={kind} data-title={tr(x.title, lang)} disabled={full}>
+      <button type="button" class:list={['btn', 'btn-sm', kind === 'event' ? 'btn-burgundy' : 'btn-gold']} data-signup={x.id} data-kind={kind} data-title={title} disabled={full}>
         {full ? t('gi.full', lang) : t(kind === 'event' ? 'gi.rsvp' : 'gi.signUp', lang)}
       </button>
     </div>

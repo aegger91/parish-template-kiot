@@ -14,7 +14,16 @@ const shown = teaser ? events.slice(0, s.limit) : events;
 const cat = (id: string) => involved.eventCategories.find((c: any) => c.id === id);
 const usedCats = involved.eventCategories.filter((c: any) => events.some((e: any) => e.category === c.id));
 const createLink = connectDeepLink(site.orthodoxConnect.appLinkBase, 'events/new', site.orthodoxConnect.parishId);
-const calEvents = events.map((e: any) => ({ id: e.id, date: e.date, time: e.time, title: tr(e.title, lang), category: e.category }));
+const calEvents = events.map((e: any) => ({
+  id: e.id,
+  date: e.date,
+  time: e.time,
+  duration: e.duration ?? 90,
+  title: tr(e.title, lang),
+  location: tr(e.location, lang),
+  note: e.description ? tr(e.description, lang) : '',
+  category: e.category,
+}));
 ---
 <section class:list={['section', { 'section--muted': s.muted }]} id={s.id}>
   <div class="container" data-events data-teaser={teaser ? '' : undefined}>
@@ -60,6 +69,7 @@ const calEvents = events.map((e: any) => ({ id: e.id, date: e.date, time: e.time
 <script>
   import { ctx, esc, t } from '../../lib/client';
   import { dayNum, formatDay, formatTime, fromDayNum, nowIn, parseIsoDay, parseTime } from '../../lib/calendar';
+  import { detailAttrs } from '../../lib/event-detail';
   import { initSignups, paintCapacity } from '../../scripts/connect';
 
   document.querySelectorAll<HTMLElement>('[data-events]').forEach((root) => {
@@ -76,7 +86,8 @@ const calEvents = events.map((e: any) => ({ id: e.id, date: e.date, time: e.time
     initSignups(root);
     if (root.hasAttribute('data-teaser')) return;
 
-    const events: { id: string; date: string; time: string; title: string; category: string }[] = JSON.parse(root.querySelector('[data-ev-json]')!.textContent!);
+    type Ev = { id: string; date: string; time: string; duration: number; title: string; location: string; note: string; category: string };
+    const events: Ev[] = JSON.parse(root.querySelector('[data-ev-json]')!.textContent!);
     const list = root.querySelector<HTMLElement>('[data-ev-list]')!;
     const cal = root.querySelector<HTMLElement>('[data-ev-calendar]')!;
     const empty = root.querySelector<HTMLElement>('[data-empty]')!;
@@ -92,13 +103,23 @@ const calEvents = events.map((e: any) => ({ id: e.id, date: e.date, time: e.time
       const start = dayNum(y, m, 1);
       const end = dayNum(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1);
       const lead = (start + 4) % 7;
-      const byDay = new Map<number, typeof events>();
+      const byDay = new Map<number, Ev[]>();
       visible().forEach((e) => {
         const d = parseIsoDay(e.date);
         if (d >= start && d < end) byDay.set(d, [...(byDay.get(d) ?? []), e]);
       });
-      const chip = (e: (typeof events)[number]) =>
-        `<li><a class="svc-chip svc-chip--event" href="#${esc(e.id)}" data-jump="${esc(e.id)}"><span class="chip-time">${esc(formatTime(parseTime(e.time), c.locale, c.hourCycle))}</span> <span class="chip-title">${esc(e.title)}</span></a></li>`;
+      const chip = (e: Ev) => {
+        const day = parseIsoDay(e.date);
+        const attrs = detailAttrs({
+          title: e.title,
+          day,
+          start: parseTime(e.time),
+          duration: e.duration || 90,
+          place: e.location,
+          note: e.note || undefined,
+        });
+        return `<li><button type="button" class="svc-chip svc-chip--event" ${attrs}><span class="chip-time">${esc(formatTime(parseTime(e.time), c.locale, c.hourCycle))}</span> <span class="chip-title">${esc(e.title)}</span></button></li>`;
+      };
       let rows = '';
       const total = Math.ceil((lead + (end - start)) / 7) * 7;
       for (let i = 0; i < total; i += 7) {
@@ -141,17 +162,6 @@ const calEvents = events.map((e: any) => ({ id: e.id, date: e.date, time: e.time
         renderCal();
       }),
     );
-    cal.addEventListener('click', (e) => {
-      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-jump]');
-      if (!a) return;
-      e.preventDefault();
-      view = 'list';
-      cat = '';
-      apply();
-      const card = document.getElementById(a.dataset.jump!);
-      card?.scrollIntoView({ block: 'center' });
-      card?.querySelector<HTMLButtonElement>('[data-signup]')?.focus({ preventScroll: true });
-    });
     if (new URLSearchParams(location.search).get('view') === 'calendar') view = 'calendar';
     apply();
   });

@@ -34,14 +34,12 @@ const funds = d.funds.map((f: any) => ({ id: f.id, label: tr(f.label, lang) }));
         <legend>{t('amount', lang)}</legend>
         <div class="amount-grid">
           {d.amounts.map((a: number) => (
-            <label class="amount-option"><input type="radio" name="amount" value={a} checked={a === d.defaultAmount} /><span>{money(a)}</span></label>
+            <label class="amount-option"><input type="radio" name="amount" value={a} data-suggested /><span>{money(a)}</span></label>
           ))}
-          <label class="amount-option amount-option--other"><input type="radio" name="amount" value="other" /><span>{t('otherAmount', lang)}</span></label>
         </div>
-        <div class="field other-amount" data-other hidden>
+        <div class="field other-amount" data-other>
           <label for="donate-other">{t('otherAmount', lang)}</label>
-          <div class="money-input"><span aria-hidden="true">{money(0).replace(/[\d.,\s]/g, '')}</span><input id="donate-other" type="number" inputmode="decimal" min="1" step="1" name="other" /></div>
-          <p class="field-error">{t('enterAmount', lang, { min: money(1) })}</p>
+          <div class="money-input"><span aria-hidden="true">{money(0).replace(/[\d.,\s]/g, '')}</span><input id="donate-other" type="number" inputmode="decimal" step="1" name="other" value="" placeholder="0" /></div>
         </div>
       </fieldset>
       <div class="field">
@@ -52,7 +50,7 @@ const funds = d.funds.map((f: any) => ({ id: f.id, label: tr(f.label, lang) }));
       </div>
       <div class="donate-summary" aria-live="polite">
         <span class="summary-label">{t('yourGift', lang)}</span>
-        <strong data-summary></strong>
+        <strong data-summary>{money(0)}</strong>
       </div>
       <button class="btn btn-gold btn-lg btn-block" type="submit">{t('continuePayment', lang)}</button>
       <p class="form-note">{t('paymentDemo', lang)}</p>
@@ -64,30 +62,36 @@ const funds = d.funds.map((f: any) => ({ id: f.id, label: tr(f.label, lang) }));
   import { ctx, money, t } from '../../lib/client';
   import { submitPayment } from '../../lib/handlers';
   document.querySelectorAll<HTMLFormElement>('[data-donate]').forEach((form) => {
-    const other = form.querySelector<HTMLElement>('[data-other]')!;
-    const otherInput = other.querySelector('input')!;
+    const otherInput = form.querySelector<HTMLInputElement>('[name=other]')!;
     const summary = form.querySelector<HTMLElement>('[data-summary]')!;
     const status = form.querySelector<HTMLElement>('[data-status]')!;
     const fund = form.querySelector<HTMLSelectElement>('[name=fund]')!;
     const amount = () => {
-      const v = (form.querySelector<HTMLInputElement>('[name=amount]:checked')?.value) ?? '0';
-      return v === 'other' ? Number(otherInput.value) || 0 : Number(v);
+      const chip = form.querySelector<HTMLInputElement>('[name=amount]:checked');
+      if (chip) return Number(chip.value) || 0;
+      return Number(otherInput.value) || 0;
     };
     const monthly = () => form.querySelector<HTMLInputElement>('[name=frequency]:checked')?.value === 'monthly';
     const update = () => {
-      other.hidden = form.querySelector<HTMLInputElement>('[name=amount]:checked')?.value !== 'other';
       const a = amount();
       const fundLabel = fund.options[fund.selectedIndex].text;
-      summary.textContent = a > 0 ? t(monthly() ? 'summaryMonthly' : 'summaryOnce', { amount: money(a), fund: fundLabel }) : '';
+      summary.textContent = t(monthly() ? 'summaryMonthly' : 'summaryOnce', { amount: money(a), fund: fundLabel });
     };
-    form.addEventListener('input', update);
+    form.querySelectorAll<HTMLInputElement>('[data-suggested]').forEach((r) =>
+      r.addEventListener('change', () => {
+        otherInput.value = '';
+        update();
+      }),
+    );
+    otherInput.addEventListener('input', () => {
+      form.querySelectorAll<HTMLInputElement>('[name=amount]').forEach((r) => (r.checked = false));
+      update();
+    });
     form.addEventListener('change', update);
     update();
     form.addEventListener('submit', async (e) => {
       e.preventDefault();
       const a = amount();
-      other.classList.toggle('is-invalid', a < 1);
-      if (a < 1) { otherInput.focus(); return; }
       const c = ctx();
       const res = await submitPayment(
         {

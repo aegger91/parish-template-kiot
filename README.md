@@ -38,11 +38,16 @@ Things to know:
 - **Welcome and About blocks.** The Home page has a `home-welcome` text section and Our Parish has a `parish-about` text section (type `richText`). Edit the text, or set `"enabled": false` to hide them.
 - **Ids are stable.** Every item has an `id`. Change the text freely, but keep the id.
 - **Translations.** Any text field can be a plain string or one entry per language, like `{ "en": "Vespers", "el": "Εσπερινός" }`. A missing language falls back to the default language.
-- **Languages.** Add a language to `site.languages` (with `dir: "rtl"` for right-to-left scripts) and add its text to the fields. The language switcher adapts to any count.
+- **Languages.** Add a language to `site.languages` (with `dir: "rtl"` for right-to-left scripts) and add its text to the fields. The language switcher adapts to any count. Fonts self-host Latin, Latin-ext, Greek and Cyrillic subsets.
 - **Sections.** Each page has a `sections` list. Move a section in the list to reorder it. Add `"enabled": false` to hide it.
 - **Modules.** `site.features` turns the Store, Request a Service, Commemorations and Candles, Get Involved, livestream and donations on or off. A module that is off disappears from the menu, pages and sections.
 - **Logo.** `site.logo.style` is `kiot` (arched icon frame), `seal`, `square` (your own image) or `wordmark`.
-- **Calendar.** `site.calendar.style` is `revised-julian`, `julian` or `gregorian`.
+- **Calendar style.** `site.calendar.calendarStyle` is `'new'` or `'old'` (builder/parish setting; no visitor toggle).
+  - **`new`** (default for this Greek Orthodox template): Revised Julian. Fixed feast dates and saint-of-the-day labels use the civil date.
+  - **`old`**: Julian (Old Style). Fixed feasts and saint labels show the civil date plus Old Style, e.g. `Dec 19 (Dec 6 O.S.)`.
+  - Movable Pascha-based feasts are the same in both. A small schedule header label reads “New Calendar” or “Old Calendar (Julian)” (translated).
+- **Clickable schedules.** Every service or event row opens a detail panel with Add to calendar (`.ics` + Google Calendar), Get directions, and the livestream link when the service is marked live.
+- **Donations and commemorations.** Amount fields start empty or at `$0`. Suggested-amount chips are optional; there is no minimum. In English UI the module is “Commemoration names” (nav: “Prayer requests”); Slavic languages keep the native word (Записки / Записке).
 - **Newsletter.** The footer sign-up form appears only when `orthodoxConnect.newsletter.enabled` is true.
 
 ## Connect payments and forms
@@ -51,13 +56,13 @@ All payments, form posts and sign-ups go through `src/lib/handlers.ts`. Each fun
 
 ## Other scripts
 
-- `npm run check:layout` loads every page in every language at 360, 390, 768, 1280 and 1440 px wide and reports horizontal overflow, cut-off labels and script errors. Run it against `npm run preview`.
+- `npm run check:layout` loads every page in every language at 360, 768 and 1280 px and flags overflow, clipped text (`scrollWidth`/`scrollHeight`) and overlaps. Run it against `npm run preview`.
 - `npm run screenshots` saves desktop and mobile screenshots of key pages to `screenshots/`.
 - `npm run zip` packs `dist/` into `parish-template-kiot-dist.zip` with the files at the zip root.
 - `npm run illustrations` regenerates the line drawings in `public/images/illustrations/`.
 
 The layout and screenshot scripts use Playwright with a local Chrome. Set `CHROME_PATH` if Chrome is not found.
 
-## Images and credits
+## Images, icons and credits
 
-See [SOURCES.md](SOURCES.md).
+See [SOURCES.md](SOURCES.md) for photo credits and [ICONS.md](ICONS.md) for Orthodox symbols and pictograms.
