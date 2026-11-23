@@ -1,0 +1,25 @@
+---
+import Cross from './Cross.astro';
+import { tr } from '../lib/i18n';
+interface Props {
+  lang: string;
+  eyebrow?: any;
+  heading?: any;
+  intro?: any;
+  align?: 'start' | 'center';
+  level?: 2 | 3;
+  id?: string;
+}
+const { lang, eyebrow, heading, intro, align = 'center', level = 2, id } = Astro.props;
+const H = level === 2 ? 'h2' : 'h3';
+---
+{(heading || eyebrow || intro) && (
+  <div class:list={['section-head', `section-head--${align}`]} data-reveal>
+    {eyebrow && (
+      <p class="eyebrow"><Cross size={11} /><span>{tr(eyebrow, lang)}</span><Cross size={11} /></p>
+    )}
+    {heading && <H class="section-title" id={id}>{tr(heading, lang)}</H>}
+    {intro && <p class="section-intro">{tr(intro, lang)}</p>}
+    <slot />
+  </div>
+)}

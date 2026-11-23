@@ -1,0 +1,107 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import Cross from '../Cross.astro';
+import { parishServices } from '../../lib/content';
+import { asset, t, tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const list = parishServices.services.filter((x: any) => !x.link || pageExists(x.link.page));
+---
+<section class="section" id={s.id}>
+  <div class="container" data-request-service>
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <ul class="arch-grid arch-grid--3 rs-grid">
+      {list.map((x: any, i: number) => (
+        <li class="arch-card rs-card" data-reveal style={`--reveal-delay:${(i % 3) * 70}ms`}>
+          <div class="rs-illustration"><img src={asset(x.illustration)} alt="" width="400" height="300" loading="lazy" /></div>
+          <div class="arch-card-body">
+            <h3 class="arch-card-title">{tr(x.title, lang)}</h3>
+            {x.subtitle && <p class="rs-subtitle">{tr(x.subtitle, lang)}</p>}
+            <p class="rs-meta">
+              <span class:list={['rs-price', `rs-price--${x.price}`]}>{t(x.price === 'free' ? 'rs.free' : 'rs.donation', lang)}</span>
+              <span class="rs-duration"><Icon name="clock" size={15} /> {tr(x.duration, lang)}</span>
+            </p>
+            <p class="rs-desc">{tr(x.description, lang)}</p>
+            {x.link ? (
+              <a class="btn btn-burgundy btn-sm" href={pageHref(lang, x.link.page)}>{t('rs.openForm', lang)} <Icon name="arrow-right" size={15} directional /></a>
+            ) : (
+              <button type="button" class="btn btn-burgundy btn-sm" data-open-request={x.id} data-title={tr(x.title, lang)}>{t('rs.request', lang)}</button>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+
+    <dialog class="dialog" data-request-dialog aria-labelledby="rs-dialog-title">
+      <div class="dialog-inner">
+        <button type="button" class="dialog-close icon-btn" data-dialog-close aria-label={t('close', lang)}><Icon name="x" size={20} /></button>
+        <div class="dialog-head">
+          <Cross size={26} class="text-gold" />
+          <p class="eyebrow">{t('rs.formTitle', lang)}</p>
+          <h2 id="rs-dialog-title" class="dialog-title" data-request-title></h2>
+          <p class="form-note">{t('rs.formIntro', lang)}</p>
+        </div>
+        <form data-office-form="service-request" data-success-key="rs.sent" novalidate>
+          <input type="hidden" name="service" data-service-id />
+          <div class="field">
+            <label for="rs-name">{t('fullName', lang)}</label>
+            <input id="rs-name" name="name" required autocomplete="name" />
+            <p class="field-error">{t('required', lang)}</p>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="rs-phone">{t('phone', lang)}</label>
+              <input id="rs-phone" name="phone" type="tel" inputmode="tel" required autocomplete="tel" placeholder="(000)-000-0000" data-phone />
+              <p class="field-error">{t('phoneHint', lang)}</p>
+            </div>
+            <div class="field">
+              <label for="rs-email">{t('email', lang)}</label>
+              <input id="rs-email" name="email" type="email" required autocomplete="email" />
+              <p class="field-error">{t('required', lang)}</p>
+            </div>
+          </div>
+          <div class="field-row">
+            <div class="field">
+              <label for="rs-date">{t('preferredDate', lang)}</label>
+              <input id="rs-date" name="date" type="date" />
+            </div>
+            <div class="field">
+              <label for="rs-time">{t('preferredTime', lang)}</label>
+              <input id="rs-time" name="time" type="time" step="900" />
+            </div>
+          </div>
+          <div class="field">
+            <label for="rs-notes">{t('notes', lang)} <span class="optional">({t('optional', lang)})</span></label>
+            <textarea id="rs-notes" name="notes" rows="4"></textarea>
+          </div>
+          <button class="btn btn-gold btn-block" type="submit">{t('rs.sendRequest', lang)}</button>
+          <p class="form-status" role="status" data-status></p>
+        </form>
+      </div>
+    </dialog>
+  </div>
+</section>
+<script>
+  import { setupDialog } from '../../lib/client';
+  import { initOfficeForms } from '../../scripts/office-forms';
+  const root = document.querySelector<HTMLElement>('[data-request-service]');
+  if (root) {
+    const dialog = root.querySelector<HTMLDialogElement>('[data-request-dialog]')!;
+    const d = setupDialog(dialog);
+    const form = dialog.querySelector('form')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    initOfficeForms(dialog);
+    root.querySelectorAll<HTMLButtonElement>('[data-open-request]').forEach((b) =>
+      b.addEventListener('click', () => {
+        dialog.querySelector('[data-request-title]')!.textContent = b.dataset.title!;
+        form.querySelector<HTMLInputElement>('[data-service-id]')!.value = b.dataset.openRequest!;
+        status.textContent = '';
+        form.querySelectorAll('.is-invalid').forEach((f) => f.classList.remove('is-invalid'));
+        d.open(b);
+        setTimeout(() => form.querySelector<HTMLInputElement>('input:not([type=hidden])')?.focus(), 30);
+      }),
+    );
+  }
+</script>

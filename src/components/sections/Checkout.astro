@@ -1,0 +1,163 @@
+---
+import Icon from '../Icon.astro';
+import Pictogram from '../Pictogram.astro';
+import { site } from '../../lib/content';
+import { t, tr } from '../../lib/i18n';
+import { pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any }
+const { lang } = Astro.props;
+const st = site.features.store;
+const shipCfg = { enabled: !!st.shipping?.enabled, flatRate: st.shipping?.flatRate ?? 0, freeOver: st.shipping?.freeOver ?? 0, pickup: !!st.pickup?.enabled };
+---
+<section class="section">
+  <div class="container checkout-layout" data-checkout data-ship={JSON.stringify(shipCfg)}>
+    <form class="form-card checkout-form" data-checkout-form novalidate>
+      <fieldset class="fieldset">
+        <legend class="fieldset-title">{t('store.yourDetails', lang)}</legend>
+        <div class="field-row">
+          <div class="field">
+            <label for="co-name">{t('fullName', lang)}</label>
+            <input id="co-name" name="name" required autocomplete="name" />
+            <p class="field-error">{t('required', lang)}</p>
+          </div>
+          <div class="field">
+            <label for="co-email">{t('email', lang)}</label>
+            <input id="co-email" name="email" type="email" required autocomplete="email" />
+            <p class="field-error">{t('required', lang)}</p>
+          </div>
+        </div>
+        <div class="field">
+          <label for="co-phone">{t('phone', lang)} <span class="optional">({t('optional', lang)})</span></label>
+          <input id="co-phone" name="phone" type="tel" inputmode="tel" placeholder="(000)-000-0000" data-phone />
+          <p class="field-error">{t('phoneHint', lang)}</p>
+        </div>
+      </fieldset>
+
+      <fieldset class="fieldset" data-fulfillment>
+        <legend class="fieldset-title">{t('store.fulfillment', lang)}</legend>
+        <div class="choice-grid">
+          {shipCfg.enabled && (
+            <label class="choice-card">
+              <input type="radio" name="method" value="ship" checked />
+              <span><Icon name="truck" size={22} /><strong>{t('store.shipToAddress', lang)}</strong><small data-ship-note></small></span>
+            </label>
+          )}
+          {shipCfg.pickup && (
+            <label class="choice-card">
+              <input type="radio" name="method" value="pickup" checked={!shipCfg.enabled} />
+              <span><Pictogram name="church" size={22} /><strong>{t('store.pickup', lang)}</strong><small>{tr(st.pickup.note, lang)}</small></span>
+            </label>
+          )}
+        </div>
+        <div class="address-fields" data-address>
+          <div class="field">
+            <label for="co-street">{t('store.street', lang)}</label>
+            <input id="co-street" name="street" required autocomplete="street-address" />
+            <p class="field-error">{t('required', lang)}</p>
+          </div>
+          <div class="field-row field-row--3">
+            <div class="field">
+              <label for="co-city">{t('store.city', lang)}</label>
+              <input id="co-city" name="city" required autocomplete="address-level2" />
+              <p class="field-error">{t('required', lang)}</p>
+            </div>
+            <div class="field">
+              <label for="co-region">{t('store.region', lang)}</label>
+              <input id="co-region" name="region" required autocomplete="address-level1" />
+              <p class="field-error">{t('required', lang)}</p>
+            </div>
+            <div class="field">
+              <label for="co-postal">{t('store.postalCode', lang)}</label>
+              <input id="co-postal" name="postal" required autocomplete="postal-code" />
+              <p class="field-error">{t('required', lang)}</p>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <p class="form-note" data-no-ship hidden>{t('store.noShippingNeeded', lang)}</p>
+      <button class="btn btn-gold btn-lg btn-block" type="submit"><Icon name="lock" size={16} /> {t('store.placeOrder', lang)}</button>
+      <p class="form-note">{t('paymentDemo', lang)}</p>
+      <p class="form-status" role="status" data-status></p>
+    </form>
+
+    <aside class="summary-card">
+      <h2 class="summary-title">{t('store.orderSummary', lang)}</h2>
+      <ul class="mini-lines" data-mini></ul>
+      <dl class="totals">
+        <div><dt>{t('store.subtotal', lang)}</dt><dd data-subtotal></dd></div>
+        <div data-ship-row><dt>{t('store.shipping', lang)}</dt><dd data-shipping></dd></div>
+        <div class="totals-grand"><dt>{t('store.total', lang)}</dt><dd data-total></dd></div>
+      </dl>
+      <a class="text-link" href={pageHref(lang, 'cart')}><Icon name="arrow-left" size={15} directional /> {t('cart', lang)}</a>
+    </aside>
+  </div>
+</section>
+<script>
+  import { clearCart, needsShipping, readCart, subtotal } from '../../lib/cart';
+  import { ctx, esc, maskPhone, money, t, validateForm } from '../../lib/client';
+  import { submitPayment } from '../../lib/handlers';
+  const root = document.querySelector<HTMLElement>('[data-checkout]');
+  if (root) {
+    const cfg = JSON.parse(root.dataset.ship!);
+    const form = root.querySelector<HTMLFormElement>('[data-checkout-form]')!;
+    const address = form.querySelector<HTMLElement>('[data-address]')!;
+    const fulfil = form.querySelector<HTMLElement>('[data-fulfillment]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    form.querySelectorAll<HTMLInputElement>('[data-phone]').forEach(maskPhone);
+    const method = () => form.querySelector<HTMLInputElement>('[name=method]:checked')?.value ?? 'pickup';
+    const shipping = (lines = readCart()) => {
+      if (!needsShipping(lines) || method() !== 'ship') return 0;
+      const sub = lines.filter((l) => l.kind === 'product').reduce((n, l) => n + l.unitPrice * l.quantity, 0);
+      return cfg.freeOver && sub >= cfg.freeOver ? 0 : cfg.flatRate;
+    };
+    const paint = () => {
+      const lines = readCart();
+      const ship = needsShipping(lines);
+      fulfil.hidden = !ship;
+      form.querySelector<HTMLElement>('[data-no-ship]')!.hidden = ship || !lines.length;
+      const showAddr = ship && method() === 'ship';
+      address.hidden = !showAddr;
+      address.querySelectorAll<HTMLInputElement>('input').forEach((i) => (i.disabled = !showAddr));
+      const note = form.querySelector<HTMLElement>('[data-ship-note]');
+      if (note) note.textContent = cfg.freeOver ? t('store.freeShippingOver', { amount: money(cfg.freeOver) }) : money(cfg.flatRate);
+      root.querySelector('[data-mini]')!.innerHTML = lines.length
+        ? lines.map((l) => `<li><span>${l.quantity} × ${esc(l.label)}${l.detail ? ` <small>${esc(l.detail)}</small>` : ''}</span><span>${esc(money(l.unitPrice * l.quantity))}</span></li>`).join('')
+        : `<li>${esc(t('store.emptyCart'))}</li>`;
+      const s = subtotal(lines);
+      const sh = shipping(lines);
+      root.querySelector('[data-subtotal]')!.textContent = money(s);
+      root.querySelector<HTMLElement>('[data-ship-row]')!.hidden = !ship;
+      root.querySelector('[data-shipping]')!.textContent = method() === 'pickup' || sh === 0 ? t('store.free') : money(sh);
+      root.querySelector('[data-total]')!.textContent = money(s + sh);
+      form.querySelector<HTMLButtonElement>('[type=submit]')!.disabled = !lines.length;
+    };
+    form.addEventListener('change', paint);
+    window.addEventListener('kiot:cart', paint);
+    paint();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validateForm(form)) { status.textContent = t('formError'); return; }
+      const lines = readCart();
+      if (!lines.length) return;
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+      const c = ctx();
+      const sh = shipping(lines);
+      const res = await submitPayment(
+        {
+          purpose: 'order',
+          currency: c.currency,
+          lines: sh ? [...lines, { kind: 'product', id: 'shipping', label: t('store.shipping'), quantity: 1, unitPrice: sh }] : lines,
+          total: subtotal(lines) + sh,
+          customer: { name: data.name, email: data.email, phone: data.phone },
+          fulfillment: needsShipping(lines)
+            ? { method: method() as 'ship' | 'pickup', address: method() === 'ship' ? { street: data.street, city: data.city, region: data.region, postal: data.postal } : undefined }
+            : undefined,
+        },
+        c.paymentProvider,
+      );
+      clearCart();
+      form.reset();
+      status.textContent = t('store.orderPlaced', { ref: res.reference });
+    });
+  }
+</script>

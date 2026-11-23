@@ -1,0 +1,192 @@
+{
+  "$schema": "../schemas/site.schema.json",
+  "id": "st-example-kiot",
+  "template": "parish-template-kiot",
+  "name": {
+    "en": "St. Example Greek Orthodox Church",
+    "el": "Ελληνορθόδοξος Ναός Αγίου Example"
+  },
+  "shortName": {
+    "en": "St. Example",
+    "el": "Άγιος Example"
+  },
+  "tagline": {
+    "en": "A Greek Orthodox parish family in Springfield",
+    "el": "Μια ελληνορθόδοξη ενοριακή οικογένεια στο Springfield"
+  },
+  "description": {
+    "en": "Sample website for St. Example Greek Orthodox Church: service times, parish life, news and ways to give.",
+    "el": "Δείγμα ιστότοπου για τον Ελληνορθόδοξο Ναό Αγίου Example: ώρες ακολουθιών, ενοριακή ζωή, νέα και τρόποι προσφοράς."
+  },
+  "sampleNotice": true,
+  "languages": [
+    {
+      "code": "en",
+      "label": "English",
+      "nativeLabel": "English",
+      "locale": "en-US",
+      "dir": "ltr",
+      "hourCycle": "h12"
+    },
+    {
+      "code": "el",
+      "label": "Greek",
+      "nativeLabel": "Ελληνικά",
+      "locale": "el-GR",
+      "dir": "ltr",
+      "hourCycle": "h23"
+    }
+  ],
+  "defaultLanguage": "en",
+  "timeZone": "America/Chicago",
+  "calendar": {
+    "style": "revised-julian"
+  },
+  "logo": {
+    "style": "kiot",
+    "image": "/images/logo/square-sample.svg",
+    "alt": {
+      "en": "St. Example parish emblem",
+      "el": "Έμβλημα της ενορίας Αγίου Example"
+    },
+    "sealText": {
+      "en": "St. Example Greek Orthodox Church",
+      "el": "Ελληνορθόδοξος Ναός Αγίου Example"
+    }
+  },
+  "contact": {
+    "address": {
+      "street": "123 Example Street",
+      "city": "Springfield",
+      "region": "ST",
+      "postalCode": "00000",
+      "country": "USA"
+    },
+    "phone": "(555) 010-0100",
+    "email": "office@example.org",
+    "officeHours": {
+      "en": "Tuesday to Friday, 9:00 AM to 3:00 PM",
+      "el": "Τρίτη έως Παρασκευή, 9:00 έως 15:00"
+    },
+    "directionsQuery": "123 Example Street, Springfield",
+    "mapEmbedUrl": "",
+    "parking": {
+      "en": "Free parking in the church lot on Example Street, with overflow parking at the school across the road on Sundays.",
+      "el": "Δωρεάν στάθμευση στο πάρκινγκ του ναού στην Example Street. Τις Κυριακές υπάρχει επιπλέον χώρος στο σχολείο απέναντι."
+    },
+    "transit": {
+      "en": "Bus lines 4 and 12 stop at Example Street and 2nd Avenue, a two minute walk from the church doors.",
+      "el": "Οι λεωφορειακές γραμμές 4 και 12 σταματούν στη γωνία Example Street και 2nd Avenue, δύο λεπτά με τα πόδια από τον ναό."
+    },
+    "accessibility": {
+      "en": "Step-free entrance on the north side, with an accessible restroom in the parish hall.",
+      "el": "Είσοδος χωρίς σκαλοπάτια στη βόρεια πλευρά και προσβάσιμη τουαλέτα στην αίθουσα της ενορίας."
+    }
+  },
+  "socials": [
+    {
+      "id": "facebook",
+      "network": "facebook",
+      "label": "Facebook",
+      "url": "https://example.org/facebook"
+    },
+    {
+      "id": "youtube",
+      "network": "youtube",
+      "label": "YouTube",
+      "url": "https://example.org/youtube"
+    },
+    {
+      "id": "instagram",
+      "network": "instagram",
+      "label": "Instagram",
+      "url": "https://example.org/instagram"
+    }
+  ],
+  "currency": "USD",
+  "features": {
+    "store": {
+      "enabled": true,
+      "shipping": {
+        "enabled": true,
+        "flatRate": 8,
+        "freeOver": 75
+      },
+      "pickup": {
+        "enabled": true,
+        "note": {
+          "en": "Pick up at the church bookstore after Sunday Liturgy or during office hours.",
+          "el": "Παραλαβή από το βιβλιοπωλείο του ναού μετά τη Θεία Λειτουργία της Κυριακής ή στις ώρες γραφείου."
+        }
+      }
+    },
+    "requestService": {
+      "enabled": true
+    },
+    "zapiski": {
+      "enabled": true
+    },
+    "getInvolved": {
+      "enabled": true
+    },
+    "payments": {
+      "provider": "none"
+    },
+    "livestream": {
+      "enabled": true,
+      "liveNow": true,
+      "watchUrl": "https://example.org/livestream",
+      "embedUrl": ""
+    },
+    "donations": {
+      "enabled": true,
+      "amounts": [
+        25,
+        50,
+        100,
+        250
+      ],
+      "defaultAmount": 50,
+      "allowMonthly": true,
+      "funds": [
+        {
+          "id": "general",
+          "label": {
+            "en": "General parish fund",
+            "el": "Γενικό ταμείο της ενορίας"
+          }
+        },
+        {
+          "id": "philanthropy",
+          "label": {
+            "en": "Philanthropy and food pantry",
+            "el": "Φιλόπτωχο και τράπεζα τροφίμων"
+          }
+        },
+        {
+          "id": "iconography",
+          "label": {
+            "en": "Iconography fund",
+            "el": "Ταμείο αγιογράφησης"
+          }
+        },
+        {
+          "id": "youth",
+          "label": {
+            "en": "Youth and Greek school",
+            "el": "Νεολαία και ελληνικό σχολείο"
+          }
+        }
+      ]
+    }
+  },
+  "orthodoxConnect": {
+    "parishId": "sample-parish-id",
+    "apiBase": "",
+    "appLinkBase": "https://connect.example.org/open",
+    "newsletter": {
+      "enabled": true,
+      "listId": "sample-newsletter"
+    }
+  }
+}

@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "services.schema.json",
+  "title": "Service schedule",
+  "description": "Weekly services, services added automatically for feasts, and one-off dated services.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "weekly": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "time": {
+            "$ref": "common.schema.json#/$defs/time"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 5
+          },
+          "type": {
+            "enum": [
+              "liturgy",
+              "vespers",
+              "orthros",
+              "prayer",
+              "class",
+              "confession",
+              "meeting",
+              "other"
+            ]
+          },
+          "streamed": {
+            "type": "boolean"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "day": {
+            "type": "integer",
+            "minimum": 0,
+            "maximum": 6,
+            "description": "0 = Sunday"
+          }
+        },
+        "required": [
+          "id",
+          "time",
+          "title",
+          "day"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "feastServices": {
+      "type": "object",
+      "properties": {
+        "great": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "common.schema.json#/$defs/id"
+              },
+              "time": {
+                "$ref": "common.schema.json#/$defs/time"
+              },
+              "duration": {
+                "type": "integer",
+                "minimum": 5
+              },
+              "type": {
+                "enum": [
+                  "liturgy",
+                  "vespers",
+                  "orthros",
+                  "prayer",
+                  "class",
+                  "confession",
+                  "meeting",
+                  "other"
+                ]
+              },
+              "streamed": {
+                "type": "boolean"
+              },
+              "title": {
+                "$ref": "common.schema.json#/$defs/localized"
+              },
+              "offsetDays": {
+                "type": "integer",
+                "description": "-1 = eve of the feast"
+              },
+              "skipOnDays": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6
+                }
+              }
+            },
+            "required": [
+              "id",
+              "time",
+              "title"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "major": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "common.schema.json#/$defs/id"
+              },
+              "time": {
+                "$ref": "common.schema.json#/$defs/time"
+              },
+              "duration": {
+                "type": "integer",
+                "minimum": 5
+              },
+              "type": {
+                "enum": [
+                  "liturgy",
+                  "vespers",
+                  "orthros",
+                  "prayer",
+                  "class",
+                  "confession",
+                  "meeting",
+                  "other"
+                ]
+              },
+              "streamed": {
+                "type": "boolean"
+              },
+              "title": {
+                "$ref": "common.schema.json#/$defs/localized"
+              },
+              "offsetDays": {
+                "type": "integer",
+                "description": "-1 = eve of the feast"
+              },
+              "skipOnDays": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6
+                }
+              }
+            },
+            "required": [
+              "id",
+              "time",
+              "title"
+            ],
+            "additionalProperties": false
+          }
+        },
+        "saint": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "$ref": "common.schema.json#/$defs/id"
+              },
+              "time": {
+                "$ref": "common.schema.json#/$defs/time"
+              },
+              "duration": {
+                "type": "integer",
+                "minimum": 5
+              },
+              "type": {
+                "enum": [
+                  "liturgy",
+                  "vespers",
+                  "orthros",
+                  "prayer",
+                  "class",
+                  "confession",
+                  "meeting",
+                  "other"
+                ]
+              },
+              "streamed": {
+                "type": "boolean"
+              },
+              "title": {
+                "$ref": "common.schema.json#/$defs/localized"
+              },
+              "offsetDays": {
+                "type": "integer",
+                "description": "-1 = eve of the feast"
+              },
+              "skipOnDays": {
+                "type": "array",
+                "items": {
+                  "type": "integer",
+                  "minimum": 0,
+                  "maximum": 6
+                }
+              }
+            },
+            "required": [
+              "id",
+              "time",
+              "title"
+            ],
+            "additionalProperties": false
+          }
+        }
+      },
+      "required": [],
+      "additionalProperties": false
+    },
+    "special": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "time": {
+            "$ref": "common.schema.json#/$defs/time"
+          },
+          "duration": {
+            "type": "integer",
+            "minimum": 5
+          },
+          "type": {
+            "enum": [
+              "liturgy",
+              "vespers",
+              "orthros",
+              "prayer",
+              "class",
+              "confession",
+              "meeting",
+              "other"
+            ]
+          },
+          "streamed": {
+            "type": "boolean"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "date": {
+            "$ref": "common.schema.json#/$defs/date"
+          }
+        },
+        "required": [
+          "id",
+          "time",
+          "title",
+          "date"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "weekly"
+  ],
+  "additionalProperties": false
+}

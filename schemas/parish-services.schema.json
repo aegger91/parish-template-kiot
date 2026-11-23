@@ -1,0 +1,57 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "parish-services.schema.json",
+  "title": "Request a Service",
+  "description": "Cards on the Request a Service page. A card with link opens that page instead of the request form.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "services": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "illustration": {
+            "$ref": "common.schema.json#/$defs/path"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "subtitle": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "price": {
+            "enum": [
+              "free",
+              "donation"
+            ]
+          },
+          "duration": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "description": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "link": {
+            "$ref": "common.schema.json#/$defs/pageLink"
+          }
+        },
+        "required": [
+          "id",
+          "title",
+          "price"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "services"
+  ],
+  "additionalProperties": false
+}

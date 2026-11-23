@@ -1,0 +1,15 @@
+---
+import Cross from '../Cross.astro';
+import { tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+---
+<section class="section section--quote" id={s.id}>
+  <div class="container narrow center" data-reveal>
+    <Cross variant="icxc" size={72} class="quote-cross" />
+    <blockquote class="quote">
+      <p>{tr(s.text, lang)}</p>
+      {s.source && <footer>{tr(s.source, lang)}</footer>}
+    </blockquote>
+  </div>
+</section>

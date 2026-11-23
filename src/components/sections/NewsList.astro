@@ -1,0 +1,55 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import { galleryImage, news } from '../../lib/content';
+import { asset, getLanguage, t, tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+import { formatDay, parseIsoDay } from '../../lib/calendar';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const articles = [...news.articles].sort((a: any, b: any) => b.date.localeCompare(a.date)).slice(0, s.limit ?? 100);
+const cat = (id: string) => news.categories.find((c: any) => c.id === id);
+const hasNews = pageExists('news');
+---
+<section class="section" id={s.id}>
+  <div class="container">
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro}>
+      {s.limit && hasNews && <a class="text-link" href={pageHref(lang, 'news')}>{t('allNews', lang)} <Icon name="arrow-right" size={15} directional /></a>}
+    </SectionHead>
+    <div data-filter-root>
+      {s.showFilters && (
+        <div class="chip-filters" role="group" aria-label={t('filterBy', lang)} data-reveal>
+          <button type="button" class="chip-btn" aria-pressed="true" data-filter="">{t('all', lang)}</button>
+          {news.categories.map((c: any) => <button type="button" class="chip-btn" aria-pressed="false" data-filter={c.id}>{tr(c.label, lang)}</button>)}
+        </div>
+      )}
+      <ul class="card-grid card-grid--3" data-reveal-group>
+        {articles.map((a: any) => {
+          const img = galleryImage(a.image);
+          return (
+            <li class="news-card" data-reveal data-category={a.category}>
+              <a class="news-card-link" href={hasNews ? pageHref(lang, 'news', a.slug) : '#'}>
+                <div class="news-card-media">
+                  {img && <img src={asset(img.src)} alt="" width={img.width} height={img.height} loading="lazy" decoding="async" />}
+                  <span class="news-cat">{tr(cat(a.category)?.label, lang)}</span>
+                </div>
+                <div class="news-card-body">
+                  <time datetime={a.date}>{formatDay(parseIsoDay(a.date), L.locale, { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                  <h3>{tr(a.title, lang)}</h3>
+                  <p>{tr(a.excerpt, lang)}</p>
+                  <span class="text-link">{t('readMore', lang)} <Icon name="arrow-right" size={15} directional /></span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+      <p class="empty-note" data-empty hidden>{t('noResults', lang)}</p>
+    </div>
+  </div>
+</section>
+<script>
+  import { initChipFilter } from '../../scripts/filters';
+  initChipFilter();
+</script>

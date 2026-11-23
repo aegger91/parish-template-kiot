@@ -1,0 +1,201 @@
+{
+  "$schema": "../schemas/zapiski.schema.json",
+  "maxNames": 10,
+  "noteTypes": [
+    {
+      "id": "health",
+      "label": {
+        "en": "For Health",
+        "el": "Υπέρ υγείας",
+        "ru": "О здравии"
+      }
+    },
+    {
+      "id": "repose",
+      "label": {
+        "en": "For the Repose",
+        "el": "Υπέρ αναπαύσεως",
+        "ru": "Об упокоении"
+      }
+    }
+  ],
+  "commemorations": [
+    {
+      "id": "proskomedia",
+      "appliesTo": [
+        "health",
+        "repose"
+      ],
+      "suggested": 5,
+      "label": {
+        "en": "Proskomide",
+        "el": "Προσκομιδή"
+      }
+    },
+    {
+      "id": "liturgy",
+      "appliesTo": [
+        "health",
+        "repose"
+      ],
+      "suggested": 3,
+      "label": {
+        "en": "At the Divine Liturgy",
+        "el": "Στη Θεία Λειτουργία"
+      }
+    },
+    {
+      "id": "moleben",
+      "appliesTo": [
+        "health"
+      ],
+      "suggested": 10,
+      "label": {
+        "en": "Moleben (Paraklesis)",
+        "el": "Παράκληση"
+      }
+    },
+    {
+      "id": "panikhida",
+      "appliesTo": [
+        "repose"
+      ],
+      "suggested": 10,
+      "label": {
+        "en": "Panikhida (Trisagion)",
+        "el": "Τρισάγιο"
+      }
+    },
+    {
+      "id": "sorokoust",
+      "appliesTo": [
+        "health",
+        "repose"
+      ],
+      "suggested": 40,
+      "label": {
+        "en": "Sorokoust (40 days)",
+        "el": "Σαρανταλείτουργο (40 ημέρες)"
+      }
+    }
+  ],
+  "candles": [
+    {
+      "id": "small",
+      "label": {
+        "en": "Small taper",
+        "el": "Μικρό κερί"
+      },
+      "price": 1
+    },
+    {
+      "id": "medium",
+      "label": {
+        "en": "Medium taper",
+        "el": "Μεσαίο κερί"
+      },
+      "price": 3
+    },
+    {
+      "id": "large",
+      "label": {
+        "en": "Large taper",
+        "el": "Μεγάλο κερί"
+      },
+      "price": 5
+    },
+    {
+      "id": "lamp",
+      "label": {
+        "en": "Vigil lamp for one week",
+        "el": "Καντήλι για μία εβδομάδα"
+      },
+      "price": 10
+    }
+  ],
+  "donationPresets": [
+    5,
+    10,
+    20
+  ],
+  "prefixes": [
+    {
+      "id": "bishop",
+      "label": {
+        "en": "Bishop",
+        "el": "Επίσκοπος"
+      },
+      "short": {
+        "en": "Bp.",
+        "el": "Επισκ."
+      }
+    },
+    {
+      "id": "priest",
+      "label": {
+        "en": "Priest",
+        "el": "Ιερέας"
+      },
+      "short": {
+        "en": "Fr.",
+        "el": "π."
+      }
+    },
+    {
+      "id": "deacon",
+      "label": {
+        "en": "Deacon",
+        "el": "Διάκονος"
+      },
+      "short": {
+        "en": "Dn.",
+        "el": "Διάκ."
+      }
+    },
+    {
+      "id": "monk",
+      "label": {
+        "en": "Monk",
+        "el": "Μοναχός"
+      },
+      "short": {
+        "en": "Monk",
+        "el": "Μον."
+      }
+    },
+    {
+      "id": "nun",
+      "label": {
+        "en": "Nun",
+        "el": "Μοναχή"
+      },
+      "short": {
+        "en": "Nun",
+        "el": "Μον."
+      }
+    },
+    {
+      "id": "infant",
+      "label": {
+        "en": "Infant (under 7)",
+        "el": "Νήπιο (κάτω των 7)"
+      },
+      "short": {
+        "en": "Infant",
+        "el": "Νήπιο"
+      }
+    },
+    {
+      "id": "child",
+      "label": {
+        "en": "Child (7 to 14)",
+        "el": "Παιδί (7 έως 14)"
+      },
+      "short": {
+        "en": "Child",
+        "el": "Παιδί"
+      }
+    }
+  ],
+  "hint": []
+}

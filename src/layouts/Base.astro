@@ -1,0 +1,78 @@
+---
+import '@fontsource/gfs-didot/400.css';
+import '@fontsource-variable/literata';
+import '@fontsource-variable/literata/wght-italic.css';
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { feasts, languages, services, site } from '../lib/content';
+import { getLanguage, t, tr, uiFor, withBase } from '../lib/i18n';
+import { pageHref, pageExists, pathHref } from '../lib/pages';
+
+interface Props {
+  lang: string;
+  path: string;
+  title?: string;
+  description?: string;
+  currentId?: string;
+  trail?: string[];
+}
+const { lang, path, title, description, currentId, trail } = Astro.props;
+const L = getLanguage(lang);
+const siteName = tr(site.name, lang);
+const fullTitle = title ? `${title} | ${siteName}` : siteName;
+const desc = description || tr(site.description, lang);
+const links: Record<string, string> = {};
+for (const id of ['home', 'store', 'cart', 'checkout', 'zapiski', 'livestream', 'services', 'donate', 'contact', 'events', 'volunteer']) {
+  if (pageExists(id)) links[id] = pageHref(lang, id);
+}
+const ctx = {
+  lang,
+  locale: L.locale,
+  hourCycle: L.hourCycle,
+  dir: L.dir,
+  timeZone: site.timeZone,
+  currency: site.currency,
+  calendar: site.calendar,
+  base: import.meta.env.BASE_URL,
+  ui: uiFor(lang),
+  paymentProvider: site.features?.payments?.provider ?? 'none',
+  parishId: site.orthodoxConnect?.parishId,
+  appLinkBase: site.orthodoxConnect?.appLinkBase,
+  newsletterListId: site.orthodoxConnect?.newsletter?.listId,
+  liveNow: !!site.features?.livestream?.enabled && !!site.features?.livestream?.liveNow,
+  links,
+};
+const scheduleData = { weekly: services.weekly, feastServices: services.feastServices, special: services.special, feasts };
+---
+<!doctype html>
+<html lang={lang} dir={L.dir} class="no-js">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={desc} />
+    <meta name="theme-color" content="#561524" />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={desc} />
+    <link rel="icon" type="image/svg+xml" href={withBase('/favicon.svg')} />
+    {languages.map((l) => <link rel="alternate" hreflang={l.code} href={pathHref(l.code, path)} />)}
+    <script is:inline>document.documentElement.classList.replace('no-js', 'js');</script>
+  </head>
+  <body>
+    <a class="skip-link" href="#main">{t('skipToContent', lang)}</a>
+    {site.sampleNotice && <div class="sample-banner">{t('sampleBanner', lang)}</div>}
+    <Header lang={lang} path={path} currentId={currentId} trail={trail} />
+    <main id="main" tabindex="-1">
+      <slot />
+    </main>
+    <Footer lang={lang} />
+    <div id="kiot-live" class="visually-hidden" aria-live="polite"></div>
+    <script id="kiot-ctx" type="application/json" set:html={JSON.stringify(ctx)} />
+    <script id="kiot-schedule" type="application/json" set:html={JSON.stringify(scheduleData)} />
+    <script>
+      import '../scripts/reveal';
+      import '../scripts/live';
+    </script>
+  </body>
+</html>

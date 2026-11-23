@@ -1,0 +1,61 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import { site } from '../../lib/content';
+import { t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const c = site.contact;
+const topics = ['general', 'visit', 'sacrament', 'other'];
+---
+<section class="section" id={s.id}>
+  <div class="container contact-grid">
+    <div class="contact-info" data-reveal>
+      <SectionHead lang={lang} heading={s.heading} intro={s.intro} align="start" />
+      <dl class="info-list">
+        <div><dt><Icon name="map-pin" size={18} /> {t('address', lang)}</dt><dd>{c.address.street}<br />{c.address.city}, {c.address.region} {c.address.postalCode}</dd></div>
+        <div><dt><Icon name="phone" size={18} /> {t('phone', lang)}</dt><dd><a href={`tel:${c.phone.replace(/[^\d+]/g, '')}`}>{c.phone}</a></dd></div>
+        <div><dt><Icon name="mail" size={18} /> {t('email', lang)}</dt><dd><a href={`mailto:${c.email}`}>{c.email}</a></dd></div>
+        <div><dt><Icon name="clock" size={18} /> {t('officeHours', lang)}</dt><dd>{tr(c.officeHours, lang)}</dd></div>
+      </dl>
+    </div>
+    <form class="form-card" data-office-form="contact" novalidate data-reveal>
+      <div class="field-row">
+        <div class="field">
+          <label for="c-name">{t('name', lang)}</label>
+          <input id="c-name" name="name" required autocomplete="name" />
+          <p class="field-error">{t('required', lang)}</p>
+        </div>
+        <div class="field">
+          <label for="c-email">{t('email', lang)}</label>
+          <input id="c-email" name="email" type="email" required autocomplete="email" />
+          <p class="field-error">{t('required', lang)}</p>
+        </div>
+      </div>
+      <div class="field-row">
+        <div class="field">
+          <label for="c-phone">{t('phone', lang)} <span class="optional">({t('optional', lang)})</span></label>
+          <input id="c-phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" placeholder="(000)-000-0000" data-phone />
+          <p class="field-error">{t('phoneHint', lang)}</p>
+        </div>
+        <div class="field">
+          <label for="c-topic">{t('topic', lang)}</label>
+          <select id="c-topic" name="topic">
+            {topics.map((tp) => <option value={tp}>{t(`topic.${tp}`, lang)}</option>)}
+          </select>
+        </div>
+      </div>
+      <div class="field">
+        <label for="c-message">{t('message', lang)}</label>
+        <textarea id="c-message" name="message" rows="5" required></textarea>
+        <p class="field-error">{t('required', lang)}</p>
+      </div>
+      <button class="btn btn-burgundy" type="submit">{t('sendMessage', lang)}</button>
+      <p class="form-status" role="status" data-status></p>
+    </form>
+  </div>
+</section>
+<script>
+  import { initOfficeForms } from '../../scripts/office-forms';
+  initOfficeForms();
+</script>

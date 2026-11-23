@@ -1,0 +1,190 @@
+{
+  "$schema": "../schemas/parish-services.schema.json",
+  "services": [
+    {
+      "id": "commemoration-note",
+      "illustration": "/images/illustrations/commemoration-note.svg",
+      "title": {
+        "en": "Submit a Commemoration Note",
+        "el": "Ονόματα για μνημόνευση"
+      },
+      "subtitle": {
+        "en": "Names for health or repose (Zapiska)",
+        "el": "Υπέρ υγείας ή υπέρ αναπαύσεως"
+      },
+      "price": "donation",
+      "duration": {
+        "en": "Read at the next Liturgy",
+        "el": "Στην επόμενη Λειτουργία"
+      },
+      "description": {
+        "en": "Names for health or repose.",
+        "el": "Ονόματα υπέρ υγείας ή αναπαύσεως."
+      },
+      "link": {
+        "page": "zapiski"
+      }
+    },
+    {
+      "id": "moleben",
+      "illustration": "/images/illustrations/moleben.svg",
+      "title": {
+        "en": "Prayer Service",
+        "el": "Παράκληση ή Αγιασμός"
+      },
+      "subtitle": {
+        "en": "Paraklesis or Agiasmos (Moleben)",
+        "el": "Ιδιωτική παράκληση ή αγιασμός"
+      },
+      "price": "donation",
+      "duration": {
+        "en": "About 30 minutes",
+        "el": "Περίπου 30 λεπτά"
+      },
+      "description": {
+        "en": "Request a date with the priest.",
+        "el": "Ζητήστε ημερομηνία από τον ιερέα."
+      }
+    },
+    {
+      "id": "baptism",
+      "illustration": "/images/illustrations/baptism.svg",
+      "title": {
+        "en": "Baptism",
+        "el": "Βάπτιση"
+      },
+      "price": "donation",
+      "duration": {
+        "en": "About 1 hour",
+        "el": "Περίπου 1 ώρα"
+      },
+      "description": {
+        "en": "Request a date with the priest.",
+        "el": "Ζητήστε ημερομηνία από τον ιερέα."
+      }
+    },
+    {
+      "id": "confession",
+      "illustration": "/images/illustrations/confession.svg",
+      "title": {
+        "en": "Confession",
+        "el": "Εξομολόγηση"
+      },
+      "price": "free",
+      "duration": {
+        "en": "15 to 30 minutes",
+        "el": "15 έως 30 λεπτά"
+      },
+      "description": {
+        "en": "Request a time with the priest.",
+        "el": "Ζητήστε ώρα από τον ιερέα."
+      }
+    },
+    {
+      "id": "chrismation",
+      "illustration": "/images/illustrations/chrismation.svg",
+      "title": {
+        "en": "Chrismation",
+        "el": "Χρίσμα"
+      },
+      "price": "free",
+      "duration": {
+        "en": "About 45 minutes",
+        "el": "Περίπου 45 λεπτά"
+      },
+      "description": {
+        "en": "Request a meeting with the priest.",
+        "el": "Ζητήστε συνάντηση με τον ιερέα."
+      }
+    },
+    {
+      "id": "wedding",
+      "illustration": "/images/illustrations/wedding.svg",
+      "title": {
+        "en": "Wedding (Crowning)",
+        "el": "Γάμος (Στέψη)"
+      },
+      "price": "donation",
+      "duration": {
+        "en": "About 1 hour",
+        "el": "Περίπου 1 ώρα"
+      },
+      "description": {
+        "en": "Request a date with the priest.",
+        "el": "Ζητήστε ημερομηνία από τον ιερέα."
+      }
+    },
+    {
+      "id": "unction",
+      "illustration": "/images/illustrations/unction.svg",
+      "title": {
+        "en": "Holy Unction",
+        "el": "Ευχέλαιο"
+      },
+      "price": "free",
+      "duration": {
+        "en": "About 1 hour, shorter at a bedside",
+        "el": "Περίπου 1 ώρα, συντομότερο δίπλα σε ασθενή"
+      },
+      "description": {
+        "en": "At church, at home or in the hospital.",
+        "el": "Στον ναό, στο σπίτι ή στο νοσοκομείο."
+      }
+    },
+    {
+      "id": "house-blessing",
+      "illustration": "/images/illustrations/house-blessing.svg",
+      "title": {
+        "en": "House or Car Blessing",
+        "el": "Αγιασμός σπιτιού ή αυτοκινήτου"
+      },
+      "price": "donation",
+      "duration": {
+        "en": "About 20 minutes",
+        "el": "Περίπου 20 λεπτά"
+      },
+      "description": {
+        "en": "Request a visit from the priest.",
+        "el": "Ζητήστε επίσκεψη του ιερέα."
+      }
+    },
+    {
+      "id": "funeral",
+      "illustration": "/images/illustrations/memorial.svg",
+      "title": {
+        "en": "Funeral and Memorial Services",
+        "el": "Κηδεία και μνημόσυνα"
+      },
+      "subtitle": {
+        "en": "Funeral service, Trisagion, Mnemosyno (Slavic use: Otpevanie, Panikhida)",
+        "el": "Εξόδιος Ακολουθία, Τρισάγιο, Μνημόσυνο"
+      },
+      "price": "donation",
+      "duration": {
+        "en": "Funeral about 1 hour, Trisagion about 15 minutes",
+        "el": "Εξόδιος περίπου 1 ώρα, Τρισάγιο περίπου 15 λεπτά"
+      },
+      "description": {
+        "en": "Call the office as soon as you can.",
+        "el": "Καλέστε το γραφείο το συντομότερο."
+      }
+    },
+    {
+      "id": "counseling",
+      "illustration": "/images/illustrations/counseling.svg",
+      "title": {
+        "en": "Pastoral Counseling",
+        "el": "Πνευματική συζήτηση"
+      },
+      "price": "free",
+      "duration": {
+        "en": "About 45 minutes",
+        "el": "Περίπου 45 λεπτά"
+      },
+      "description": {
+        "en": "Request a time with the priest.",
+        "el": "Ζητήστε ώρα από τον ιερέα."
+      }
+    }
+  ]
+}

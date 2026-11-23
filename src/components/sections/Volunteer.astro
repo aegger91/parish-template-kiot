@@ -1,0 +1,74 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import InvolveCard from '../InvolveCard.astro';
+import { involved, site } from '../../lib/content';
+import { connectDeepLink } from '../../lib/handlers';
+import { t, tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any; page: any }
+const { lang, section: s } = Astro.props;
+const teaser = !!s.limit;
+const needs = [...involved.needs].sort((a: any, b: any) => (a.date + a.time).localeCompare(b.date + b.time));
+const shown = teaser ? needs.filter((n: any) => n.signups < n.capacity).slice(0, s.limit) : needs;
+const cat = (id: string) => involved.needCategories.find((c: any) => c.id === id);
+const usedCats = involved.needCategories.filter((c: any) => needs.some((e: any) => e.category === c.id));
+const postLink = connectDeepLink(site.orthodoxConnect.appLinkBase, 'needs/new', site.orthodoxConnect.parishId);
+---
+<section class:list={['section', { 'section--muted': s.muted }]} id={s.id}>
+  <div class="container" data-volunteer data-teaser={teaser ? '' : undefined}>
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} align={teaser ? 'center' : 'start'}>
+      {!teaser && (
+        <a class="btn btn-ghost btn-sm oc-link" href={postLink} rel="noopener" title={t('gi.handoff', lang)}>
+          <Icon name="hand-heart" size={16} /> {t('gi.postNeed', lang)} <span class="visually-hidden">({t('gi.handoff', lang)})</span>
+        </a>
+      )}
+    </SectionHead>
+    {!teaser && (
+      <div class="involve-toolbar" data-reveal>
+        <div class="chip-filters" role="group" aria-label={t('filterBy', lang)}>
+          <button type="button" class="chip-btn" aria-pressed="true" data-cat="">{t('all', lang)}</button>
+          {usedCats.map((c: any) => <button type="button" class="chip-btn" aria-pressed="false" data-cat={c.id}><Icon name={c.icon} size={14} /> {tr(c.label, lang)}</button>)}
+        </div>
+      </div>
+    )}
+    <div class="involve-list involve-list--grid">
+      {shown.map((n: any) => <InvolveCard lang={lang} item={n} kind="need" category={cat(n.category)} />)}
+    </div>
+    <p class="empty-note" data-empty hidden>{t('noResults', lang)}</p>
+    {teaser && pageExists('volunteer') && (
+      <p class="center section-more"><a class="btn btn-outline" href={pageHref(lang, 'volunteer')}>{t('gi.seeAllNeeds', lang)} <Icon name="arrow-right" size={16} directional /></a></p>
+    )}
+  </div>
+</section>
+<script>
+  import { ctx } from '../../lib/client';
+  import { nowIn } from '../../lib/calendar';
+  import { initSignups, paintCapacity } from '../../scripts/connect';
+  document.querySelectorAll<HTMLElement>('[data-volunteer]').forEach((root) => {
+    const today = nowIn(ctx().timeZone).day;
+    const cards = [...root.querySelectorAll<HTMLElement>('.involve-card')];
+    cards.forEach((card) => {
+      const past = Number(card.dataset.day) < today;
+      card.classList.toggle('is-past', past);
+      card.querySelector<HTMLElement>('[data-past]')!.hidden = !past;
+      if (past) card.querySelector<HTMLButtonElement>('[data-signup]')!.disabled = true;
+      card.addEventListener('kiot:signups', () => paintCapacity(card));
+    });
+    initSignups(root);
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const btns = root.querySelectorAll<HTMLButtonElement>('[data-cat]:is(button)');
+    btns.forEach((b) =>
+      b.addEventListener('click', () => {
+        btns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+        let n = 0;
+        cards.forEach((card) => {
+          const ok = !b.dataset.cat || card.dataset.cat === b.dataset.cat;
+          card.hidden = !ok;
+          if (ok) { n++; card.classList.add('is-revealed'); }
+        });
+        empty.hidden = n > 0;
+      }),
+    );
+  });
+</script>

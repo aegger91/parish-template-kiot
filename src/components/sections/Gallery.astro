@@ -1,0 +1,100 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import { gallery, imageSources } from '../../lib/content';
+import { asset, t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const src = (id?: string) => imageSources.sources.find((x: any) => x.id === id);
+const items = gallery.images.map((img: any) => ({
+  src: asset(img.src),
+  title: tr(img.title, lang),
+  alt: tr(img.alt, lang),
+  credit: img.placeholder ? t('sampleImage', lang) : src(img.source) ? `${src(img.source).work}. ${src(img.source).license}.` : '',
+}));
+---
+<section class="section" id={s.id}>
+  <div class="container" data-filter-root>
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <div class="chip-filters" role="group" aria-label={t('filterBy', lang)} data-reveal>
+      <button type="button" class="chip-btn" aria-pressed="true" data-filter="">{t('all', lang)}</button>
+      {gallery.categories.map((c: any) => <button type="button" class="chip-btn" aria-pressed="false" data-filter={c.id}>{tr(c.label, lang)}</button>)}
+    </div>
+    <ul class="gallery-grid" data-gallery data-reveal-group>
+      {gallery.images.map((img: any, i: number) => (
+        <li class:list={['gallery-item', { 'gallery-item--wide': img.width > img.height * 1.4 }]} data-category={img.category} data-reveal>
+          <button type="button" class="gallery-btn" data-index={i} aria-label={t('viewImage', lang, { title: tr(img.title, lang) })}>
+            <img src={asset(img.src)} alt="" width={img.width} height={img.height} loading="lazy" decoding="async" />
+            <span class="gallery-caption">{tr(img.title, lang)}</span>
+            <span class="gallery-zoom" aria-hidden="true"><Icon name="maximize-2" size={16} /></span>
+          </button>
+        </li>
+      ))}
+    </ul>
+    <p class="empty-note" data-empty hidden>{t('noResults', lang)}</p>
+  </div>
+  <dialog class="lightbox" data-lightbox aria-label={tr(s.heading, lang)}>
+    <div class="lightbox-inner">
+      <button type="button" class="icon-btn lightbox-close" data-dialog-close aria-label={t('close', lang)}><Icon name="x" size={24} /></button>
+      <button type="button" class="lightbox-nav lightbox-prev" data-lb-prev aria-label={t('previous', lang)}><Icon name="chevron-left" size={28} directional /></button>
+      <figure class="lightbox-figure">
+        <img data-lb-img alt="" />
+        <figcaption>
+          <span class="lb-title" data-lb-title></span>
+          <span class="lb-count" data-lb-count></span>
+          <span class="lb-credit" data-lb-credit></span>
+        </figcaption>
+      </figure>
+      <button type="button" class="lightbox-nav lightbox-next" data-lb-next aria-label={t('next', lang)}><Icon name="chevron-right" size={28} directional /></button>
+    </div>
+  </dialog>
+  <script type="application/json" data-gallery-items set:html={JSON.stringify(items)} />
+</section>
+<script>
+  import { setupDialog, t } from '../../lib/client';
+  import { initChipFilter } from '../../scripts/filters';
+  initChipFilter();
+  document.querySelectorAll<HTMLElement>('[data-gallery]').forEach((grid) => {
+    const section = grid.closest('section')!;
+    const items = JSON.parse(section.querySelector('[data-gallery-items]')!.textContent!);
+    const dlg = section.querySelector<HTMLDialogElement>('[data-lightbox]')!;
+    const d = setupDialog(dlg);
+    const img = dlg.querySelector<HTMLImageElement>('[data-lb-img]')!;
+    let index = 0;
+    const visible = () => [...grid.querySelectorAll<HTMLElement>('.gallery-item:not([hidden]) [data-index]')].map((b) => Number(b.dataset.index));
+    const show = (i: number) => {
+      index = i;
+      const it = items[i];
+      img.src = it.src;
+      img.alt = it.alt;
+      dlg.querySelector('[data-lb-title]')!.textContent = it.title;
+      const v = visible();
+      dlg.querySelector('[data-lb-count]')!.textContent = t('imageOf', { n: v.indexOf(i) + 1, total: v.length });
+      dlg.querySelector('[data-lb-credit]')!.textContent = it.credit;
+    };
+    const step = (dir: number) => {
+      const v = visible();
+      const pos = v.indexOf(index);
+      show(v[(pos + dir + v.length) % v.length]);
+    };
+    grid.querySelectorAll<HTMLButtonElement>('[data-index]').forEach((b) =>
+      b.addEventListener('click', () => {
+        show(Number(b.dataset.index));
+        d.open(b);
+      }),
+    );
+    const rtl = document.documentElement.dir === 'rtl';
+    dlg.querySelector('[data-lb-prev]')!.addEventListener('click', () => step(-1));
+    dlg.querySelector('[data-lb-next]')!.addEventListener('click', () => step(1));
+    dlg.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') step(rtl ? -1 : 1);
+      if (e.key === 'ArrowLeft') step(rtl ? 1 : -1);
+    });
+    let x0 = 0;
+    dlg.addEventListener('touchstart', (e) => (x0 = e.touches[0].clientX), { passive: true });
+    dlg.addEventListener('touchend', (e) => {
+      const dx = e.changedTouches[0].clientX - x0;
+      if (Math.abs(dx) > 50) step((dx < 0 ? 1 : -1) * (rtl ? -1 : 1));
+    });
+  });
+</script>

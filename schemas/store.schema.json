@@ -1,0 +1,113 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "store.schema.json",
+  "title": "Store",
+  "description": "Store catalog. Prices in site currency.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "categories": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "label": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "pictogram": {
+            "$ref": "common.schema.json#/$defs/pictogram"
+          }
+        },
+        "required": [
+          "id",
+          "label"
+        ],
+        "additionalProperties": false
+      }
+    },
+    "products": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "slug": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "category": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "featured": {
+            "type": "boolean"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "summary": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "description": {
+            "$ref": "common.schema.json#/$defs/localizedList"
+          },
+          "images": {
+            "type": "array",
+            "items": {
+              "$ref": "common.schema.json#/$defs/path"
+            },
+            "minItems": 1
+          },
+          "variants": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "id": {
+                  "$ref": "common.schema.json#/$defs/id"
+                },
+                "label": {
+                  "$ref": "common.schema.json#/$defs/localized"
+                },
+                "price": {
+                  "$ref": "common.schema.json#/$defs/money"
+                },
+                "stock": {
+                  "type": "integer",
+                  "minimum": 0
+                }
+              },
+              "required": [
+                "id",
+                "label",
+                "price",
+                "stock"
+              ],
+              "additionalProperties": false
+            },
+            "minItems": 1
+          }
+        },
+        "required": [
+          "id",
+          "slug",
+          "category",
+          "title",
+          "images",
+          "variants"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "categories",
+    "products"
+  ],
+  "additionalProperties": false
+}

@@ -1,0 +1,52 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "clergy.schema.json",
+  "title": "Clergy and staff",
+  "description": "People shown on the Clergy page.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "people": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "name": {
+            "type": "string"
+          },
+          "initials": {
+            "type": "string",
+            "maxLength": 3
+          },
+          "role": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "image": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "bio": {
+            "$ref": "common.schema.json#/$defs/localizedList"
+          }
+        },
+        "required": [
+          "id",
+          "name",
+          "role"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "people"
+  ],
+  "additionalProperties": false
+}

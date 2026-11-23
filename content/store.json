@@ -1,0 +1,583 @@
+{
+  "$schema": "../schemas/store.schema.json",
+  "categories": [
+    {
+      "id": "icons",
+      "label": {
+        "en": "Icons",
+        "el": "Εικόνες"
+      },
+      "pictogram": "icon-frame"
+    },
+    {
+      "id": "candles",
+      "label": {
+        "en": "Candles and lamps",
+        "el": "Κεριά και καντήλια"
+      },
+      "pictogram": "candle"
+    },
+    {
+      "id": "books",
+      "label": {
+        "en": "Books",
+        "el": "Βιβλία"
+      },
+      "pictogram": "gospel"
+    },
+    {
+      "id": "prayer-ropes",
+      "label": {
+        "en": "Prayer ropes",
+        "el": "Κομποσκοίνια"
+      },
+      "pictogram": "prayer-rope"
+    },
+    {
+      "id": "incense",
+      "label": {
+        "en": "Incense",
+        "el": "Θυμίαμα"
+      },
+      "pictogram": "censer"
+    },
+    {
+      "id": "crosses",
+      "label": {
+        "en": "Crosses",
+        "el": "Σταυροί"
+      },
+      "pictogram": "cross"
+    },
+    {
+      "id": "gifts",
+      "label": {
+        "en": "Gifts",
+        "el": "Δώρα"
+      },
+      "pictogram": "church"
+    }
+  ],
+  "products": [
+    {
+      "id": "icon-pantocrator",
+      "slug": "christ-pantocrator-icon",
+      "category": "icons",
+      "featured": true,
+      "title": {
+        "en": "Christ Pantocrator icon print",
+        "el": "Εικόνα Χριστού Παντοκράτορα"
+      },
+      "summary": {
+        "en": "Mounted print of the 6th century Sinai icon.",
+        "el": "Επικολλημένη εκτύπωση της εικόνας του Σινά, 6ος αιώνας."
+      },
+      "description": [
+        {
+          "en": "Sample product. A faithful print of the encaustic icon from Saint Catherine's Monastery, mounted on a wooden panel with a gold edge and a hanging hook.",
+          "el": "Ενδεικτικό προϊόν. Πιστή εκτύπωση της εγκαυστικής εικόνας της Μονής της Αγίας Αικατερίνης, επικολλημένη σε ξύλο με χρυσή μπορντούρα και άγκιστρο."
+        },
+        {
+          "en": "Blessed at the parish before shipping or pickup.",
+          "el": "Ευλογείται στον ναό πριν από την αποστολή ή την παραλαβή."
+        }
+      ],
+      "images": [
+        "/images/icons/pantocrator-sinai.jpg"
+      ],
+      "variants": [
+        {
+          "id": "5x7",
+          "label": {
+            "en": "5 x 7 in",
+            "el": "13 x 18 εκ."
+          },
+          "price": 28,
+          "stock": 14
+        },
+        {
+          "id": "8x10",
+          "label": {
+            "en": "8 x 10 in",
+            "el": "20 x 25 εκ."
+          },
+          "price": 45,
+          "stock": 6
+        },
+        {
+          "id": "11x14",
+          "label": {
+            "en": "11 x 14 in",
+            "el": "28 x 36 εκ."
+          },
+          "price": 68,
+          "stock": 2
+        }
+      ]
+    },
+    {
+      "id": "icon-hodegetria",
+      "slug": "theotokos-hodegetria-icon",
+      "category": "icons",
+      "featured": true,
+      "title": {
+        "en": "Theotokos Hodegetria icon print",
+        "el": "Εικόνα Παναγίας Οδηγήτριας"
+      },
+      "summary": {
+        "en": "Mounted icon print on wood.",
+        "el": "Τυπωμένη εικόνα σε ξύλο."
+      },
+      "description": [
+        {
+          "en": "Sample product. Mounted print of a 15th century Byzantine Hodegetria on a wooden panel.",
+          "el": "Ενδεικτικό προϊόν. Εκτύπωση βυζαντινής Οδηγήτριας του 15ου αιώνα σε ξύλο."
+        }
+      ],
+      "images": [
+        "/images/icons/hodegetria.jpg"
+      ],
+      "variants": [
+        {
+          "id": "5x7",
+          "label": {
+            "en": "5 x 7 in",
+            "el": "13 x 18 εκ."
+          },
+          "price": 28,
+          "stock": 9
+        },
+        {
+          "id": "8x10",
+          "label": {
+            "en": "8 x 10 in",
+            "el": "20 x 25 εκ."
+          },
+          "price": 45,
+          "stock": 0
+        }
+      ]
+    },
+    {
+      "id": "icon-nicholas",
+      "slug": "st-nicholas-icon",
+      "category": "icons",
+      "title": {
+        "en": "St. Nicholas icon print",
+        "el": "Εικόνα Αγίου Νικολάου"
+      },
+      "summary": {
+        "en": "A favorite name-day gift.",
+        "el": "Αγαπημένο δώρο για ονομαστική γιορτή."
+      },
+      "description": [
+        {
+          "en": "Sample product. Mounted print of the 13th century Sinai icon of St. Nicholas.",
+          "el": "Ενδεικτικό προϊόν. Εκτύπωση της εικόνας του Αγίου Νικολάου του Σινά, 13ος αιώνας."
+        }
+      ],
+      "images": [
+        "/images/icons/nicholas-sinai.jpg"
+      ],
+      "variants": [
+        {
+          "id": "5x7",
+          "label": {
+            "en": "5 x 7 in",
+            "el": "13 x 18 εκ."
+          },
+          "price": 28,
+          "stock": 11
+        }
+      ]
+    },
+    {
+      "id": "beeswax-tapers",
+      "slug": "beeswax-tapers",
+      "category": "candles",
+      "featured": true,
+      "title": {
+        "en": "Beeswax tapers",
+        "el": "Κεριά από μελισσοκέρι"
+      },
+      "summary": {
+        "en": "Pure beeswax, hand dipped.",
+        "el": "Καθαρό κερί μέλισσας, χειροποίητο."
+      },
+      "description": [
+        {
+          "en": "Sample product. A bundle of fifty thin tapers that burn clean and slow.",
+          "el": "Ενδεικτικό προϊόν. Δέσμη πενήντα λεπτών κεριών που καίνε καθαρά και αργά."
+        }
+      ],
+      "images": [
+        "/images/illustrations/tapers.svg"
+      ],
+      "variants": [
+        {
+          "id": "thin-50",
+          "label": {
+            "en": "Thin, 50 tapers",
+            "el": "Λεπτά, 50 κεριά"
+          },
+          "price": 18,
+          "stock": 40
+        },
+        {
+          "id": "medium-25",
+          "label": {
+            "en": "Medium, 25 tapers",
+            "el": "Μεσαία, 25 κεριά"
+          },
+          "price": 24,
+          "stock": 22
+        }
+      ]
+    },
+    {
+      "id": "vigil-lamp",
+      "slug": "hanging-vigil-lamp",
+      "category": "candles",
+      "title": {
+        "en": "Hanging vigil lamp",
+        "el": "Κρεμαστό καντήλι"
+      },
+      "summary": {
+        "en": "Brass kandili with red glass for the icon corner.",
+        "el": "Ορειχάλκινο καντήλι με κόκκινο ποτήρι για το εικονοστάσι."
+      },
+      "description": [
+        {
+          "en": "Sample product. Includes three chains, a red glass cup and ten floating wicks.",
+          "el": "Ενδεικτικό προϊόν. Περιλαμβάνει τρεις αλυσίδες, κόκκινο ποτήρι και δέκα φιτίλια."
+        }
+      ],
+      "images": [
+        "/images/illustrations/vigil-lamp.svg"
+      ],
+      "variants": [
+        {
+          "id": "brass",
+          "label": {
+            "en": "Brass",
+            "el": "Ορείχαλκος"
+          },
+          "price": 36,
+          "stock": 7
+        }
+      ]
+    },
+    {
+      "id": "prayer-book",
+      "slug": "prayer-book",
+      "category": "books",
+      "featured": true,
+      "title": {
+        "en": "Orthodox prayer book",
+        "el": "Ορθόδοξο προσευχητάριο"
+      },
+      "summary": {
+        "en": "Morning and evening prayers in Greek and English.",
+        "el": "Πρωινές και βραδινές προσευχές στα ελληνικά και στα αγγλικά."
+      },
+      "description": [
+        {
+          "en": "Sample product. Pocket size, with the Small Paraklesis and prayers before Communion.",
+          "el": "Ενδεικτικό προϊόν. Μέγεθος τσέπης, με τη Μικρή Παράκληση και τις ευχές πριν από τη Θεία Κοινωνία."
+        }
+      ],
+      "images": [
+        "/images/illustrations/prayer-book.svg"
+      ],
+      "variants": [
+        {
+          "id": "standard",
+          "label": {
+            "en": "Paperback",
+            "el": "Χαρτόδετο"
+          },
+          "price": 16,
+          "stock": 30
+        },
+        {
+          "id": "leather",
+          "label": {
+            "en": "Leather cover",
+            "el": "Δερμάτινο εξώφυλλο"
+          },
+          "price": 29,
+          "stock": 3
+        }
+      ]
+    },
+    {
+      "id": "gospel-book",
+      "slug": "holy-gospel-pew-edition",
+      "category": "books",
+      "title": {
+        "en": "The Holy Gospel, home edition",
+        "el": "Το Ιερό Ευαγγέλιο, έκδοση για το σπίτι"
+      },
+      "summary": {
+        "en": "The four Gospels with the yearly reading table.",
+        "el": "Τα τέσσερα Ευαγγέλια με τον πίνακα των αναγνωσμάτων του έτους."
+      },
+      "description": [
+        {
+          "en": "Sample product. Hardcover with a cross on the front and a ribbon marker.",
+          "el": "Ενδεικτικό προϊόν. Σκληρό εξώφυλλο με σταυρό και κορδέλα σελιδοδείκτη."
+        }
+      ],
+      "images": [
+        "/images/illustrations/gospel-book.svg"
+      ],
+      "variants": [
+        {
+          "id": "hardcover",
+          "label": {
+            "en": "Hardcover",
+            "el": "Σκληρόδετο"
+          },
+          "price": 32,
+          "stock": 12
+        }
+      ]
+    },
+    {
+      "id": "prayer-rope",
+      "slug": "wool-prayer-rope",
+      "category": "prayer-ropes",
+      "featured": true,
+      "title": {
+        "en": "Wool prayer rope",
+        "el": "Μάλλινο κομποσκοίνι"
+      },
+      "summary": {
+        "en": "Knotted by hand, with a cross and tassel.",
+        "el": "Πλεγμένο στο χέρι, με σταυρό και φούντα."
+      },
+      "description": [
+        {
+          "en": "Sample product. Choose the number of knots.",
+          "el": "Δείγμα προϊόντος. Επιλέξτε τον αριθμό των κόμπων."
+        }
+      ],
+      "images": [
+        "/images/illustrations/prayer-rope.svg"
+      ],
+      "variants": [
+        {
+          "id": "33",
+          "label": {
+            "en": "33 knots",
+            "el": "33 κόμποι"
+          },
+          "price": 12,
+          "stock": 25
+        },
+        {
+          "id": "50",
+          "label": {
+            "en": "50 knots",
+            "el": "50 κόμποι"
+          },
+          "price": 18,
+          "stock": 10
+        },
+        {
+          "id": "100",
+          "label": {
+            "en": "100 knots",
+            "el": "100 κόμποι"
+          },
+          "price": 28,
+          "stock": 4
+        }
+      ]
+    },
+    {
+      "id": "incense",
+      "slug": "monastery-incense",
+      "category": "incense",
+      "title": {
+        "en": "Monastery incense",
+        "el": "Μοναστηριακό θυμίαμα"
+      },
+      "summary": {
+        "en": "Resin incense with a gentle rose scent.",
+        "el": "Θυμίαμα από ρητίνη με απαλό άρωμα τριαντάφυλλου."
+      },
+      "description": [
+        {
+          "en": "Sample product. 100 g tin.",
+          "el": "Δείγμα προϊόντος. Κουτί 100 g."
+        }
+      ],
+      "images": [
+        "/images/illustrations/incense.svg"
+      ],
+      "variants": [
+        {
+          "id": "100g",
+          "label": {
+            "en": "100 g",
+            "el": "100 γρ."
+          },
+          "price": 14,
+          "stock": 18
+        },
+        {
+          "id": "250g",
+          "label": {
+            "en": "250 g",
+            "el": "250 γρ."
+          },
+          "price": 28,
+          "stock": 8
+        }
+      ]
+    },
+    {
+      "id": "censer",
+      "slug": "home-censer",
+      "category": "incense",
+      "title": {
+        "en": "Home censer",
+        "el": "Θυμιατό για το σπίτι"
+      },
+      "summary": {
+        "en": "Small brass censer with a domed lid.",
+        "el": "Μικρό ορειχάλκινο θυμιατό με θολωτό καπάκι."
+      },
+      "description": [
+        {
+          "en": "Sample product. Comes with a roll of quick-light charcoal.",
+          "el": "Ενδεικτικό προϊόν. Περιλαμβάνει ένα ρολό κάρβουνα."
+        }
+      ],
+      "images": [
+        "/images/illustrations/censer.svg"
+      ],
+      "variants": [
+        {
+          "id": "brass",
+          "label": {
+            "en": "Brass",
+            "el": "Ορείχαλκος"
+          },
+          "price": 38,
+          "stock": 5
+        }
+      ]
+    },
+    {
+      "id": "cross-pendant",
+      "slug": "byzantine-cross-pendant",
+      "category": "crosses",
+      "featured": true,
+      "title": {
+        "en": "Byzantine cross pendant",
+        "el": "Βυζαντινός σταυρός μενταγιόν"
+      },
+      "summary": {
+        "en": "Equal-armed cross on a fine chain.",
+        "el": "Ισοσκελής σταυρός σε λεπτή αλυσίδα."
+      },
+      "description": [
+        {
+          "en": "Sample product. A classic baptismal gift. The chain is 18 inches long.",
+          "el": "Ενδεικτικό προϊόν. Κλασικό δώρο βάπτισης. Η αλυσίδα έχει μήκος 45 εκ."
+        }
+      ],
+      "images": [
+        "/images/illustrations/cross-pendant.svg"
+      ],
+      "variants": [
+        {
+          "id": "silver",
+          "label": {
+            "en": "Sterling silver",
+            "el": "Ασήμι 925"
+          },
+          "price": 45,
+          "stock": 9
+        },
+        {
+          "id": "gold",
+          "label": {
+            "en": "Gold plated",
+            "el": "Επίχρυσο"
+          },
+          "price": 55,
+          "stock": 0
+        }
+      ]
+    },
+    {
+      "id": "icon-stand",
+      "slug": "small-icon-with-stand",
+      "category": "gifts",
+      "title": {
+        "en": "Small icon with stand",
+        "el": "Μικρή εικόνα με βάση"
+      },
+      "summary": {
+        "en": "For a desk, a car or a hospital bedside.",
+        "el": "Για γραφείο, αυτοκίνητο ή κομοδίνο νοσοκομείου."
+      },
+      "description": [
+        {
+          "en": "Sample product. Wooden easel stand with a small icon print.",
+          "el": "Ενδεικτικό προϊόν. Ξύλινη βάση με μικρή εκτύπωση εικόνας."
+        }
+      ],
+      "images": [
+        "/images/illustrations/icon-stand.svg"
+      ],
+      "variants": [
+        {
+          "id": "standard",
+          "label": {
+            "en": "Standard",
+            "el": "Κανονικό"
+          },
+          "price": 22,
+          "stock": 15
+        }
+      ]
+    },
+    {
+      "id": "prosphora-seal",
+      "slug": "prosphora-seal",
+      "category": "gifts",
+      "title": {
+        "en": "Prosphora seal",
+        "el": "Σφραγίδα προσφόρου"
+      },
+      "summary": {
+        "en": "Carved wooden seal for baking prosphora at home.",
+        "el": "Σκαλιστή ξύλινη σφραγίδα για ζύμωμα προσφόρων στο σπίτι."
+      },
+      "description": [
+        {
+          "en": "Sample product. Carved with the cross and IC XC NI KA.",
+          "el": "Ενδεικτικό προϊόν. Σκαλισμένη με τον σταυρό και το IC XC NI KA."
+        }
+      ],
+      "images": [
+        "/images/illustrations/prosphora.svg"
+      ],
+      "variants": [
+        {
+          "id": "small",
+          "label": {
+            "en": "Small, 3 in",
+            "el": "Μικρή, 8 εκ."
+          },
+          "price": 26,
+          "stock": 6
+        }
+      ]
+    }
+  ]
+}

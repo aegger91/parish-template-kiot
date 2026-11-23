@@ -1,0 +1,44 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import Cross from '../Cross.astro';
+import { services, site } from '../../lib/content';
+import { formatDay, formatTime, parseTime } from '../../lib/calendar';
+import { getLanguage, t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const ls = site.features.livestream;
+const streamed = services.weekly.filter((w) => w.streamed).sort((a, b) => (a.day ?? 0) - (b.day ?? 0) || a.time.localeCompare(b.time));
+---
+<section class="section" id={s.id}>
+  <div class="container live-grid">
+    <div class="live-player" data-reveal>
+      <div class="player-frame">
+        {ls.embedUrl ? (
+          <iframe src={ls.embedUrl} title={tr(s.heading, lang)} allow="autoplay; encrypted-media; picture-in-picture" allowfullscreen loading="lazy"></iframe>
+        ) : (
+          <div class="player-placeholder">
+            <Cross variant="icxc" size={80} class="text-gold" />
+            <p>{t('streamPlaceholder', lang)}</p>
+          </div>
+        )}
+        <span class="live-badge player-badge" data-live-badge hidden={!ls.liveNow}><span class="live-dot" aria-hidden="true"></span>{t('liveNow', lang)}</span>
+      </div>
+      {ls.watchUrl && <a class="btn btn-burgundy" href={ls.watchUrl} rel="noopener"><Icon name="external-link" size={16} /> {t('openStream', lang)}</a>}
+    </div>
+    <aside class="live-side" data-reveal>
+      <h2 class="section-title section-title--sm">{tr(s.heading, lang)}</h2>
+      <h3 class="side-heading">{t('streamedServices', lang)}</h3>
+      <ul class="live-times">
+        {streamed.map((w) => (
+          <li>
+            <span>{formatDay(3 + (w.day ?? 0), L.locale, { weekday: 'long' })}</span>
+            <strong>{formatTime(parseTime(w.time), L.locale, L.hourCycle)}</strong>
+            <span>{tr(w.title, lang)}</span>
+          </li>
+        ))}
+      </ul>
+    </aside>
+  </div>
+</section>

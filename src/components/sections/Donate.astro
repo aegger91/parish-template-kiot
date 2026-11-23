@@ -1,0 +1,105 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Pictogram from '../Pictogram.astro';
+import Cross from '../Cross.astro';
+import { site } from '../../lib/content';
+import { getLanguage, t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const d = site.features.donations;
+const money = (n: number) => new Intl.NumberFormat(L.locale, { style: 'currency', currency: site.currency, maximumFractionDigits: 0 }).format(n);
+const funds = d.funds.map((f: any) => ({ id: f.id, label: tr(f.label, lang) }));
+---
+<section class="section" id={s.id}>
+  <div class="container donate-grid">
+    <div class="donate-intro" data-reveal>
+      <SectionHead lang={lang} heading={s.heading} intro={s.intro} align="start" />
+      <div class="donate-funds">
+        <p class="donate-funds-title"><Pictogram name="candle" size={22} /> {t('fundsList', lang)}</p>
+        <ul>{funds.map((f: any) => <li><Cross size={12} class="text-gold" /> {f.label}</li>)}</ul>
+      </div>
+    </div>
+    <form class="donate-card" data-donate novalidate data-reveal>
+      {d.allowMonthly && (
+        <fieldset class="fieldset">
+          <legend>{t('frequency', lang)}</legend>
+          <div class="seg seg--full">
+            <label class="seg-radio"><input type="radio" name="frequency" value="once" checked /><span>{t('oneTime', lang)}</span></label>
+            <label class="seg-radio"><input type="radio" name="frequency" value="monthly" /><span>{t('monthly', lang)}</span></label>
+          </div>
+        </fieldset>
+      )}
+      <fieldset class="fieldset">
+        <legend>{t('amount', lang)}</legend>
+        <div class="amount-grid">
+          {d.amounts.map((a: number) => (
+            <label class="amount-option"><input type="radio" name="amount" value={a} checked={a === d.defaultAmount} /><span>{money(a)}</span></label>
+          ))}
+          <label class="amount-option amount-option--other"><input type="radio" name="amount" value="other" /><span>{t('otherAmount', lang)}</span></label>
+        </div>
+        <div class="field other-amount" data-other hidden>
+          <label for="donate-other">{t('otherAmount', lang)}</label>
+          <div class="money-input"><span aria-hidden="true">{money(0).replace(/[\d.,\s]/g, '')}</span><input id="donate-other" type="number" inputmode="decimal" min="1" step="1" name="other" /></div>
+          <p class="field-error">{t('enterAmount', lang, { min: money(1) })}</p>
+        </div>
+      </fieldset>
+      <div class="field">
+        <label for="donate-fund">{t('fund', lang)}</label>
+        <select id="donate-fund" name="fund">
+          {funds.map((f: any) => <option value={f.id}>{f.label}</option>)}
+        </select>
+      </div>
+      <div class="donate-summary" aria-live="polite">
+        <span class="summary-label">{t('yourGift', lang)}</span>
+        <strong data-summary></strong>
+      </div>
+      <button class="btn btn-gold btn-lg btn-block" type="submit">{t('continuePayment', lang)}</button>
+      <p class="form-note">{t('paymentDemo', lang)}</p>
+      <p class="form-status" role="status" data-status></p>
+    </form>
+  </div>
+</section>
+<script>
+  import { ctx, money, t } from '../../lib/client';
+  import { submitPayment } from '../../lib/handlers';
+  document.querySelectorAll<HTMLFormElement>('[data-donate]').forEach((form) => {
+    const other = form.querySelector<HTMLElement>('[data-other]')!;
+    const otherInput = other.querySelector('input')!;
+    const summary = form.querySelector<HTMLElement>('[data-summary]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const fund = form.querySelector<HTMLSelectElement>('[name=fund]')!;
+    const amount = () => {
+      const v = (form.querySelector<HTMLInputElement>('[name=amount]:checked')?.value) ?? '0';
+      return v === 'other' ? Number(otherInput.value) || 0 : Number(v);
+    };
+    const monthly = () => form.querySelector<HTMLInputElement>('[name=frequency]:checked')?.value === 'monthly';
+    const update = () => {
+      other.hidden = form.querySelector<HTMLInputElement>('[name=amount]:checked')?.value !== 'other';
+      const a = amount();
+      const fundLabel = fund.options[fund.selectedIndex].text;
+      summary.textContent = a > 0 ? t(monthly() ? 'summaryMonthly' : 'summaryOnce', { amount: money(a), fund: fundLabel }) : '';
+    };
+    form.addEventListener('input', update);
+    form.addEventListener('change', update);
+    update();
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const a = amount();
+      other.classList.toggle('is-invalid', a < 1);
+      if (a < 1) { otherInput.focus(); return; }
+      const c = ctx();
+      const res = await submitPayment(
+        {
+          purpose: 'donation',
+          currency: c.currency,
+          recurring: monthly() ? 'monthly' : undefined,
+          lines: [{ kind: 'donation', id: fund.value, label: fund.options[fund.selectedIndex].text, quantity: 1, unitPrice: a }],
+          total: a,
+        },
+        c.paymentProvider,
+      );
+      status.textContent = t('paymentDone', { ref: res.reference });
+    });
+  });
+</script>

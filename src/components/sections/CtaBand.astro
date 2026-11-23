@@ -1,0 +1,19 @@
+---
+import Pictogram from '../Pictogram.astro';
+import { tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+---
+<section class="section section--tight" id={s.id}>
+  <div class="container">
+    <div class="cta-band" data-reveal>
+      {s.pictogram && <span class="cta-picto"><Pictogram name={s.pictogram} size={40} /></span>}
+      <div class="cta-copy">
+        <h2>{tr(s.heading, lang)}</h2>
+        {s.text && <p>{tr(s.text, lang)}</p>}
+      </div>
+      {s.cta && pageExists(s.cta.page) && <a class="btn btn-gold" href={pageHref(lang, s.cta.page)}>{tr(s.cta.label, lang)}</a>}
+    </div>
+  </div>
+</section>

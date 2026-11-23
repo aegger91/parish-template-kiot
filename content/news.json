@@ -1,0 +1,119 @@
+{
+  "$schema": "../schemas/news.schema.json",
+  "categories": [
+    {
+      "id": "announcements",
+      "label": {
+        "en": "Announcements",
+        "el": "Ανακοινώσεις"
+      }
+    },
+    {
+      "id": "events",
+      "label": {
+        "en": "Events",
+        "el": "Εκδηλώσεις"
+      }
+    },
+    {
+      "id": "youth",
+      "label": {
+        "en": "Youth",
+        "el": "Νεολαία"
+      }
+    },
+    {
+      "id": "philanthropy",
+      "label": {
+        "en": "Philanthropy",
+        "el": "Φιλανθρωπία"
+      }
+    }
+  ],
+  "articles": [
+    {
+      "id": "nativity-fast-2026",
+      "slug": "nativity-fast-schedule",
+      "date": "2026-11-15",
+      "category": "announcements",
+      "image": "hodegetria",
+      "title": {
+        "en": "Nativity Fast service schedule",
+        "el": "Πρόγραμμα ακολουθιών της Σαρακοστής των Χριστουγέννων"
+      },
+      "excerpt": {
+        "en": "Added services and confession times through December.",
+        "el": "Επιπλέον ακολουθίες και ώρες εξομολόγησης έως τον Δεκέμβριο."
+      },
+      "body": [
+        {
+          "en": "Sample article. Article text goes here.",
+          "el": "Δείγμα άρθρου. Εδώ μπαίνει το κείμενο του άρθρου."
+        }
+      ]
+    },
+    {
+      "id": "food-pantry-2026",
+      "slug": "winter-food-drive",
+      "date": "2026-11-08",
+      "category": "philanthropy",
+      "image": "hospitality-abraham",
+      "title": {
+        "en": "Winter food drive for the city pantry",
+        "el": "Χειμερινή συλλογή τροφίμων για την τράπεζα της πόλης"
+      },
+      "excerpt": {
+        "en": "Bring canned goods and warm socks to the narthex through December.",
+        "el": "Φέρτε κονσέρβες και ζεστές κάλτσες στον νάρθηκα έως τον Δεκέμβριο."
+      },
+      "body": [
+        {
+          "en": "Sample article. Article text goes here.",
+          "el": "Δείγμα άρθρου. Εδώ μπαίνει το κείμενο του άρθρου."
+        }
+      ]
+    },
+    {
+      "id": "youth-retreat-2026",
+      "slug": "youth-retreat",
+      "date": "2026-10-28",
+      "category": "youth",
+      "image": "transfiguration",
+      "title": {
+        "en": "Youth retreat on the Transfiguration",
+        "el": "Συνάντηση νεολαίας για τη Μεταμόρφωση"
+      },
+      "excerpt": {
+        "en": "Teens spent a weekend on prayer, hiking and conversation about the light of Tabor.",
+        "el": "Οι έφηβοι πέρασαν ένα Σαββατοκύριακο με προσευχή, πεζοπορία και συζήτηση για το φως του Θαβώρ."
+      },
+      "body": [
+        {
+          "en": "Sample article. Article text goes here.",
+          "el": "Δείγμα άρθρου. Εδώ μπαίνει το κείμενο του άρθρου."
+        }
+      ]
+    },
+    {
+      "id": "st-nicholas-2026",
+      "slug": "st-nicholas-day",
+      "date": "2026-10-20",
+      "category": "events",
+      "image": "nicholas-sinai",
+      "title": {
+        "en": "St. Nicholas Day program for children",
+        "el": "Γιορτή του Αγίου Νικολάου για τα παιδιά"
+      },
+      "excerpt": {
+        "en": "Greek school students will sing and present the life of the saint after Liturgy.",
+        "el": "Οι μαθητές του ελληνικού σχολείου θα ψάλουν και θα παρουσιάσουν τον βίο του αγίου μετά τη Λειτουργία."
+      },
+      "body": [
+        {
+          "en": "Sample article. Article text goes here.",
+          "el": "Δείγμα άρθρου. Εδώ μπαίνει το κείμενο του άρθρου."
+        }
+      ]
+    }
+  ]
+}

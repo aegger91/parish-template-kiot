@@ -1,0 +1,72 @@
+---
+/* Renders a page's sections in config order, skipping disabled ones and those whose module is off. */
+import type { PageNode } from '../lib/content';
+import { featureOn } from '../lib/content';
+import Hero from './sections/Hero.astro';
+import PictogramCards from './sections/PictogramCards.astro';
+import SchedulePreview from './sections/SchedulePreview.astro';
+import LivestreamPromo from './sections/LivestreamPromo.astro';
+import NewsList from './sections/NewsList.astro';
+import Quote from './sections/Quote.astro';
+import CtaBand from './sections/CtaBand.astro';
+import RichText from './sections/RichText.astro';
+import Facts from './sections/Facts.astro';
+import SubpageCards from './sections/SubpageCards.astro';
+import Clergy from './sections/Clergy.astro';
+import Timeline from './sections/Timeline.astro';
+import IconCarousel from './sections/IconCarousel.astro';
+import Gallery from './sections/Gallery.astro';
+import Schedule from './sections/Schedule.astro';
+import Livestream from './sections/Livestream.astro';
+import Sermons from './sections/Sermons.astro';
+import Donate from './sections/Donate.astro';
+import Contact from './sections/Contact.astro';
+import Directions from './sections/Directions.astro';
+import Credits from './sections/Credits.astro';
+import StoreGrid from './sections/StoreGrid.astro';
+import Cart from './sections/Cart.astro';
+import Checkout from './sections/Checkout.astro';
+import RequestService from './sections/RequestService.astro';
+import Zapiski from './sections/Zapiski.astro';
+import Events from './sections/Events.astro';
+import Volunteer from './sections/Volunteer.astro';
+
+interface Props { lang: string; page: PageNode }
+const { lang, page } = Astro.props;
+
+const registry: Record<string, any> = {
+  hero: Hero,
+  pictogramCards: PictogramCards,
+  schedulePreview: SchedulePreview,
+  livestreamPromo: LivestreamPromo,
+  newsList: NewsList,
+  quote: Quote,
+  ctaBand: CtaBand,
+  richText: RichText,
+  facts: Facts,
+  subpageCards: SubpageCards,
+  clergy: Clergy,
+  timeline: Timeline,
+  iconCarousel: IconCarousel,
+  gallery: Gallery,
+  schedule: Schedule,
+  livestream: Livestream,
+  sermons: Sermons,
+  donate: Donate,
+  contact: Contact,
+  directions: Directions,
+  credits: Credits,
+  storeGrid: StoreGrid,
+  cart: Cart,
+  checkout: Checkout,
+  requestService: RequestService,
+  zapiski: Zapiski,
+  events: Events,
+  volunteer: Volunteer,
+};
+const sections = page.sections.filter((s) => s.enabled !== false && featureOn(s.requires) && registry[s.type]);
+---
+{sections.map((s, i) => {
+  const C = registry[s.type];
+  return <C lang={lang} section={s} page={page} index={i} />;
+})}

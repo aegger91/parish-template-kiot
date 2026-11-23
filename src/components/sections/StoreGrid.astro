@@ -1,0 +1,107 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import Pictogram from '../Pictogram.astro';
+import { site, store } from '../../lib/content';
+import { asset, getLanguage, t, tr } from '../../lib/i18n';
+import { pageHref } from '../../lib/pages';
+import { categoryOf, minPrice, totalStock } from '../../lib/store';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const money = (n: number) => new Intl.NumberFormat(L.locale, { style: 'currency', currency: site.currency, minimumFractionDigits: n % 1 ? 2 : 0 }).format(n);
+const products = store.products;
+const ship = site.features.store.shipping;
+---
+<section class="section" id={s.id}>
+  <div class="container" data-store>
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro}>
+      {ship?.enabled && ship.freeOver && <p class="store-perk"><Icon name="truck" size={16} /> {t('store.freeShippingOver', lang, { amount: money(ship.freeOver) })}</p>}
+    </SectionHead>
+    <div class="store-layout">
+      <aside class="store-filters" data-reveal>
+        <div class="field field--inline">
+          <label class="visually-hidden" for="store-q">{t('store.search', lang)}</label>
+          <span class="input-icon"><Icon name="search" size={18} /></span>
+          <input id="store-q" type="search" placeholder={t('store.search', lang)} data-q />
+        </div>
+        <div class="cat-list" role="group" aria-label={t('filterBy', lang)}>
+          <button type="button" class="cat-btn" aria-pressed="true" data-cat=""><Pictogram name="cross" size={18} /> <span>{t('store.allCategories', lang)}</span></button>
+          {store.categories.map((c: any) => (
+            <button type="button" class="cat-btn" aria-pressed="false" data-cat={c.id}><Pictogram name={c.pictogram} size={18} /> <span>{tr(c.label, lang)}</span></button>
+          ))}
+        </div>
+        <div class="field">
+          <label for="store-sort">{t('store.sort', lang)}</label>
+          <select id="store-sort" data-sort>
+            <option value="featured">{t('store.sortFeatured', lang)}</option>
+            <option value="low">{t('store.sortPriceLow', lang)}</option>
+            <option value="high">{t('store.sortPriceHigh', lang)}</option>
+          </select>
+        </div>
+      </aside>
+      <div>
+        <ul class="product-grid" data-products>
+          {products.map((p: any, i: number) => {
+            const stock = totalStock(p);
+            return (
+              <li class="product-card" data-reveal data-cat={p.category} data-price={minPrice(p)} data-order={p.featured ? i : 100 + i} data-text={`${tr(p.title, lang)} ${tr(p.summary, lang)}`.toLowerCase()}>
+                <a href={pageHref(lang, 'store', p.slug)}>
+                  <div class:list={['product-media', { 'product-media--icon': p.category === 'icons' }]}>
+                    <img src={asset(p.images[0])} alt="" loading="lazy" decoding="async" />
+                  </div>
+                  <div class="product-body">
+                    <p class="product-cat">{tr(categoryOf(p)?.label, lang)}</p>
+                    <h3 class="product-title">{tr(p.title, lang)}</h3>
+                    <p class="product-price">
+                      {p.variants.length > 1 ? t('store.from', lang, { price: money(minPrice(p)) }) : money(minPrice(p))}
+                    </p>
+                    {stock === 0 && <p class="stock stock--out">{t('store.outOfStock', lang)}</p>}
+                  </div>
+                </a>
+              </li>
+            );
+          })}
+        </ul>
+        <p class="empty-note" data-empty hidden>{t('noResults', lang)}</p>
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-store]').forEach((root) => {
+    const grid = root.querySelector<HTMLElement>('[data-products]')!;
+    const items = [...grid.querySelectorAll<HTMLElement>('.product-card')];
+    const q = root.querySelector<HTMLInputElement>('[data-q]')!;
+    const sort = root.querySelector<HTMLSelectElement>('[data-sort]')!;
+    const cats = root.querySelectorAll<HTMLButtonElement>('[data-cat]:is(button)');
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    let cat = new URLSearchParams(location.search).get('category') ?? '';
+    const apply = () => {
+      const needle = q.value.trim().toLowerCase();
+      cats.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
+      let n = 0;
+      items.forEach((it) => {
+        const ok = (!cat || it.dataset.cat === cat) && (!needle || it.dataset.text!.includes(needle));
+        it.hidden = !ok;
+        if (ok) { n++; it.classList.add('is-revealed'); }
+      });
+      const key = sort.value;
+      const sorted = [...items].sort((a, b) =>
+        key === 'low' ? Number(a.dataset.price) - Number(b.dataset.price) : key === 'high' ? Number(b.dataset.price) - Number(a.dataset.price) : Number(a.dataset.order) - Number(b.dataset.order),
+      );
+      sorted.forEach((it) => grid.appendChild(it));
+      empty.hidden = n > 0;
+    };
+    cats.forEach((b) => b.addEventListener('click', () => {
+      cat = b.dataset.cat!;
+      const url = new URL(location.href);
+      cat ? url.searchParams.set('category', cat) : url.searchParams.delete('category');
+      history.replaceState(null, '', url);
+      apply();
+    }));
+    q.addEventListener('input', apply);
+    sort.addEventListener('change', apply);
+    apply();
+  });
+</script>

@@ -1,0 +1,360 @@
+{
+  "$schema": "../schemas/get-involved.schema.json",
+  "source": "orthodoxconnect",
+  "eventCategories": [
+    {
+      "id": "feast",
+      "label": {
+        "en": "Feast days",
+        "el": "Εορτές"
+      }
+    },
+    {
+      "id": "education",
+      "label": {
+        "en": "Learning",
+        "el": "Κατήχηση"
+      }
+    },
+    {
+      "id": "youth",
+      "label": {
+        "en": "Youth",
+        "el": "Νεολαία"
+      }
+    },
+    {
+      "id": "fellowship",
+      "label": {
+        "en": "Fellowship",
+        "el": "Συναναστροφή"
+      }
+    },
+    {
+      "id": "philanthropy",
+      "label": {
+        "en": "Philanthropy",
+        "el": "Φιλανθρωπία"
+      }
+    }
+  ],
+  "needCategories": [
+    {
+      "id": "coffee-hour",
+      "label": {
+        "en": "Coffee hour",
+        "el": "Καφές μετά τη Λειτουργία"
+      },
+      "icon": "coffee"
+    },
+    {
+      "id": "cleaning",
+      "label": {
+        "en": "Church cleaning",
+        "el": "Καθαριότητα ναού"
+      },
+      "icon": "brush"
+    },
+    {
+      "id": "choir",
+      "label": {
+        "en": "Choir",
+        "el": "Χορωδία"
+      },
+      "icon": "music"
+    },
+    {
+      "id": "food-drive",
+      "label": {
+        "en": "Food drive",
+        "el": "Συλλογή τροφίμων"
+      },
+      "icon": "package"
+    },
+    {
+      "id": "meals",
+      "label": {
+        "en": "Meals for families",
+        "el": "Φαγητό για οικογένειες"
+      },
+      "icon": "utensils"
+    }
+  ],
+  "events": [
+    {
+      "id": "evt-young-adults-nov",
+      "title": {
+        "en": "Young adults evening",
+        "el": "Βραδιά νέων"
+      },
+      "date": "2026-11-27",
+      "time": "19:30",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 30,
+      "signups": 18,
+      "organizer": "Dn. Stephen Sample",
+      "category": "youth",
+      "description": {
+        "en": "Supper, a short talk and Compline together.",
+        "el": "Δείπνο, μια σύντομη ομιλία και Απόδειπνο μαζί."
+      }
+    },
+    {
+      "id": "evt-advent-talk",
+      "title": {
+        "en": "Talk: preparing for the Nativity",
+        "el": "Ομιλία: προετοιμασία για τα Χριστούγεννα"
+      },
+      "date": "2026-12-03",
+      "time": "19:00",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 60,
+      "signups": 21,
+      "organizer": "Fr. Nicholas Example",
+      "category": "education",
+      "description": {
+        "en": "An evening on fasting, confession and the hymns of the season.",
+        "el": "Μια βραδιά για τη νηστεία, την εξομολόγηση και τους ύμνους της περιόδου."
+      }
+    },
+    {
+      "id": "evt-st-nicholas",
+      "title": {
+        "en": "St. Nicholas Day children's program",
+        "el": "Γιορτή του Αγίου Νικολάου για παιδιά"
+      },
+      "date": "2026-12-06",
+      "time": "11:30",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 120,
+      "signups": 64,
+      "organizer": "Greek school committee",
+      "category": "feast",
+      "description": {
+        "en": "Songs, a short play and a lenten lunch after Liturgy.",
+        "el": "Τραγούδια, ένα θεατρικό και νηστίσιμο γεύμα μετά τη Λειτουργία."
+      }
+    },
+    {
+      "id": "evt-philoptochos-tea",
+      "title": {
+        "en": "Philoptochos winter tea",
+        "el": "Χειμερινό τσάι του Φιλοπτώχου"
+      },
+      "date": "2026-12-12",
+      "time": "14:00",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 50,
+      "signups": 33,
+      "organizer": "Philoptochos board",
+      "category": "philanthropy",
+      "description": {
+        "en": "Proceeds go to the winter coat drive.",
+        "el": "Τα έσοδα διατίθενται για τη συλλογή χειμερινών ρούχων."
+      }
+    },
+    {
+      "id": "evt-kalanta",
+      "title": {
+        "en": "Kalanta in the neighborhood",
+        "el": "Κάλαντα στη γειτονιά"
+      },
+      "date": "2026-12-24",
+      "time": "16:00",
+      "location": {
+        "en": "Meet in the narthex",
+        "el": "Συνάντηση στον νάρθηκα"
+      },
+      "capacity": 40,
+      "signups": 12,
+      "organizer": "Youth ministry",
+      "category": "youth",
+      "description": {
+        "en": "Sing the Christmas carols for our neighbors and shut-ins.",
+        "el": "Λέμε τα κάλαντα σε γείτονες και σε όσους δεν μπορούν να βγουν από το σπίτι."
+      }
+    },
+    {
+      "id": "evt-vasilopita",
+      "title": {
+        "en": "Vasilopita and New Year lunch",
+        "el": "Κοπή βασιλόπιτας και γεύμα"
+      },
+      "date": "2027-01-03",
+      "time": "11:30",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 150,
+      "signups": 38,
+      "organizer": "Parish council",
+      "category": "fellowship",
+      "description": {
+        "en": "Cutting of the Vasilopita after Liturgy, with lunch for all.",
+        "el": "Κοπή της βασιλόπιτας μετά τη Λειτουργία και γεύμα για όλους."
+      }
+    },
+    {
+      "id": "evt-theophany-waters",
+      "title": {
+        "en": "Theophany blessing of the waters",
+        "el": "Αγιασμός των υδάτων των Θεοφανείων"
+      },
+      "date": "2027-01-06",
+      "time": "13:00",
+      "location": {
+        "en": "Example Lake pier",
+        "el": "Προβλήτα της Example Lake"
+      },
+      "capacity": 200,
+      "signups": 45,
+      "organizer": "Fr. Nicholas Example",
+      "category": "feast",
+      "description": {
+        "en": "The Great Blessing of Waters by the lake, with the cross cast into the water.",
+        "el": "Ο Μεγάλος Αγιασμός στη λίμνη, με τη ρίψη του Τιμίου Σταυρού στα νερά."
+      }
+    }
+  ],
+  "needs": [
+    {
+      "id": "need-coffee-nov29",
+      "title": {
+        "en": "Coffee hour hosts",
+        "el": "Οικοδεσπότες για τον καφέ"
+      },
+      "date": "2026-11-29",
+      "time": "11:30",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 4,
+      "signups": 2,
+      "organizer": "Hospitality ministry",
+      "category": "coffee-hour",
+      "description": {
+        "en": "Set out coffee and simple food after Liturgy, then tidy up.",
+        "el": "Ετοιμάστε καφέ και κάτι απλό μετά τη Λειτουργία και συμμαζέψτε μετά."
+      }
+    },
+    {
+      "id": "need-meals-nov30",
+      "title": {
+        "en": "Meals for a family with a new baby",
+        "el": "Φαγητό για οικογένεια με νεογέννητο"
+      },
+      "date": "2026-11-30",
+      "time": "17:00",
+      "location": {
+        "en": "Delivered to the family's home",
+        "el": "Παράδοση στο σπίτι της οικογένειας"
+      },
+      "capacity": 7,
+      "signups": 2,
+      "organizer": "Philoptochos board",
+      "category": "meals",
+      "description": {
+        "en": "One dinner per evening for a week. Address shared after sign-up.",
+        "el": "Ένα δείπνο κάθε βράδυ για μία εβδομάδα. Η διεύθυνση δίνεται μετά την εγγραφή."
+      }
+    },
+    {
+      "id": "need-food-dec5",
+      "title": {
+        "en": "Sort donations for the food drive",
+        "el": "Διαλογή τροφίμων για τη συλλογή"
+      },
+      "date": "2026-12-05",
+      "time": "10:00",
+      "location": {
+        "en": "Parish hall basement",
+        "el": "Υπόγειο της αίθουσας"
+      },
+      "capacity": 12,
+      "signups": 7,
+      "organizer": "Philoptochos board",
+      "category": "food-drive",
+      "description": {
+        "en": "Sort, box and label food for the city pantry.",
+        "el": "Διαλογή, συσκευασία και σήμανση τροφίμων για την τράπεζα της πόλης."
+      }
+    },
+    {
+      "id": "need-coffee-dec6",
+      "title": {
+        "en": "Coffee hour for St. Nicholas Day",
+        "el": "Καφές για τη γιορτή του Αγίου Νικολάου"
+      },
+      "date": "2026-12-06",
+      "time": "11:30",
+      "location": {
+        "en": "Parish hall",
+        "el": "Αίθουσα ενορίας"
+      },
+      "capacity": 6,
+      "signups": 6,
+      "organizer": "Hospitality ministry",
+      "category": "coffee-hour",
+      "description": {
+        "en": "A larger crowd than usual. Thank you to everyone who signed up.",
+        "el": "Περισσότερος κόσμος από ό,τι συνήθως. Ευχαριστούμε όσους δήλωσαν συμμετοχή."
+      }
+    },
+    {
+      "id": "need-choir-dec16",
+      "title": {
+        "en": "Extra voices for the Nativity Liturgy",
+        "el": "Επιπλέον φωνές για τη Λειτουργία των Χριστουγέννων"
+      },
+      "date": "2026-12-16",
+      "time": "19:00",
+      "location": {
+        "en": "Choir loft",
+        "el": "Αναλόγιο"
+      },
+      "capacity": 8,
+      "signups": 3,
+      "organizer": "Anna Example",
+      "category": "choir",
+      "description": {
+        "en": "Two rehearsals, then sing at the feast. No experience needed.",
+        "el": "Δύο πρόβες και ψαλμωδία στην εορτή. Δεν χρειάζεται εμπειρία."
+      }
+    },
+    {
+      "id": "need-clean-dec19",
+      "title": {
+        "en": "Clean the church before the Nativity",
+        "el": "Καθαριότητα του ναού πριν από τα Χριστούγεννα"
+      },
+      "date": "2026-12-19",
+      "time": "09:00",
+      "location": {
+        "en": "Church",
+        "el": "Ναός"
+      },
+      "capacity": 10,
+      "signups": 4,
+      "organizer": "Basil Sample",
+      "category": "cleaning",
+      "description": {
+        "en": "Polish brass, wash floors and change the candle sand.",
+        "el": "Γυάλισμα των ορειχάλκινων, πλύσιμο δαπέδων και αλλαγή της άμμου στα μανουάλια."
+      }
+    }
+  ]
+}

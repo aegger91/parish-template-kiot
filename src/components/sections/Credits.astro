@@ -1,0 +1,24 @@
+---
+import { gallery, imageSources } from '../../lib/content';
+import { asset, t } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang } = Astro.props;
+const thumb = (id: string) => gallery.images.find((g: any) => g.source === id);
+---
+<section class="section">
+  <div class="container narrow">
+    <ul class="credits-list">
+      {imageSources.sources.map((s: any) => (
+        <li class="credit-item">
+          {thumb(s.id) && <img src={asset(thumb(s.id).src)} alt="" width="72" height="96" loading="lazy" />}
+          <div>
+            <p class="credit-work">{s.work}</p>
+            <p>{s.author}. {s.license}.</p>
+            <a class="text-link" href={s.url} rel="noopener">Wikimedia Commons</a>
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="form-note">{t('illustrationsCredit', lang)}</p>
+  </div>
+</section>

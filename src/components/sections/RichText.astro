@@ -1,0 +1,15 @@
+---
+import Pictogram from '../Pictogram.astro';
+import { tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+---
+<section class="section" id={s.id}>
+  <div class="container rich-grid">
+    {s.pictogram && <div class="rich-picto" aria-hidden="true" data-reveal><Pictogram name={s.pictogram} size={64} /></div>}
+    <div class="prose" data-reveal>
+      {s.heading && <h2 class="section-title">{tr(s.heading, lang)}</h2>}
+      {(s.body ?? []).map((p: any) => <p>{tr(p, lang)}</p>)}
+    </div>
+  </div>
+</section>

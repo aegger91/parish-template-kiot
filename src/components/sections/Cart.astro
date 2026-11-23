@@ -1,0 +1,71 @@
+---
+import Icon from '../Icon.astro';
+import Pictogram from '../Pictogram.astro';
+import { t } from '../../lib/i18n';
+import { pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any }
+const { lang } = Astro.props;
+---
+<section class="section">
+  <div class="container cart-layout" data-cart>
+    <div class="cart-lines">
+      <ul class="line-list" data-lines></ul>
+      <div class="cart-empty" data-empty hidden>
+        <Pictogram name="candle" size={48} />
+        <p>{t('store.emptyCart', lang)}</p>
+        <a class="btn btn-burgundy" href={pageHref(lang, 'store')}>{t('store.continueShopping', lang)}</a>
+      </div>
+    </div>
+    <aside class="summary-card" data-summary-card hidden>
+      <h2 class="summary-title">{t('store.orderSummary', lang)}</h2>
+      <dl class="totals">
+        <div><dt>{t('store.subtotal', lang)}</dt><dd data-subtotal></dd></div>
+      </dl>
+      <a class="btn btn-gold btn-block" href={pageHref(lang, 'checkout')}><Icon name="lock" size={16} /> {t('store.checkout', lang)}</a>
+      <a class="text-link" href={pageHref(lang, 'store')}>{t('store.continueShopping', lang)}</a>
+    </aside>
+  </div>
+</section>
+<script>
+  import { readCart, removeLine, setQuantity, subtotal } from '../../lib/cart';
+  import { esc, money, t } from '../../lib/client';
+  const root = document.querySelector<HTMLElement>('[data-cart]');
+  if (root) {
+    const list = root.querySelector<HTMLElement>('[data-lines]')!;
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    const card = root.querySelector<HTMLElement>('[data-summary-card]')!;
+    const paint = () => {
+      const lines = readCart();
+      empty.hidden = lines.length > 0;
+      card.hidden = lines.length === 0;
+      list.innerHTML = lines
+        .map((l) => `<li class="line" data-key="${esc(l.key)}">
+  <div class="line-media">${l.image ? `<img src="${esc(l.image)}" alt="" />` : `<span class="line-kind line-kind--${l.kind}"></span>`}</div>
+  <div class="line-info">
+    <p class="line-label">${esc(l.label)}</p>
+    ${l.detail ? `<p class="line-detail">${esc(l.detail)}</p>` : ''}
+    <p class="line-unit">${esc(money(l.unitPrice))}</p>
+  </div>
+  <div class="line-qty">${
+    l.kind === 'product'
+      ? `<label class="visually-hidden" for="q-${esc(l.key)}">${esc(t('store.qtyFor', { item: l.label }))}</label><input id="q-${esc(l.key)}" type="number" min="0" max="${l.maxQuantity ?? 99}" value="${l.quantity}" data-qty />`
+      : ''
+  }</div>
+  <p class="line-total">${esc(money(l.unitPrice * l.quantity))}</p>
+  <button type="button" class="icon-btn" data-remove aria-label="${esc(t('store.remove'))}: ${esc(l.label)}"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M3 6h18M8 6V4h8v2M6 6l1 14h10l1-14"/></svg></button>
+</li>`)
+        .join('');
+      root.querySelector('[data-subtotal]')!.textContent = money(subtotal(lines));
+    };
+    list.addEventListener('change', (e) => {
+      const input = (e.target as HTMLElement).closest<HTMLInputElement>('[data-qty]');
+      if (input) setQuantity(input.closest<HTMLElement>('[data-key]')!.dataset.key!, Number(input.value));
+    });
+    list.addEventListener('click', (e) => {
+      const btn = (e.target as HTMLElement).closest('[data-remove]');
+      if (btn) removeLine(btn.closest<HTMLElement>('[data-key]')!.dataset.key!);
+    });
+    window.addEventListener('kiot:cart', paint);
+    paint();
+  }
+</script>

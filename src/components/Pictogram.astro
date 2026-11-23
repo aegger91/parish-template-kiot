@@ -1,0 +1,94 @@
+---
+/* Orthodox pictograms on a 24px grid, stroked in currentColor. */
+import Cross from './Cross.astro';
+
+export type PictogramName = 'church' | 'chalice' | 'censer' | 'candle' | 'prayer-rope' | 'gospel' | 'icon-frame' | 'bells' | 'cross';
+interface Props {
+  name: PictogramName | string;
+  size?: number;
+  class?: string;
+}
+const { name, size = 28, class: cls = '' } = Astro.props;
+const knots = Array.from({ length: 12 }, (_, i) => {
+  const a = (i / 12) * Math.PI * 2 + Math.PI / 12;
+  return { x: 12 + Math.sin(a) * 6, y: 8.6 - Math.cos(a) * 6 };
+}).filter((k) => k.y < 14);
+---
+{name === 'cross' ? (
+  <Cross size={size} class={cls} />
+) : (
+  <svg class:list={['pictogram', cls]} width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    {name === 'church' && (
+      <>
+        <path d="M12 1.6v3.2M10.6 2.9h2.8" />
+        <path d="M8.6 8.6a3.4 3.4 0 0 1 6.8 0" />
+        <path d="M8.6 8.6v2.9M15.4 8.6v2.9M8.6 11.5h6.8" />
+        <path d="M4 21v-7.4q0-2.1 4.6-2.1M20 21v-7.4q0-2.1-4.6-2.1" />
+        <path d="M10.2 21v-3.2a1.8 1.8 0 0 1 3.6 0V21" />
+        <path d="M6.3 16.5v1.6M17.7 16.5v1.6M11 9.4v1" />
+        <path d="M2.5 21h19" />
+      </>
+    )}
+    {name === 'chalice' && (
+      <>
+        <path d="M6.8 3.2h10.4v2.4a5.2 5.2 0 0 1-10.4 0Z" />
+        <path d="M12 10.8v6.2" />
+        <circle cx="12" cy="13.4" r="1.1" />
+        <path d="M8.4 20.6h7.2M9.6 20.6q2.4-3.8 4.8 0" />
+        <path d="M12 4.6v2.6M10.7 5.9h2.6" stroke-width="1.2" />
+      </>
+    )}
+    {name === 'censer' && (
+      <>
+        <path d="M8.2 2.4h7.6M8.2 2.4l1.3 8.4M15.8 2.4l-1.3 8.4M12 2.4v5.4" />
+        <path d="M12 7.2v-1.8M11.1 6.3h1.8" stroke-width="1.2" />
+        <path d="M8.4 11.2a3.6 3 0 0 1 7.2 0" />
+        <path d="M6.8 11.2h10.4a5.2 5.2 0 0 1-10.4 0Z" />
+        <path d="M10.2 18.2h3.6l1 2.4H9.2Z" />
+      </>
+    )}
+    {name === 'candle' && (
+      <>
+        <path d="M12 2.4c1.7 2 1.7 3.5 0 4.7c-1.7-1.2-1.7-2.7 0-4.7Z" fill="currentColor" fill-opacity="0.18" />
+        <path d="M10.8 8.6h2.4v8.4h-2.4Z" />
+        <path d="M7.6 17h8.8M9 17v.8a3 1.6 0 0 0 6 0V17" />
+        <path d="M12 19.4v1.4M8 20.8h8" />
+      </>
+    )}
+    {name === 'prayer-rope' && (
+      <>
+        {knots.map((k) => <circle cx={k.x.toFixed(2)} cy={k.y.toFixed(2)} r="1.05" fill="currentColor" stroke="none" />)}
+        <path d="M6.4 11.4Q8 15 12 14.6Q16 15 17.6 11.4" stroke-dasharray="0.1 2.2" />
+        <path d="M12 14.6v4.4M10.4 16.4h3.2" />
+        <path d="M11.2 19.4l-.7 2.4M12 19.4v2.6M12.8 19.4l.7 2.4" stroke-width="1.2" />
+      </>
+    )}
+    {name === 'gospel' && (
+      <>
+        <rect x="5" y="2.8" width="14" height="18.4" rx="1.4" />
+        <path d="M12 8.4v7.2M8.4 12h7.2" />
+        <circle cx="7.6" cy="5.4" r=".7" fill="currentColor" />
+        <circle cx="16.4" cy="5.4" r=".7" fill="currentColor" />
+        <circle cx="7.6" cy="18.6" r=".7" fill="currentColor" />
+        <circle cx="16.4" cy="18.6" r=".7" fill="currentColor" />
+      </>
+    )}
+    {name === 'icon-frame' && (
+      <>
+        <path d="M12 1.2v2.4M10.9 2.4h2.2" stroke-width="1.2" />
+        <path d="M4.6 21.4V11a7.4 7.4 0 0 1 14.8 0v10.4Z" />
+        <path d="M7.4 18.8V11.2a4.6 4.6 0 0 1 9.2 0v7.6Z" />
+        <circle cx="12" cy="11.4" r="2.3" />
+      </>
+    )}
+    {name === 'bells' && (
+      <>
+        <path d="M3.6 21.2V9.4a8.4 8.4 0 0 1 16.8 0v11.8" />
+        <path d="M12 7.6c-2.4 0-3.4 1.9-3.4 4.3v2.5l-1.2 1.7h9.2l-1.2-1.7v-2.5c0-2.4-1-4.3-3.4-4.3Z" />
+        <circle cx="12" cy="17.6" r=".9" />
+        <path d="M12 7.6V6" />
+        <path d="M2.4 21.2h19.2" />
+      </>
+    )}
+  </svg>
+)}

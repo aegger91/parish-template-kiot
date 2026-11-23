@@ -1,0 +1,54 @@
+---
+import Icon from './Icon.astro';
+import { formatDay, formatTime, parseIsoDay, parseTime } from '../lib/calendar';
+import { getLanguage, t, tr } from '../lib/i18n';
+interface Props { lang: string; item: any; kind: 'event' | 'need'; category?: any }
+const { lang, item: x, kind, category } = Astro.props;
+const L = getLanguage(lang);
+const day = parseIsoDay(x.date);
+const n = Math.min(x.signups, x.capacity);
+const left = x.capacity - n;
+const full = left <= 0;
+const spots = kind === 'event' ? `${t('gi.going', lang, { count: n })} · ${full ? t('gi.full', lang) : t('gi.spotsLeft', lang, { count: left })}` : t('gi.spots', lang, { signups: n, capacity: x.capacity });
+---
+<article
+  class:list={['involve-card', `involve-card--${kind}`, { 'is-full': full }]}
+  id={x.id}
+  data-reveal
+  data-kind={kind}
+  data-cat={x.category}
+  data-day={day}
+  data-capacity={x.capacity}
+  data-signups={x.signups}
+>
+  <div class="ic-date">
+    <span class="ic-mon">{formatDay(day, L.locale, { month: 'short' })}</span>
+    <span class="ic-day">{formatDay(day, L.locale, { day: 'numeric' })}</span>
+    <span class="ic-dow">{formatDay(day, L.locale, { weekday: 'short' })}</span>
+  </div>
+  <div class="ic-body">
+    <p class="ic-top">
+      {category && (
+        <span class="ic-cat">{category.icon && <Icon name={category.icon} size={14} />}{tr(category.label, lang)}</span>
+      )}
+      <span class="oc-badge"><span class="oc-mark" aria-hidden="true"></span>{t('gi.onConnect', lang)}</span>
+      <span class="ic-past" data-past hidden>{t('gi.past', lang)}</span>
+    </p>
+    <h3 class="ic-title">{tr(x.title, lang)}</h3>
+    <ul class="ic-meta">
+      <li><Icon name="clock" size={15} /> {formatTime(parseTime(x.time), L.locale, L.hourCycle)}</li>
+      <li><Icon name="map-pin" size={15} /> <span class="visually-hidden">{t('gi.location', lang)}: </span>{tr(x.location, lang)}</li>
+      <li><Icon name="user" size={15} /> <span class="visually-hidden">{t('gi.organizer', lang)}: </span>{x.organizer}</li>
+    </ul>
+    {x.description && <p class="ic-desc">{tr(x.description, lang)}</p>}
+    <div class="ic-foot">
+      <div class="ic-capacity">
+        <span class="ic-spots" data-spots>{spots}</span>
+        <span class="cap-bar" aria-hidden="true"><span data-bar style={`inline-size:${Math.round((n / x.capacity) * 100)}%`}></span></span>
+      </div>
+      <button type="button" class:list={['btn', 'btn-sm', kind === 'event' ? 'btn-burgundy' : 'btn-gold']} data-signup={x.id} data-kind={kind} data-title={tr(x.title, lang)} disabled={full}>
+        {full ? t('gi.full', lang) : t(kind === 'event' ? 'gi.rsvp' : 'gi.signUp', lang)}
+      </button>
+    </div>
+  </div>
+</article>

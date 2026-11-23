@@ -1,0 +1,158 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import InvolveCard from '../InvolveCard.astro';
+import { involved, site } from '../../lib/content';
+import { connectDeepLink } from '../../lib/handlers';
+import { t, tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any; page: any }
+const { lang, section: s } = Astro.props;
+const teaser = !!s.limit;
+const events = [...involved.events].sort((a: any, b: any) => (a.date + a.time).localeCompare(b.date + b.time));
+const shown = teaser ? events.slice(0, s.limit) : events;
+const cat = (id: string) => involved.eventCategories.find((c: any) => c.id === id);
+const usedCats = involved.eventCategories.filter((c: any) => events.some((e: any) => e.category === c.id));
+const createLink = connectDeepLink(site.orthodoxConnect.appLinkBase, 'events/new', site.orthodoxConnect.parishId);
+const calEvents = events.map((e: any) => ({ id: e.id, date: e.date, time: e.time, title: tr(e.title, lang), category: e.category }));
+---
+<section class:list={['section', { 'section--muted': s.muted }]} id={s.id}>
+  <div class="container" data-events data-teaser={teaser ? '' : undefined}>
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} align={teaser ? 'center' : 'start'}>
+      {!teaser && (
+        <a class="btn btn-ghost btn-sm oc-link" href={createLink} rel="noopener" title={t('gi.handoff', lang)}>
+          <Icon name="calendar-plus" size={16} /> {t('gi.createEvent', lang)} <span class="visually-hidden">({t('gi.handoff', lang)})</span>
+        </a>
+      )}
+    </SectionHead>
+    {!teaser && (
+      <div class="involve-toolbar" data-reveal>
+        <div class="chip-filters" role="group" aria-label={t('filterBy', lang)}>
+          <button type="button" class="chip-btn" aria-pressed="true" data-cat="">{t('all', lang)}</button>
+          {usedCats.map((c: any) => <button type="button" class="chip-btn" aria-pressed="false" data-cat={c.id}>{tr(c.label, lang)}</button>)}
+        </div>
+        <div class="seg" role="group" aria-label={tr(s.heading, lang)}>
+          <button type="button" class="seg-btn" aria-pressed="true" data-ev-view="list"><Icon name="list" size={16} /> {t('gi.list', lang)}</button>
+          <button type="button" class="seg-btn" aria-pressed="false" data-ev-view="calendar"><Icon name="calendar-days" size={16} /> {t('gi.calendar', lang)}</button>
+        </div>
+      </div>
+    )}
+    <div class="involve-list" data-ev-list>
+      {shown.map((e: any) => <InvolveCard lang={lang} item={e} kind="event" category={cat(e.category)} />)}
+    </div>
+    <p class="empty-note" data-empty hidden>{t('noResults', lang)}</p>
+    {!teaser && (
+      <div class="ev-calendar" data-ev-calendar hidden>
+        <div class="sched-nav">
+          <button type="button" class="icon-btn" data-cal-step="-1" aria-label={t('previousMonth', lang)}><Icon name="chevron-left" size={20} directional /></button>
+          <h3 class="sched-label" data-cal-label aria-live="polite"></h3>
+          <button type="button" class="icon-btn" data-cal-step="1" aria-label={t('nextMonth', lang)}><Icon name="chevron-right" size={20} directional /></button>
+        </div>
+        <div data-cal-body></div>
+      </div>
+    )}
+    {teaser && pageExists('events') && (
+      <p class="center section-more"><a class="btn btn-outline" href={pageHref(lang, 'events')}>{t('gi.seeAllEvents', lang)} <Icon name="arrow-right" size={16} directional /></a></p>
+    )}
+    <script type="application/json" data-ev-json set:html={JSON.stringify(calEvents)} />
+  </div>
+</section>
+<script>
+  import { ctx, esc, t } from '../../lib/client';
+  import { dayNum, formatDay, formatTime, fromDayNum, nowIn, parseIsoDay, parseTime } from '../../lib/calendar';
+  import { initSignups, paintCapacity } from '../../scripts/connect';
+
+  document.querySelectorAll<HTMLElement>('[data-events]').forEach((root) => {
+    const c = ctx();
+    const today = nowIn(c.timeZone).day;
+    const cards = [...root.querySelectorAll<HTMLElement>('.involve-card')];
+    cards.forEach((card) => {
+      const past = Number(card.dataset.day) < today;
+      card.classList.toggle('is-past', past);
+      card.querySelector<HTMLElement>('[data-past]')!.hidden = !past;
+      if (past) card.querySelector<HTMLButtonElement>('[data-signup]')!.disabled = true;
+      card.addEventListener('kiot:signups', () => paintCapacity(card));
+    });
+    initSignups(root);
+    if (root.hasAttribute('data-teaser')) return;
+
+    const events: { id: string; date: string; time: string; title: string; category: string }[] = JSON.parse(root.querySelector('[data-ev-json]')!.textContent!);
+    const list = root.querySelector<HTMLElement>('[data-ev-list]')!;
+    const cal = root.querySelector<HTMLElement>('[data-ev-calendar]')!;
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    let cat = '';
+    let view = 'list';
+    const first = fromDayNum(Math.max(today, events.length ? parseIsoDay(events[0].date) : today));
+    let ym = { y: first.y, m: first.m };
+
+    const visible = () => events.filter((e) => !cat || e.category === cat);
+    const renderCal = () => {
+      const { y, m } = ym;
+      root.querySelector('[data-cal-label]')!.textContent = formatDay(dayNum(y, m, 1), c.locale, { month: 'long', year: 'numeric' });
+      const start = dayNum(y, m, 1);
+      const end = dayNum(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1);
+      const lead = (start + 4) % 7;
+      const byDay = new Map<number, typeof events>();
+      visible().forEach((e) => {
+        const d = parseIsoDay(e.date);
+        if (d >= start && d < end) byDay.set(d, [...(byDay.get(d) ?? []), e]);
+      });
+      const chip = (e: (typeof events)[number]) =>
+        `<li><a class="svc-chip svc-chip--event" href="#${esc(e.id)}" data-jump="${esc(e.id)}"><span class="chip-time">${esc(formatTime(parseTime(e.time), c.locale, c.hourCycle))}</span> <span class="chip-title">${esc(e.title)}</span></a></li>`;
+      let rows = '';
+      const total = Math.ceil((lead + (end - start)) / 7) * 7;
+      for (let i = 0; i < total; i += 7) {
+        rows += '<tr>';
+        for (let j = 0; j < 7; j++) {
+          const d = start - lead + i + j;
+          const inMonth = d >= start && d < end;
+          const items = inMonth ? byDay.get(d) ?? [] : [];
+          rows += `<td class="mo-cell${inMonth ? '' : ' is-outside'}${d === today ? ' is-today' : ''}">${inMonth ? `<span class="mo-num">${fromDayNum(d).d}</span>${items.length ? `<ul class="chip-list chip-list--tight">${items.map(chip).join('')}</ul>` : ''}` : ''}</td>`;
+        }
+        rows += '</tr>';
+      }
+      const heads = Array.from({ length: 7 }, (_, j) => `<th scope="col">${esc(formatDay(3 + j, c.locale, { weekday: 'short' }))}</th>`).join('');
+      const days = [...byDay.keys()].sort((a, b) => a - b);
+      const mobile = days.length
+        ? days.map((d) => `<li class="ml-day"><div class="ml-date"><span class="ml-num">${fromDayNum(d).d}</span><span class="ml-dow">${esc(formatDay(d, c.locale, { weekday: 'short' }))}</span></div><div class="ml-body"><ul class="chip-list">${byDay.get(d)!.map(chip).join('')}</ul></div></li>`).join('')
+        : `<li class="empty-note">${esc(t('gi.noEvents'))}</li>`;
+      root.querySelector('[data-cal-body]')!.innerHTML = `<table class="month-grid"><thead><tr>${heads}</tr></thead><tbody>${rows}</tbody></table><ul class="month-list">${mobile}</ul>${days.length ? '' : `<p class="empty-note month-empty">${esc(t('gi.noEvents'))}</p>`}`;
+    };
+    const apply = () => {
+      root.querySelectorAll<HTMLButtonElement>('[data-cat]:is(button)').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.cat === cat)));
+      root.querySelectorAll<HTMLButtonElement>('[data-ev-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.evView === view)));
+      let n = 0;
+      cards.forEach((card) => {
+        const ok = !cat || card.dataset.cat === cat;
+        card.hidden = !ok;
+        if (ok) { n++; card.classList.add('is-revealed'); }
+      });
+      list.hidden = view !== 'list';
+      empty.hidden = view !== 'list' || n > 0;
+      cal.hidden = view !== 'calendar';
+      if (view === 'calendar') renderCal();
+    };
+    root.querySelectorAll<HTMLButtonElement>('[data-cat]:is(button)').forEach((b) => b.addEventListener('click', () => { cat = b.dataset.cat!; apply(); }));
+    root.querySelectorAll<HTMLButtonElement>('[data-ev-view]').forEach((b) => b.addEventListener('click', () => { view = b.dataset.evView!; apply(); }));
+    root.querySelectorAll<HTMLButtonElement>('[data-cal-step]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const m = ym.m + Number(b.dataset.calStep);
+        ym = { y: ym.y + (m > 12 ? 1 : m < 1 ? -1 : 0), m: ((m + 11) % 12) + 1 };
+        renderCal();
+      }),
+    );
+    cal.addEventListener('click', (e) => {
+      const a = (e.target as HTMLElement).closest<HTMLAnchorElement>('[data-jump]');
+      if (!a) return;
+      e.preventDefault();
+      view = 'list';
+      cat = '';
+      apply();
+      const card = document.getElementById(a.dataset.jump!);
+      card?.scrollIntoView({ block: 'center' });
+      card?.querySelector<HTMLButtonElement>('[data-signup]')?.focus({ preventScroll: true });
+    });
+    if (new URLSearchParams(location.search).get('view') === 'calendar') view = 'calendar';
+    apply();
+  });
+</script>

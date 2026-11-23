@@ -1,0 +1,70 @@
+{
+  "$schema": "../schemas/clergy.schema.json",
+  "people": [
+    {
+      "id": "fr-nicholas",
+      "name": "Fr. Nicholas Example",
+      "initials": "NE",
+      "role": {
+        "en": "Parish Priest (Proistamenos)",
+        "el": "Προϊστάμενος του ναού"
+      },
+      "image": "",
+      "email": "frnicholas@example.org",
+      "bio": [
+        {
+          "en": "Sample biography. Fr. Nicholas has served St. Example since 2015. He was ordained after theological studies and several years as a chanter in his home parish.",
+          "el": "Ενδεικτικό βιογραφικό. Ο π. Νικόλαος διακονεί στον Άγιο Example από το 2015. Χειροτονήθηκε μετά από θεολογικές σπουδές και αρκετά χρόνια ως ψάλτης στην ενορία καταγωγής του."
+        }
+      ]
+    },
+    {
+      "id": "dn-stephen",
+      "name": "Dn. Stephen Sample",
+      "initials": "SS",
+      "role": {
+        "en": "Deacon",
+        "el": "Διάκονος"
+      },
+      "image": "",
+      "bio": [
+        {
+          "en": "Sample biography. Deacon Stephen serves at the Divine Liturgy and leads the Thursday Bible study.",
+          "el": "Ενδεικτικό βιογραφικό. Ο διάκονος Στέφανος διακονεί στη Θεία Λειτουργία και συντονίζει τη μελέτη Αγίας Γραφής της Πέμπτης."
+        }
+      ]
+    },
+    {
+      "id": "anna-chanter",
+      "name": "Anna Example",
+      "initials": "AE",
+      "role": {
+        "en": "Protopsaltis and choir director",
+        "el": "Πρωτοψάλτρια και διευθύντρια χορωδίας"
+      },
+      "image": "",
+      "bio": [
+        {
+          "en": "Sample biography. Anna teaches Byzantine music to young chanters on Wednesday evenings.",
+          "el": "Ενδεικτικό βιογραφικό. Η Άννα διδάσκει βυζαντινή μουσική σε νέους ψάλτες κάθε Τετάρτη βράδυ."
+        }
+      ]
+    },
+    {
+      "id": "basil-council",
+      "name": "Basil Sample",
+      "initials": "BS",
+      "role": {
+        "en": "Parish council president",
+        "el": "Πρόεδρος εκκλησιαστικού συμβουλίου"
+      },
+      "image": "",
+      "bio": [
+        {
+          "en": "Sample biography. Basil coordinates the parish council and the annual festival.",
+          "el": "Ενδεικτικό βιογραφικό. Ο Βασίλειος συντονίζει το εκκλησιαστικό συμβούλιο και το ετήσιο φεστιβάλ."
+        }
+      ]
+    }
+  ]
+}

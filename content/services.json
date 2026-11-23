@@ -1,0 +1,23 @@
+{
+  "$schema": "../schemas/services.schema.json",
+  "weekly": [
+    { "id": "sun-orthros", "day": 0, "time": "08:30", "duration": 75, "type": "orthros", "streamed": true, "title": { "en": "Orthros", "el": "Όρθρος" } },
+    { "id": "sun-liturgy", "day": 0, "time": "09:45", "duration": 90, "type": "liturgy", "streamed": true, "title": { "en": "Divine Liturgy", "el": "Θεία Λειτουργία" } },
+    { "id": "wed-paraklesis", "day": 3, "time": "18:00", "duration": 45, "type": "prayer", "title": { "en": "Paraklesis to the Theotokos", "el": "Παράκληση στην Υπεραγία Θεοτόκο" } },
+    { "id": "thu-study", "day": 4, "time": "19:00", "duration": 60, "type": "class", "title": { "en": "Bible study in the parish hall", "el": "Μελέτη Αγίας Γραφής στην αίθουσα" } },
+    { "id": "sat-vespers", "day": 6, "time": "17:00", "duration": 45, "type": "vespers", "streamed": true, "title": { "en": "Great Vespers", "el": "Μέγας Εσπερινός" } }
+  ],
+  "feastServices": {
+    "great": [
+      { "id": "festal-vespers", "offsetDays": -1, "time": "18:00", "duration": 60, "type": "vespers", "skipOnDays": [6], "title": { "en": "Festal Vespers", "el": "Εσπερινός της εορτής" } },
+      { "id": "festal-liturgy", "offsetDays": 0, "time": "09:00", "duration": 120, "type": "liturgy", "streamed": true, "skipOnDays": [0], "title": { "en": "Orthros and Divine Liturgy", "el": "Όρθρος και Θεία Λειτουργία" } }
+    ],
+    "major": [
+      { "id": "major-liturgy", "offsetDays": 0, "time": "09:00", "duration": 105, "type": "liturgy", "skipOnDays": [0, 6], "title": { "en": "Orthros and Divine Liturgy", "el": "Όρθρος και Θεία Λειτουργία" } }
+    ]
+  },
+  "special": [
+    { "id": "nativity-confessions", "date": "2026-12-19", "time": "10:00", "duration": 180, "type": "other", "title": { "en": "Confessions before the Nativity", "el": "Εξομολογήσεις πριν από τα Χριστούγεννα" } },
+    { "id": "general-assembly", "date": "2026-12-13", "time": "12:00", "duration": 90, "type": "other", "title": { "en": "Parish general assembly after Liturgy", "el": "Γενική συνέλευση της ενορίας μετά τη Λειτουργία" } }
+  ]
+}

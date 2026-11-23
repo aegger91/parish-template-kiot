@@ -1,0 +1,78 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "sermons.schema.json",
+  "title": "Sermons",
+  "description": "Sermon archive. audio: file path. video: embed URL. text: paragraphs.",
+  "type": "object",
+  "properties": {
+    "$schema": {
+      "type": "string"
+    },
+    "series": {
+      "type": "array",
+      "items": {
+        "$ref": "common.schema.json#/$defs/labelled"
+      }
+    },
+    "sermons": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "date": {
+            "$ref": "common.schema.json#/$defs/date"
+          },
+          "type": {
+            "enum": [
+              "audio",
+              "video",
+              "text"
+            ]
+          },
+          "series": {
+            "$ref": "common.schema.json#/$defs/id"
+          },
+          "speaker": {
+            "type": "string"
+          },
+          "scripture": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "title": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "summary": {
+            "$ref": "common.schema.json#/$defs/localized"
+          },
+          "audio": {
+            "type": "string"
+          },
+          "duration": {
+            "type": "string"
+          },
+          "video": {
+            "$ref": "common.schema.json#/$defs/url"
+          },
+          "text": {
+            "$ref": "common.schema.json#/$defs/localizedList"
+          }
+        },
+        "required": [
+          "id",
+          "date",
+          "type",
+          "title"
+        ],
+        "additionalProperties": false
+      }
+    }
+  },
+  "required": [
+    "series",
+    "sermons"
+  ],
+  "additionalProperties": false
+}

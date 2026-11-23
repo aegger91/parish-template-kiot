@@ -1,0 +1,54 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import Cross from '../Cross.astro';
+import { site } from '../../lib/content';
+import { t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const c = site.contact;
+const q = encodeURIComponent(c.directionsQuery);
+const apps = [
+  { name: 'Google Maps', href: `https://www.google.com/maps/dir/?api=1&destination=${q}` },
+  { name: 'Apple Maps', href: `https://maps.apple.com/?daddr=${q}` },
+  { name: 'OpenStreetMap', href: `https://www.openstreetmap.org/search?query=${q}` },
+];
+const notes = [
+  { key: 'parking', icon: 'car', text: c.parking },
+  { key: 'transit', icon: 'bus', text: c.transit },
+  { key: 'accessibility', icon: 'accessibility', text: c.accessibility },
+].filter((n) => n.text);
+---
+<section class="section section--muted" id={s.id}>
+  <div class="container directions-grid">
+    <div class="map-card" data-reveal>
+      {c.mapEmbedUrl ? (
+        <iframe class="map-embed" src={c.mapEmbedUrl} title={tr(s.heading, lang)} loading="lazy"></iframe>
+      ) : (
+        <div class="map-placeholder" role="img" aria-label={t('mapPlaceholder', lang)}>
+          <svg viewBox="0 0 400 260" aria-hidden="true" preserveAspectRatio="xMidYMid slice">
+            <rect width="400" height="260" fill="#f3e9d3" />
+            <path d="M0 70h400M0 170h400M90 0v260M250 0v260M330 0v260" stroke="#fffdf8" stroke-width="16" />
+            <path d="M0 230 Q140 200 400 120" stroke="#fffdf8" stroke-width="10" fill="none" />
+            <path d="M0 70h400M0 170h400M90 0v260M250 0v260M330 0v260" stroke="#e5d6b6" stroke-width="1" />
+            <rect x="110" y="88" width="120" height="64" rx="6" fill="#e9dcc0" />
+            <rect x="268" y="88" width="46" height="64" rx="6" fill="#dfe6cf" />
+            <rect x="12" y="188" width="62" height="56" rx="6" fill="#e9dcc0" />
+          </svg>
+          <span class="map-pin"><Cross size={22} /></span>
+          <p class="map-note">{t('mapPlaceholder', lang)}</p>
+        </div>
+      )}
+    </div>
+    <div class="directions-info" data-reveal>
+      <SectionHead lang={lang} heading={s.heading} align="start" />
+      <p class="directions-address"><Icon name="map-pin" size={18} /> {c.address.street}, {c.address.city}, {c.address.region} {c.address.postalCode}</p>
+      <div class="btn-row">
+        {apps.map((a, i) => <a class:list={['btn', 'btn-sm', i === 0 ? 'btn-burgundy' : 'btn-ghost']} href={a.href} rel="noopener">{t('openIn', lang, { app: a.name })}</a>)}
+      </div>
+      <dl class="info-list">
+        {notes.map((n) => <div><dt><Icon name={n.icon} size={18} /> {t(n.key, lang)}</dt><dd>{tr(n.text, lang)}</dd></div>)}
+      </dl>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,284 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import Pictogram from '../Pictogram.astro';
+import { site, zapiski } from '../../lib/content';
+import { getLanguage, t, tr } from '../../lib/i18n';
+import { pageHref } from '../../lib/pages';
+import { slip, type ZapData } from '../../lib/zapiski-view';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const data: ZapData = {
+  maxNames: zapiski.maxNames,
+  noteTypes: zapiski.noteTypes.map((n: any) => ({ id: n.id, label: tr(n.label, lang) })),
+  commemorations: zapiski.commemorations.map((c: any) => ({ id: c.id, appliesTo: c.appliesTo, suggested: c.suggested, label: tr(c.label, lang), description: tr(c.description, lang) })),
+  candles: zapiski.candles.map((c: any) => ({ id: c.id, label: tr(c.label, lang), price: c.price })),
+  donationPresets: zapiski.donationPresets,
+  prefixes: zapiski.prefixes.map((p: any) => ({ id: p.id, label: tr(p.label, lang), short: tr(p.short, lang) })),
+};
+const fmt = {
+  t: (k: string, v?: Record<string, string | number>) => t(k, lang, v),
+  money: (n: number) => new Intl.NumberFormat(L.locale, { style: 'currency', currency: site.currency, minimumFractionDigits: n % 1 ? 2 : 0 }).format(n),
+};
+const firstType = zapiski.noteTypes[0].id;
+---
+<section class="section" id={s.id}>
+  <div class="container zap-layout" data-zapiski>
+    <div class="zap-main">
+      <SectionHead lang={lang} heading={s.heading} intro={s.intro} align="start" />
+      {zapiski.hint?.length > 0 && (
+        <details class="zap-hint" data-reveal>
+          <summary><Pictogram name="gospel" size={22} /> <span>{t('zap.hintTitle', lang)}</span> <Icon name="chevron-down" size={16} /></summary>
+          <div class="prose">{zapiski.hint.map((h: any) => <p>{tr(h, lang)}</p>)}</div>
+        </details>
+      )}
+      <div class="slips" data-slips set:html={slip(1, firstType, data, fmt)} />
+      <button type="button" class="btn btn-outline btn-block add-slip" data-add-slip><Icon name="plus" size={18} /> {t('zap.addSlip', lang)}</button>
+    </div>
+    <aside class="zap-aside">
+      <form class="summary-card zap-summary" data-zap-form novalidate>
+        <h2 class="summary-title">{t('zap.summary', lang)}</h2>
+        <p class="zap-count" data-zap-count></p>
+        <ul class="mini-lines" data-zap-lines></ul>
+        <dl class="totals"><div class="totals-grand"><dt>{t('store.total', lang)}</dt><dd data-zap-total></dd></div></dl>
+        <fieldset class="fieldset">
+          <legend class="fieldset-label">{t('zap.yourDetails', lang)}</legend>
+          <div class="field">
+            <label for="zap-name">{t('fullName', lang)}</label>
+            <input id="zap-name" name="name" autocomplete="name" data-submit-required />
+            <p class="field-error">{t('required', lang)}</p>
+          </div>
+          <div class="field">
+            <label for="zap-email">{t('email', lang)}</label>
+            <input id="zap-email" name="email" type="email" autocomplete="email" data-submit-required />
+            <p class="field-error">{t('required', lang)}</p>
+          </div>
+        </fieldset>
+        <label class="check">
+          <input type="checkbox" name="consent" data-consent />
+          <span>{t('zap.consent', lang)}</span>
+        </label>
+        <p class="form-error" data-zap-error role="alert"></p>
+        <div class="zap-actions">
+          <button type="submit" class="btn btn-gold btn-block" data-action="submit">{t('zap.submit', lang)}</button>
+          {site.features.store.enabled && <button type="button" class="btn btn-ghost btn-block" data-action="cart"><Icon name="shopping-bag" size={16} /> {t('zap.addToCart', lang)}</button>}
+        </div>
+        <p class="form-note">{t('paymentDemo', lang)}</p>
+        <p class="form-status" role="status" data-status></p>
+        {site.features.store.enabled && <a class="text-link" href={pageHref(lang, 'cart')} data-cart-link hidden>{t('store.viewCart', lang)}</a>}
+      </form>
+    </aside>
+    <script type="application/json" data-zap-json set:html={JSON.stringify(data)} />
+  </div>
+</section>
+<script>
+  import { addLine } from '../../lib/cart';
+  import { announce, ctx, esc, money, t } from '../../lib/client';
+  import { submitOfficeForm, submitPayment } from '../../lib/handlers';
+  import { nameRow, slip, type ZapData } from '../../lib/zapiski-view';
+
+  const root = document.querySelector<HTMLElement>('[data-zapiski]');
+  if (root) {
+    const d: ZapData = JSON.parse(root.querySelector('[data-zap-json]')!.textContent!);
+    const f = { t, money };
+    const slips = root.querySelector<HTMLElement>('[data-slips]')!;
+    const form = root.querySelector<HTMLFormElement>('[data-zap-form]')!;
+    const error = form.querySelector<HTMLElement>('[data-zap-error]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    let counter = 1;
+
+    const all = () => [...slips.querySelectorAll<HTMLElement>('[data-slip]')];
+    const checkedPrice = (el: HTMLElement, name: string) => Number(el.querySelector<HTMLInputElement>(`[name="${name}"]:checked`)?.dataset.price ?? 0);
+    const info = (el: HTMLElement) => {
+      const idx = el.dataset.slip!;
+      const type = el.dataset.type!;
+      const names = [...el.querySelectorAll<HTMLElement>('.name-row')]
+        .map((r) => {
+          const nm = r.querySelector<HTMLInputElement>('[data-name]')!.value.trim();
+          const pid = r.querySelector<HTMLSelectElement>('[data-prefix]')!.value;
+          const pre = d.prefixes.find((p) => p.id === pid);
+          return nm ? (pre ? `${pre.short} ${nm}` : nm) : '';
+        })
+        .filter(Boolean);
+      const comm = d.commemorations.find((c) => c.id === el.querySelector<HTMLInputElement>(`[name="z${idx}-comm"]:checked`)?.value);
+      const candleIn = el.querySelector<HTMLInputElement>(`[name="z${idx}-candle"]:checked`);
+      const candle = d.candles.find((c) => c.id === candleIn?.value);
+      const other = Number(el.querySelector<HTMLInputElement>('[data-gift-other]')!.value) || 0;
+      const gift = other > 0 ? other : Number(el.querySelector<HTMLInputElement>(`[name="z${idx}-gift"]:checked`)?.value ?? 0);
+      const total = (comm?.suggested ?? 0) + (candle?.price ?? 0) + gift;
+      return { idx, type, typeLabel: d.noteTypes.find((n) => n.id === type)?.label ?? '', names, comm, candle, gift, total };
+    };
+
+    const renumber = (el: HTMLElement) => {
+      const rows = el.querySelectorAll<HTMLElement>('.name-row');
+      rows.forEach((r, i) => {
+        const n = i + 1;
+        r.querySelector('.name-num')!.textContent = String(n);
+        const [pl, nl] = r.querySelectorAll('label');
+        pl.textContent = t('zap.prefixFor', { n });
+        nl.textContent = t('zap.nameN', { n });
+        r.querySelector<HTMLInputElement>('[data-name]')!.placeholder = t('zap.nameN', { n });
+        r.querySelector('[data-remove-name]')!.setAttribute('aria-label', t('zap.removeName', { n }));
+        r.querySelector<HTMLButtonElement>('[data-remove-name]')!.disabled = rows.length === 1;
+      });
+      const full = rows.length >= d.maxNames;
+      el.querySelector<HTMLButtonElement>('[data-add-name]')!.disabled = full;
+      el.querySelector<HTMLElement>('[data-max-hint]')!.hidden = !full;
+      el.querySelector('[data-name-count]')!.textContent = `${rows.length} / ${d.maxNames}`;
+    };
+
+    const setType = (el: HTMLElement, type: string) => {
+      el.dataset.type = type;
+      el.className = `slip slip--${type}`;
+      el.querySelector('[data-slip-type]')!.textContent = d.noteTypes.find((n) => n.id === type)?.label ?? '';
+      let firstOk: HTMLInputElement | null = null;
+      el.querySelectorAll<HTMLElement>('[data-applies]').forEach((row) => {
+        const ok = row.dataset.applies!.split(' ').includes(type);
+        const input = row.querySelector('input')!;
+        row.hidden = !ok;
+        input.disabled = !ok;
+        if (ok && !firstOk) firstOk = input;
+        if (!ok && input.checked) input.checked = false;
+      });
+      if (!el.querySelector('[data-applies] input:checked') && firstOk) (firstOk as HTMLInputElement).checked = true;
+    };
+
+    const paint = () => {
+      const list = all().map(info);
+      const names = list.reduce((n, s) => n + s.names.length, 0);
+      all().forEach((el, i) => {
+        el.querySelector('[data-slip-total]')!.textContent = money(list[i].total);
+        el.querySelector<HTMLButtonElement>('[data-remove-slip]')!.hidden = list.length === 1;
+      });
+      form.querySelector('[data-zap-count]')!.textContent = t('zap.noteCount', { notes: list.length, names });
+      form.querySelector('[data-zap-lines]')!.innerHTML = list
+        .map((s) => `<li><span><span class="dot dot--${esc(s.type)}" aria-hidden="true"></span>${esc(s.typeLabel)} · ${esc(s.comm?.label ?? '')} <small>${esc(t('zap.nameCount', { count: s.names.length }))}</small></span><span>${esc(money(s.total))}</span></li>`)
+        .join('');
+      form.querySelector('[data-zap-total]')!.textContent = money(list.reduce((n, s) => n + s.total, 0));
+    };
+
+    const setup = (el: HTMLElement) => {
+      renumber(el);
+      el.querySelectorAll<HTMLInputElement>('[data-type-input]').forEach((r) => r.addEventListener('change', () => { setType(el, r.value); paint(); }));
+      el.querySelector('[data-add-name]')!.addEventListener('click', () => {
+        const list = el.querySelector<HTMLElement>('[data-names]')!;
+        const count = list.children.length;
+        if (count >= d.maxNames) return;
+        list.insertAdjacentHTML('beforeend', nameRow(Number(el.dataset.slip), Date.now() % 100000, d, f));
+        renumber(el);
+        list.lastElementChild!.querySelector<HTMLInputElement>('[data-name]')!.focus();
+      });
+      el.addEventListener('click', (e) => {
+        const rm = (e.target as HTMLElement).closest('[data-remove-name]');
+        if (rm) {
+          const row = rm.closest('.name-row')!;
+          const prev = (row.previousElementSibling ?? row.nextElementSibling) as HTMLElement | null;
+          row.remove();
+          renumber(el);
+          prev?.querySelector<HTMLInputElement>('[data-name]')?.focus();
+          paint();
+        }
+        if ((e.target as HTMLElement).closest('[data-remove-slip]')) {
+          const next = (el.previousElementSibling ?? el.nextElementSibling) as HTMLElement | null;
+          el.remove();
+          next?.querySelector<HTMLElement>('.slip-type')?.focus();
+          paint();
+        }
+      });
+      el.addEventListener('input', (e) => {
+        const tgt = e.target as HTMLInputElement;
+        if (tgt.matches('[data-gift-other]') && Number(tgt.value) > 0) el.querySelectorAll<HTMLInputElement>(`[name="z${el.dataset.slip}-gift"]`).forEach((r) => (r.checked = false));
+        if (tgt.matches(`[name="z${el.dataset.slip}-gift"]`)) el.querySelector<HTMLInputElement>('[data-gift-other]')!.value = '';
+        paint();
+      });
+      el.addEventListener('change', paint);
+    };
+
+    all().forEach(setup);
+    root.querySelector('[data-add-slip]')!.addEventListener('click', () => {
+      counter++;
+      const type = all().at(-1)?.dataset.type ?? d.noteTypes[0].id;
+      slips.insertAdjacentHTML('beforeend', slip(counter, type, d, f));
+      const el = all().at(-1)!;
+      el.querySelector<HTMLElement>('.slip-type')!.tabIndex = -1;
+      setup(el);
+      paint();
+      el.scrollIntoView({ behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth', block: 'start' });
+      el.querySelector<HTMLInputElement>('[data-name]')!.focus({ preventScroll: true });
+    });
+    paint();
+
+    const check = (needDetails: boolean) => {
+      const list = all().map(info);
+      error.textContent = '';
+      status.textContent = '';
+      let msg = '';
+      const emptySlip = all().find((_, i) => list[i].names.length === 0);
+      if (emptySlip) {
+        msg = t('zap.needName');
+        emptySlip.querySelector<HTMLInputElement>('[data-name]')!.focus();
+      } else if (!form.querySelector<HTMLInputElement>('[data-consent]')!.checked) {
+        msg = t('zap.needConsent');
+        form.querySelector<HTMLInputElement>('[data-consent]')!.focus();
+      } else if (needDetails) {
+        for (const input of form.querySelectorAll<HTMLInputElement>('[data-submit-required]')) {
+          const ok = input.value.trim() !== '' && input.checkValidity();
+          input.closest('.field')!.classList.toggle('is-invalid', !ok);
+          input.setAttribute('aria-invalid', String(!ok));
+          if (!ok && !msg) { msg = t('formError'); input.focus(); }
+        }
+      }
+      error.textContent = msg;
+      return msg ? null : list;
+    };
+
+    const reset = () => {
+      slips.innerHTML = slip(1, d.noteTypes[0].id, d, f);
+      counter = 1;
+      setup(all()[0]);
+      form.reset();
+      paint();
+    };
+
+    form.querySelector('[data-action="cart"]')?.addEventListener('click', () => {
+      const list = check(false);
+      if (!list) return;
+      list.forEach((s) => {
+        const key = `zap-${Date.now()}-${s.idx}`;
+        const detail = [s.comm?.label, s.names.join(', '), s.candle?.label].filter(Boolean).join(' · ');
+        addLine({ key, kind: 'commemoration', id: s.comm?.id ?? 'note', label: `${s.typeLabel}`, detail, quantity: 1, unitPrice: s.total, meta: { type: s.type, names: s.names, commemoration: s.comm?.id, candle: s.candle?.id, gift: s.gift } });
+      });
+      reset();
+      status.textContent = t('zap.addedToCart');
+      form.querySelector<HTMLElement>('[data-cart-link]')!.hidden = false;
+      announce(t('zap.addedToCart'));
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const list = check(true);
+      if (!list) return;
+      const c = ctx();
+      const data = Object.fromEntries(new FormData(form).entries()) as Record<string, string>;
+      const total = list.reduce((n, s) => n + s.total, 0);
+      const btn = form.querySelector<HTMLButtonElement>('[data-action="submit"]')!;
+      btn.disabled = true;
+      await submitOfficeForm('commemoration', { ...data, notes: list.map((s) => ({ type: s.type, names: s.names, commemoration: s.comm?.id, candle: s.candle?.id, gift: s.gift })) });
+      const res = await submitPayment(
+        {
+          purpose: 'commemoration',
+          currency: c.currency,
+          lines: list.map((s) => ({ kind: 'commemoration' as const, id: s.comm?.id ?? 'note', label: `${s.typeLabel}: ${s.comm?.label ?? ''}`, quantity: 1, unitPrice: s.total })),
+          total,
+          customer: { name: data.name, email: data.email },
+        },
+        c.paymentProvider,
+      );
+      btn.disabled = false;
+      reset();
+      status.textContent = t('zap.submitted', { ref: res.reference });
+      announce(status.textContent);
+    });
+  }
+</script>

@@ -1,0 +1,306 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import Cross from './Cross.astro';
+import LanguageSwitcher from './LanguageSwitcher.astro';
+import { featureOn, site } from '../lib/content';
+import { t, tr } from '../lib/i18n';
+import { navTree, pageExists, pageHref, type NavItem } from '../lib/pages';
+
+interface Props {
+  lang: string;
+  path: string;
+  currentId?: string;
+  trail?: string[];
+}
+const { lang, path, currentId, trail = [] } = Astro.props;
+const items = navTree(lang);
+const links = items.filter((i) => i.style === 'link');
+const donate = items.find((i) => i.style === 'button');
+const live = featureOn('livestream') && pageExists('livestream');
+const liveNow = live && site.features.livestream.liveNow;
+const store = featureOn('store') && pageExists('cart');
+const isCurrent = (i: NavItem) => i.id === currentId || trail.includes(i.id);
+const addr = site.contact.address;
+---
+<header class="site-header" data-header>
+  <div class="header-inner container">
+    <a class="brand" href={pageHref(lang, 'home')} aria-label={tr(site.name, lang)}>
+      <Logo lang={lang} />
+    </a>
+
+    <nav class="primary-nav" aria-label={t('mainNav', lang)} data-nav>
+      <ul class="nav-list" data-nav-list>
+        {links.map((item) => (
+          <li class="nav-item" data-nav-item>
+            {item.children.length ? (
+              <>
+                <button class:list={['nav-link', 'nav-parent', { 'is-current': isCurrent(item) }]} type="button" aria-expanded="false" data-dropdown-toggle>
+                  <span>{item.label}</span>
+                  <Icon name="chevron-down" size={14} class="nav-chevron" />
+                </button>
+                <ul class="dropdown" data-dropdown>
+                  {item.overview && <li><a href={item.overview.href} aria-current={item.id === currentId ? 'page' : undefined}>{item.overview.label}</a></li>}
+                  {item.children.map((c) => (
+                    <li>
+                      <a href={c.href} aria-current={c.id === currentId ? 'page' : undefined}>{c.label}</a>
+                      {c.children.length > 0 && (
+                        <ul class="dropdown-sub">
+                          {c.children.map((g) => <li><a href={g.href} aria-current={g.id === currentId ? 'page' : undefined}>{g.label}</a></li>)}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </>
+            ) : (
+              <a class:list={['nav-link', { 'is-current': isCurrent(item) }]} href={item.href} aria-current={item.id === currentId ? 'page' : undefined}>{item.label}</a>
+            )}
+          </li>
+        ))}
+        <li class="nav-item nav-more" data-nav-more hidden>
+          <button class="nav-link nav-parent" type="button" aria-expanded="false" data-dropdown-toggle>
+            <span>{t('more', lang)}</span>
+            <Icon name="chevron-down" size={14} class="nav-chevron" />
+          </button>
+          <ul class="dropdown dropdown--more" data-dropdown data-more-list></ul>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="header-actions">
+      {live && (
+        <a class="live-badge" href={pageHref(lang, 'livestream')} data-live-badge hidden={!liveNow}>
+          <span class="live-dot" aria-hidden="true"></span>
+          <span>{t('liveNow', lang)}</span>
+        </a>
+      )}
+      <span class="header-lang"><LanguageSwitcher lang={lang} path={path} /></span>
+      {store && (
+        <a class="cart-button" href={pageHref(lang, 'cart')} data-cart-link>
+          <Icon name="shopping-bag" size={20} />
+          <span class="visually-hidden" data-cart-label>{t('cart', lang)}</span>
+          <span class="cart-count" data-cart-count hidden>0</span>
+        </a>
+      )}
+      {donate && <a class="btn btn-gold btn-sm donate-btn" href={donate.href}>{donate.label}</a>}
+      <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-drawer" data-menu-open>
+        <Icon name="menu" size={22} />
+        <span class="menu-toggle-label">{t('menu', lang)}</span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<div class="drawer" id="site-drawer" role="dialog" aria-modal="true" aria-label={t('menu', lang)} data-drawer hidden>
+  <div class="drawer-backdrop" data-menu-close></div>
+  <div class="drawer-panel" data-drawer-panel>
+    <div class="drawer-head">
+      <Logo lang={lang} />
+      <button class="icon-btn" type="button" data-menu-close aria-label={t('closeMenu', lang)}>
+        <Icon name="x" size={22} />
+      </button>
+    </div>
+    {donate && <a class="btn btn-gold drawer-donate" href={donate.href}>{donate.label}</a>}
+    <nav class="drawer-nav" aria-label={t('mainNav', lang)}>
+      <ul>
+        {links.map((item) => (
+          <li>
+            {item.children.length ? (
+              <details class="drawer-group" open={isCurrent(item) || undefined}>
+                <summary>
+                  <span>{item.label}</span>
+                  <Icon name="chevron-down" size={18} class="drawer-chevron" />
+                </summary>
+                <ul>
+                  {item.overview && <li><a href={item.overview.href} aria-current={item.id === currentId ? 'page' : undefined}>{item.overview.label}</a></li>}
+                  {item.children.map((c) => (
+                    <li>
+                      <a href={c.href} aria-current={c.id === currentId ? 'page' : undefined}>{c.label}</a>
+                      {c.children.length > 0 && (
+                        <ul class="drawer-sub">
+                          {c.children.map((g) => <li><a href={g.href}>{g.label}</a></li>)}
+                        </ul>
+                      )}
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            ) : (
+              <a class="drawer-link" href={item.href} aria-current={item.id === currentId ? 'page' : undefined}>{item.label}</a>
+            )}
+          </li>
+        ))}
+        {store && (
+          <li><a class="drawer-link" href={pageHref(lang, 'cart')}><Icon name="shopping-bag" size={18} /> <span>{t('cart', lang)}</span> <span class="cart-count cart-count--inline" data-cart-count hidden>0</span></a></li>
+        )}
+      </ul>
+    </nav>
+    <div class="drawer-foot">
+      <LanguageSwitcher lang={lang} path={path} variant="list" />
+      <p class="drawer-address">
+        <Cross size={14} class="text-gold" />
+        <span>{addr.street}, {addr.city}</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<script>
+  import { cartCount, readCart } from '../lib/cart';
+  import { ctx, t } from '../lib/client';
+
+  const header = document.querySelector<HTMLElement>('[data-header]')!;
+  const nav = header.querySelector<HTMLElement>('[data-nav]')!;
+  const list = header.querySelector<HTMLUListElement>('[data-nav-list]')!;
+  const more = header.querySelector<HTMLLIElement>('[data-nav-more]')!;
+  const moreList = header.querySelector<HTMLUListElement>('[data-more-list]')!;
+  const items = [...list.querySelectorAll<HTMLLIElement>('[data-nav-item]')];
+
+  /* Condense on scroll; hide while scrolling down, reveal on scroll up. */
+  let lastY = window.scrollY;
+  const onScroll = () => {
+    const y = window.scrollY;
+    header.classList.toggle('is-condensed', y > 24);
+    const busy = header.matches(':focus-within') || header.querySelector('[aria-expanded="true"]');
+    header.classList.toggle('is-hidden', !busy && y > 420 && y > lastY + 4);
+    if (y < lastY - 4 || y < 420) header.classList.remove('is-hidden');
+    lastY = y;
+  };
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  /* Dropdowns: click or keyboard to open, Escape or outside click to close. */
+  const closeAll = (except?: Element) => {
+    header.querySelectorAll<HTMLButtonElement>('[data-dropdown-toggle][aria-expanded="true"]').forEach((b) => {
+      if (b !== except) b.setAttribute('aria-expanded', 'false');
+    });
+  };
+  header.addEventListener('click', (e) => {
+    const btn = (e.target as Element).closest<HTMLButtonElement>('[data-dropdown-toggle]');
+    if (!btn) return;
+    const open = btn.getAttribute('aria-expanded') === 'true';
+    closeAll(btn);
+    btn.setAttribute('aria-expanded', String(!open));
+  });
+  document.addEventListener('click', (e) => {
+    if (!header.contains(e.target as Node)) closeAll();
+  });
+  header.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      const open = header.querySelector<HTMLButtonElement>('[data-dropdown-toggle][aria-expanded="true"]');
+      if (open) {
+        open.setAttribute('aria-expanded', 'false');
+        open.focus();
+      }
+    }
+  });
+  header.addEventListener('focusout', (e) => {
+    const next = e.relatedTarget as Node | null;
+    header.querySelectorAll<HTMLLIElement>('.nav-item').forEach((li) => {
+      if (next && !li.contains(next)) li.querySelector('[data-dropdown-toggle]')?.setAttribute('aria-expanded', 'false');
+    });
+  });
+
+  /* Priority navigation: move items that do not fit into "More"; fall back to the drawer when even that fails. */
+  const fit = () => {
+    header.classList.remove('is-compact');
+    items.forEach((li) => list.insertBefore(li, more));
+    moreList.innerHTML = '';
+    more.hidden = true;
+    if (window.innerWidth < 1024) {
+      header.classList.add('is-compact');
+      return;
+    }
+    const overflowing = () => list.scrollWidth > nav.clientWidth + 1;
+    if (!overflowing()) return;
+    more.hidden = false;
+    const moved: HTMLLIElement[] = [];
+    for (let i = items.length - 1; i >= 1 && overflowing(); i--) {
+      moved.unshift(items[i]);
+      items[i].remove();
+    }
+    moved.forEach((li) => {
+      const clone = document.createElement('li');
+      const link = li.querySelector('a.nav-link, button.nav-link');
+      if (link?.tagName === 'A') {
+        clone.innerHTML = `<a href="${(link as HTMLAnchorElement).href}">${link.textContent?.trim()}</a>`;
+      } else {
+        const label = link?.querySelector('span')?.textContent?.trim() ?? '';
+        const sub = li.querySelector('[data-dropdown]')!.cloneNode(true) as HTMLElement;
+        sub.className = 'dropdown-sub';
+        sub.removeAttribute('data-dropdown');
+        clone.innerHTML = `<span class="dropdown-heading">${label}</span>`;
+        clone.appendChild(sub);
+      }
+      moreList.appendChild(clone);
+      list.insertBefore(li, more);
+      li.hidden = true;
+    });
+    if (overflowing() || items.length - moved.length < 4) {
+      items.forEach((li) => (li.hidden = false));
+      more.hidden = true;
+      header.classList.add('is-compact');
+    }
+  };
+  const refit = () => {
+    items.forEach((li) => (li.hidden = false));
+    fit();
+  };
+  new ResizeObserver(refit).observe(header);
+  document.fonts?.ready.then(refit);
+
+  /* Drawer with focus trap. */
+  const drawer = document.querySelector<HTMLElement>('[data-drawer]')!;
+  const openBtn = header.querySelector<HTMLButtonElement>('[data-menu-open]')!;
+  const focusables = () => [...drawer.querySelectorAll<HTMLElement>('a[href], button, summary')].filter((el) => el.offsetParent !== null);
+  const openDrawer = () => {
+    drawer.hidden = false;
+    requestAnimationFrame(() => drawer.classList.add('is-open'));
+    openBtn.setAttribute('aria-expanded', 'true');
+    document.documentElement.classList.add('scroll-lock');
+    focusables()[0]?.focus();
+  };
+  const closeDrawer = () => {
+    drawer.classList.remove('is-open');
+    openBtn.setAttribute('aria-expanded', 'false');
+    document.documentElement.classList.remove('scroll-lock');
+    setTimeout(() => (drawer.hidden = true), 280);
+    openBtn.focus();
+  };
+  openBtn.addEventListener('click', openDrawer);
+  drawer.querySelectorAll('[data-menu-close]').forEach((el) => el.addEventListener('click', closeDrawer));
+  drawer.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeDrawer();
+    if (e.key !== 'Tab') return;
+    const f = focusables();
+    if (!f.length) return;
+    if (e.shiftKey && document.activeElement === f[0]) {
+      e.preventDefault();
+      f[f.length - 1].focus();
+    } else if (!e.shiftKey && document.activeElement === f[f.length - 1]) {
+      e.preventDefault();
+      f[0].focus();
+    }
+  });
+
+  /* Remember the chosen language for the root redirect. */
+  document.querySelectorAll<HTMLAnchorElement>('[data-lang-link]').forEach((a) =>
+    a.addEventListener('click', () => localStorage.setItem('kiot-lang', a.dataset.langLink!)),
+  );
+
+  /* Cart badge. */
+  const paintCart = () => {
+    const n = cartCount(readCart());
+    document.querySelectorAll<HTMLElement>('[data-cart-count]').forEach((el) => {
+      el.textContent = String(n);
+      el.hidden = n === 0;
+    });
+    const label = document.querySelector<HTMLElement>('[data-cart-label]');
+    if (label) label.textContent = n ? t('cartCount', { count: n }) : t('cart');
+  };
+  paintCart();
+  window.addEventListener('kiot:cart', paintCart);
+  window.addEventListener('storage', paintCart);
+  void ctx;
+</script>
