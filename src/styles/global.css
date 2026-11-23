@@ -57,6 +57,8 @@ abbr[title] { text-decoration: none; }
 .text-gold { color: var(--color-accent); }
 .center { text-align: center; }
 .cross { flex: none; display: inline-block; vertical-align: middle; }
+/* Orthodox crosses must never mirror (esp. Slavic footrest orientation). */
+.cross--fixed, [dir='rtl'] .cross--fixed { transform: none; }
 .ui-icon { flex: none; display: inline-block; vertical-align: -0.15em; }
 [dir='rtl'] .dir-icon { transform: scaleX(-1); }
 .pictogram { flex: none; }

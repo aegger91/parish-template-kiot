@@ -204,8 +204,28 @@ function cypress(x, h, base = GROUND) {
   );
 }
 
-/** Byzantine dome on a drum with arched windows and a cross. */
-function domeOnDrum(cx, drumTop, drumBottom, drumW, domeRy, crossSize = 10) {
+/**
+ * Orthodox onion (bulbous) dome sitting on a drum base.
+ * `h` is tip-to-base height; base width is `2 * dx`.
+ */
+function onionDome(cx, baseY, dx, h, a = fill(LIGHT)) {
+  const tip = baseY - h;
+  const bulgeX = dx * 1.22;
+  let s = path(
+    `M${pt(cx - dx, baseY)}` +
+      `C${pt(cx - bulgeX, baseY - h * 0.06)} ${pt(cx - bulgeX, tip + h * 0.52)} ${pt(cx - dx * 0.32, tip + h * 0.2)}` +
+      `Q${pt(cx, tip)} ${pt(cx + dx * 0.32, tip + h * 0.2)}` +
+      `C${pt(cx + bulgeX, tip + h * 0.52)} ${pt(cx + bulgeX, baseY - h * 0.06)} ${pt(cx + dx, baseY)}Z`,
+    a,
+  );
+  // soft highlight ridges (not a Western steeple silhouette)
+  s += path(`M${pt(cx, tip)}Q${pt(cx - dx * 0.55, tip + h * 0.28)} ${pt(cx - dx * 0.72, baseY - h * 0.08)}`, join_(sw(1.5), 'stroke-opacity="0.55"'));
+  s += path(`M${pt(cx, tip)}Q${pt(cx + dx * 0.55, tip + h * 0.28)} ${pt(cx + dx * 0.72, baseY - h * 0.08)}`, join_(sw(1.5), 'stroke-opacity="0.55"'));
+  return s;
+}
+
+/** Onion dome on a drum with arched windows and a Byzantine cross. */
+function domeOnDrum(cx, drumTop, drumBottom, drumW, domeH, crossSize = 10) {
   const dx = drumW / 2;
   let s = rect(cx - dx, drumTop, drumW, drumBottom - drumTop, fill(LIGHT));
   const winW = 7;
@@ -214,11 +234,9 @@ function domeOnDrum(cx, drumTop, drumBottom, drumW, domeRy, crossSize = 10) {
     s += path(arch(cx + k * gap - winW / 2, cx + k * gap + winW / 2, drumTop + 8, drumTop + 28), join_(fill(CLOTH), sw(2)));
   }
   s += line(cx - dx - 5, drumTop, cx + dx + 5, drumTop);
-  s += path(`M${pt(cx - dx - 1, drumTop)}A${r2(dx + 1)} ${r2(domeRy)} 0 0 1 ${pt(cx + dx + 1, drumTop)}Z`, fill(LIGHT));
-  const top = drumTop - domeRy;
-  s += path(`M${pt(cx, top)}Q${pt(cx - dx * 0.5, top + domeRy * 0.25)} ${pt(cx - dx * 0.55, drumTop)}`, join_(sw(1.5), 'stroke-opacity="0.55"'));
-  s += path(`M${pt(cx, top)}Q${pt(cx + dx * 0.5, top + domeRy * 0.25)} ${pt(cx + dx * 0.55, drumTop)}`, join_(sw(1.5), 'stroke-opacity="0.55"'));
-  s += byzantineCross(cx, top - crossSize - 1, crossSize, INK);
+  s += onionDome(cx, drumTop, dx + 1, domeH);
+  const tip = drumTop - domeH;
+  s += byzantineCross(cx, tip - crossSize - 1, crossSize, INK);
   return s;
 }
 
@@ -288,11 +306,11 @@ function iconPanel(x1, x2, top, bottom) {
 const subjects = {};
 
 subjects.church = {
-  title: 'Byzantine cross-in-square church with a central dome on a drum, two lower side bays and cypress trees',
+  title: 'Orthodox cross-in-square church with a central onion dome on a drum, two lower side bays and cypress trees',
   body() {
     let s = ground(84, 316);
     s += cypress(96, 74) + cypress(304, 74);
-    s += domeOnDrum(200, 102, 160, 56, 26, 11);
+    s += domeOnDrum(200, 102, 160, 56, 34, 11);
     // side bays with lean-to roofs
     s += path(`M114 ${GROUND}V200L152 190V${GROUND}Z`, fill(LIGHT));
     s += path(`M286 ${GROUND}V200L248 190V${GROUND}Z`, fill(LIGHT));
@@ -372,7 +390,7 @@ subjects['candle-stand'] = {
 };
 
 subjects['bell-tower'] = {
-  title: 'Byzantine bell tower with two bells hanging in round arched openings, a small dome and a cross',
+  title: 'Orthodox bell tower with two bells in round arched openings, an onion dome on a drum and a cross (not a Western steeple)',
   body() {
     let s = ground(84, 316);
     s += cypress(116, 64) + cypress(284, 64);
@@ -391,17 +409,15 @@ subjects['bell-tower'] = {
     }
     s += line(166, 156, 234, 156, sw(2));
     s += rect(158, 94, 84, 8, fill(LIGHT));
-    // dome
-    s += path('M170 94A30 24 0 0 1 230 94Z', fill(LIGHT));
-    s += path('M200 70Q185 76 183 94', join_(sw(1.5), 'stroke-opacity="0.55"'));
-    s += path('M200 70Q215 76 217 94', join_(sw(1.5), 'stroke-opacity="0.55"'));
-    s += byzantineCross(200, 58, 11, INK);
+    // onion cupola on the drum (never a pointed Gothic/Western steeple)
+    s += onionDome(200, 94, 30, 32);
+    s += byzantineCross(200, 50, 11, INK);
     return s;
   },
 };
 
 subjects.prosphora = {
-  title: 'Two round prosphora loaves on a cloth; the front loaf bears a square seal with a cross',
+  title: 'Two round prosphora loaves on a cloth; the front loaf bears the IC XC NIKA seal',
   body() {
     let s = '';
     // cloth
@@ -414,16 +430,22 @@ subjects.prosphora = {
       ellipse(cx, top - h2, rx2, ry2, join_(fill(LIGHT), sw(2.5)));
     s += loaf(134, 184, 36, 21, 15, 27, 16, 14);
     s += loaf(220, 202, 60, 36, 20, 46, 28, 19);
-    // seal on the front loaf
+    // Lamb seal: central cross dividing IC | XC / NI | KA
     const sx = 220;
     const sy = 183;
     const ns = 'vector-effect="non-scaling-stroke"';
+    const sealLetter = (t, x, y) =>
+      `<text x="${x}" y="${y}" text-anchor="middle" dominant-baseline="central" font-family="serif" font-size="9" font-weight="700" fill="${INK}" stroke="none" ${ns}>${t}</text>`;
     s += g(
-      rect(-26, -26, 52, 52, join_(fill(IVORY), sw(2), ns)) +
-        byzantineCross(0, 0, 13, INK) +
-        [[-16, -16], [16, -16], [-16, 16], [16, 16]]
-          .map(([x, y]) => rect(x - 6, y - 6, 12, 12, join_(sw(1.6), ns)))
-          .join(''),
+      rect(-28, -28, 56, 56, join_(fill(IVORY), sw(2), ns)) +
+        line(-28, 0, 28, 0, join_(sw(1.8), ns)) +
+        line(0, -28, 0, 28, join_(sw(1.8), ns)) +
+        // small Greek cross at the centre of the seal
+        path('M-3.2 -12H3.2V-3.2H12V3.2H3.2V12H-3.2V3.2H-12V-3.2H-3.2Z', join_(fill(INK), 'stroke="none"')) +
+        sealLetter('IC', -14, -14) +
+        sealLetter('XC', 14, -14) +
+        sealLetter('NI', -14, 14) +
+        sealLetter('KA', 14, 14),
       `transform="translate(${sx} ${sy}) scale(1 0.62)"`,
     );
     return s;
@@ -592,22 +614,23 @@ subjects.incense = {
 };
 
 subjects.censer = {
-  title: 'A Byzantine censer hanging from chains, its domed lid topped with a cross, with gentle wisps of smoke',
+  title: 'An Orthodox censer (thurible) hanging from three chains, its onion-domed lid topped with a cross, with gentle wisps of smoke',
   body() {
     let s = '';
     s += circle(200, 32, 5, sw(2.5));
     s += ellipse(200, 42, 18, 4.5, join_(fill(GOLD_PALE), sw(2.5)));
     const rimY = 182;
-    s += chain(sampleLine(186, 45, 160, rimY), 7) + chain(sampleLine(214, 45, 240, rimY), 7);
+    // Side chains to the bowl rim; centre chain to the lid apex (opens the lid)
+    s += chain(sampleLine(186, 45, 160, rimY), 7) + chain(sampleLine(200, 46, 200, 122), 7) + chain(sampleLine(214, 45, 240, rimY), 7);
     s += smoke('M180 150C166 138 176 122 162 108S154 86 164 74', 2, 0.38);
     s += smoke('M220 150C234 138 224 122 238 108S246 86 236 74', 2, 0.38);
-    // lid: low dome on drum
+    // lid: short drum with onion cupola (not a Latin-style lid)
     s += path(`M160 ${rimY}L164 168H236L240 ${rimY}Z`, join_(fill(GOLD_PALE)));
     s += rect(174, 144, 52, 24, join_(fill(GOLD_PALE)));
     for (const x of [186, 200, 214]) s += path(arch(x - 3.5, x + 3.5, 149, 163), join_(fill(LIGHT), sw(1.5)));
     s += line(170, 144, 230, 144);
-    s += path('M176 144A24 20 0 0 1 224 144Z', join_(fill(GOLD_PALE)));
-    s += byzantineCross(200, 113, 10, INK);
+    s += onionDome(200, 144, 24, 22, join_(fill(GOLD_PALE)));
+    s += byzantineCross(200, 110, 10, INK);
     // bowl
     s += path(bowlPath(200, rimY, 42, 6, 38), join_(fill(GOLD_PALE)));
     s += line(156, rimY, 244, rimY);
@@ -620,7 +643,7 @@ subjects.censer = {
 };
 
 subjects['cross-pendant'] = {
-  title: 'A golden Byzantine cross pendant on a fine chain',
+  title: 'A golden Orthodox (Byzantine) cross pendant on a fine chain — equal-armed, not a Latin cross',
   body() {
     let s = '';
     s += chain(sampleCubic([146, 36], [150, 84], [176, 108], [197, 114]), 6);

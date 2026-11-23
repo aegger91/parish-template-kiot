@@ -2,8 +2,10 @@
   The single cross used everywhere in the template (Cross.astro and client-rendered markup).
   - byzantine: equal-armed Greek cross with flared arms and bead finials (default)
   - icxc: the Byzantine cross with IC XC / NI KA in the quadrants, titla over IC and XC
-  - slavic: eight-pointed cross; the slanted footrest is HIGHER at the viewer's LEFT
-  Never render it mirrored: no scaleX(-1) and no RTL flips.
+  - slavic: eight-pointed (three-bar) Russian cross:
+      short top titulus bar, long middle crossbar, lower footrest (suppedaneum)
+      slanting UP on the viewer's LEFT and DOWN on the viewer's RIGHT.
+      Never mirrored: no scaleX(-1), no RTL flip, no dir="rtl" transform.
 */
 export type CrossVariant = 'byzantine' | 'icxc' | 'slavic';
 
@@ -18,8 +20,11 @@ export function crossShapes(beads = true): string {
 export function crossSvg(variant: CrossVariant = 'byzantine', size: number | string = 24, cls = '', title?: string): string {
   const label = title ?? (variant === 'icxc' ? 'IC XC NIKA' : undefined);
   const a11y = label ? `role="img" aria-label="${label.replace(/"/g, '&quot;')}"` : 'aria-hidden="true"';
-  const klass = `cross${cls ? ' ' + cls : ''}`;
+  // cross--fixed blocks any accidental RTL/mirroring transforms in CSS
+  const klass = `cross cross--fixed${cls ? ' ' + cls : ''}`;
   if (variant === 'slavic') {
+    // Footrest polygon: left end HIGHER (smaller y), right end LOWER (larger y).
+    // points: TL(13,67) TR(47,77) BR(47,82.5) BL(13,72.5) — never reverse this slant.
     return `<svg class="${klass}" width="${size}" height="${size}" viewBox="0 0 60 100" fill="currentColor" ${a11y}><rect x="27" y="3" width="6" height="94" rx="1"/><rect x="18" y="13" width="24" height="5.5" rx="1"/><rect x="5" y="28" width="50" height="6.5" rx="1"/><polygon points="13,67 47,77 47,82.5 13,72.5"/></svg>`;
   }
   const letters =

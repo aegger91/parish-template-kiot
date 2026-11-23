@@ -20,7 +20,7 @@ const postLink = connectDeepLink(site.orthodoxConnect.appLinkBase, 'needs/new', 
     <SectionHead lang={lang} heading={s.heading} intro={s.intro} align={teaser ? 'center' : 'start'}>
       {!teaser && (
         <a class="btn btn-ghost btn-sm oc-link" href={postLink} rel="noopener" title={t('gi.handoff', lang)}>
-          <Icon name="hand-heart" size={16} /> {t('gi.postNeed', lang)} <span class="visually-hidden">({t('gi.handoff', lang)})</span>
+          <Icon name="users" size={16} /> {t('gi.postNeed', lang)} <span class="visually-hidden">({t('gi.handoff', lang)})</span>
         </a>
       )}
     </SectionHead>

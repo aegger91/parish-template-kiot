@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 300" role="img" aria-labelledby="cross-pendant-title">
-<title id="cross-pendant-title">A golden Byzantine cross pendant on a fine chain</title>
+<title id="cross-pendant-title">A golden Orthodox (Byzantine) cross pendant on a fine chain — equal-armed, not a Latin cross</title>
 <defs><radialGradient id="cross-pendant-bg" cx="50%" cy="45%" r="62%"><stop offset="0" stop-color="#fdfaf3"/><stop offset="1" stop-color="#f8f1e2"/></radialGradient></defs>
 <rect width="400" height="300" fill="url(#cross-pendant-bg)"/>
 <path d="M66 286V150A134 134 0 0 1 334 150V286Z" fill="#fdfaf3" stroke="#c29a46" stroke-width="2"/>
