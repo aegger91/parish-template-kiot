@@ -27,10 +27,12 @@ const firstType = zapiski.noteTypes[0].id;
   <div class="container zap-layout" data-zapiski>
     <div class="zap-main">
       <SectionHead lang={lang} heading={s.heading} intro={s.intro} align="start" />
-      <details class="zap-hint" data-reveal>
-        <summary><Pictogram name="gospel" size={22} /> <span>{t('zap.hintTitle', lang)}</span> <Icon name="chevron-down" size={16} /></summary>
-        <div class="prose">{zapiski.hint.map((h: any) => <p>{tr(h, lang)}</p>)}</div>
-      </details>
+      {zapiski.hint?.length > 0 && (
+        <details class="zap-hint" data-reveal>
+          <summary><Pictogram name="gospel" size={22} /> <span>{t('zap.hintTitle', lang)}</span> <Icon name="chevron-down" size={16} /></summary>
+          <div class="prose">{zapiski.hint.map((h: any) => <p>{tr(h, lang)}</p>)}</div>
+        </details>
+      )}
       <div class="slips" data-slips set:html={slip(1, firstType, data, fmt)} />
       <button type="button" class="btn btn-outline btn-block add-slip" data-add-slip><Icon name="plus" size={18} /> {t('zap.addSlip', lang)}</button>
     </div>

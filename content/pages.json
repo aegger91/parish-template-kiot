@@ -24,73 +24,62 @@
             "el": "Ελληνορθόδοξος Ναός"
           },
           "lead": {
-            "en": "Come and see. Our doors are open for every service, and visitors are always welcome to pray with us.",
-            "el": "Έλα και δες. Οι πόρτες μας είναι ανοιχτές σε κάθε ακολουθία και οι επισκέπτες είναι πάντα ευπρόσδεκτοι να προσευχηθούν μαζί μας."
+            "en": "A Greek Orthodox parish in Springfield. A short welcome line goes here.",
+            "el": "Ελληνορθόδοξη ενορία στο Springfield. Εδώ μπαίνει μια σύντομη φράση καλωσορίσματος."
           },
           "image": "pantocrator-sinai",
           "primaryCta": {
-            "label": {
-              "en": "Plan your visit",
-              "el": "Προγραμματίστε την επίσκεψή σας"
-            },
-            "page": "contact"
-          },
-          "secondaryCta": {
             "label": {
               "en": "Service schedule",
               "el": "Πρόγραμμα ακολουθιών"
             },
             "page": "services"
           },
+          "secondaryCta": {
+            "label": {
+              "en": "Contact and directions",
+              "el": "Επικοινωνία και πρόσβαση"
+            },
+            "page": "contact"
+          },
           "servicesCount": 3,
           "showCommemorationShortcut": true
         },
         {
           "id": "home-welcome",
-          "type": "pictogramCards",
+          "type": "richText",
           "enabled": true,
-          "eyebrow": {
+          "pictogram": "church",
+          "heading": {
             "en": "Welcome",
             "el": "Καλώς ήρθατε"
           },
+          "body": [
+            {
+              "en": "Welcome text goes here. One or two lines about the parish.",
+              "el": "Εδώ μπαίνει το κείμενο καλωσορίσματος. Μία ή δύο γραμμές για την ενορία."
+            }
+          ]
+        },
+        {
+          "id": "home-links",
+          "type": "pictogramCards",
+          "enabled": true,
           "heading": {
-            "en": "A house of prayer for the whole city",
-            "el": "Οίκος προσευχής για όλη την πόλη"
-          },
-          "intro": {
-            "en": "Whether you were baptized Orthodox, are exploring the faith or are simply curious, you are welcome at St. Example.",
-            "el": "Είτε είστε βαπτισμένος Ορθόδοξος, είτε γνωρίζετε τώρα την πίστη, είτε απλώς σας ενδιαφέρει, είστε ευπρόσδεκτοι στον Άγιο Example."
+            "en": "At St. Example",
+            "el": "Στον Άγιο Example"
           },
           "items": [
             {
-              "id": "w-visit",
-              "pictogram": "church",
-              "title": {
-                "en": "First visit",
-                "el": "Πρώτη επίσκεψη"
-              },
-              "text": {
-                "en": "Arrive a few minutes early, light a candle and stand or sit wherever you are comfortable.",
-                "el": "Ελάτε λίγα λεπτά νωρίτερα, ανάψτε ένα κερί και σταθείτε ή καθίστε όπου νιώθετε άνετα."
-              },
-              "link": {
-                "page": "contact",
-                "label": {
-                  "en": "Directions",
-                  "el": "Οδηγίες πρόσβασης"
-                }
-              }
-            },
-            {
-              "id": "w-liturgy",
+              "id": "l-services",
               "pictogram": "chalice",
               "title": {
-                "en": "Divine Liturgy",
-                "el": "Θεία Λειτουργία"
+                "en": "Services",
+                "el": "Ακολουθίες"
               },
               "text": {
-                "en": "Every Sunday at 9:45 AM, in English and Greek, with Orthros beforehand.",
-                "el": "Κάθε Κυριακή στις 9:45, στα αγγλικά και στα ελληνικά, με Όρθρο πριν από αυτήν."
+                "en": "Weekly services and feast days.",
+                "el": "Εβδομαδιαίες ακολουθίες και εορτές."
               },
               "link": {
                 "page": "services",
@@ -101,21 +90,40 @@
               }
             },
             {
-              "id": "w-life",
+              "id": "l-life",
               "pictogram": "bells",
               "title": {
                 "en": "Parish life",
                 "el": "Ενοριακή ζωή"
               },
               "text": {
-                "en": "Coffee hour, Greek school, youth groups, the choir and the food pantry all need you.",
-                "el": "Καφές μετά τη Λειτουργία, ελληνικό σχολείο, νεολαία, χορωδία και τράπεζα τροφίμων σας περιμένουν."
+                "en": "Events, ministries and volunteering.",
+                "el": "Εκδηλώσεις, διακονίες και εθελοντισμός."
               },
               "link": {
                 "page": "get-involved",
                 "label": {
                   "en": "Get involved",
                   "el": "Συμμετοχή"
+                }
+              }
+            },
+            {
+              "id": "l-contact",
+              "pictogram": "church",
+              "title": {
+                "en": "Find us",
+                "el": "Πού βρισκόμαστε"
+              },
+              "text": {
+                "en": "Address, parking and office hours.",
+                "el": "Διεύθυνση, στάθμευση και ώρες γραφείου."
+              },
+              "link": {
+                "page": "contact",
+                "label": {
+                  "en": "Directions",
+                  "el": "Οδηγίες πρόσβασης"
                 }
               }
             }
@@ -137,12 +145,12 @@
           "enabled": true,
           "requires": "livestream",
           "heading": {
-            "en": "Pray with us from home",
-            "el": "Προσευχηθείτε μαζί μας από το σπίτι"
+            "en": "Watch live",
+            "el": "Ζωντανή μετάδοση"
           },
           "text": {
-            "en": "Sunday Orthros and Divine Liturgy and Saturday Vespers are streamed for those who are sick, traveling or homebound.",
-            "el": "Ο Όρθρος και η Θεία Λειτουργία της Κυριακής και ο Εσπερινός του Σαββάτου μεταδίδονται για όσους είναι άρρωστοι, ταξιδεύουν ή δεν μπορούν να βγουν από το σπίτι."
+            "en": "Selected services are streamed live each week.",
+            "el": "Επιλεγμένες ακολουθίες μεταδίδονται ζωντανά κάθε εβδομάδα."
           }
         },
         {
@@ -175,12 +183,12 @@
           "enabled": true,
           "pictogram": "candle",
           "heading": {
-            "en": "Keep the lamps burning",
-            "el": "Να μένουν αναμμένα τα καντήλια"
+            "en": "Support the parish",
+            "el": "Στηρίξτε την ενορία"
           },
           "text": {
-            "en": "Your offering keeps the church open, supports the poor and passes the faith on to our children.",
-            "el": "Η προσφορά σας κρατά τον ναό ανοιχτό, στηρίζει τους φτωχούς και παραδίδει την πίστη στα παιδιά μας."
+            "en": "A short line about giving goes here.",
+            "el": "Εδώ μπαίνει μια σύντομη φράση για τις προσφορές."
           },
           "cta": {
             "page": "donate",
@@ -204,28 +212,24 @@
         "el": "Σχετικά με την ενορία"
       },
       "summary": {
-        "en": "Who we are and how we pray.",
-        "el": "Ποιοι είμαστε και πώς προσευχόμαστε."
+        "en": "About the parish, its clergy and its history.",
+        "el": "Για την ενορία, τον κλήρο και την ιστορία της."
       },
       "headerImage": "theotokos-apse",
       "sections": [
         {
-          "id": "parish-intro",
+          "id": "parish-about",
           "type": "richText",
           "enabled": true,
           "pictogram": "icon-frame",
           "heading": {
-            "en": "A parish family since 1924",
-            "el": "Ενοριακή οικογένεια από το 1924"
+            "en": "About us",
+            "el": "Σχετικά με εμάς"
           },
           "body": [
             {
-              "en": "St. Example is a sample Greek Orthodox parish. This text shows where a parish tells its own story in a few short paragraphs: who founded it, who worships here today and what a visitor can expect.",
-              "el": "Ο Άγιος Example είναι ένα δείγμα ελληνορθόδοξης ενορίας. Αυτό το κείμενο δείχνει πού μια ενορία λέει τη δική της ιστορία σε λίγες σύντομες παραγράφους: ποιοι την ίδρυσαν, ποιοι προσεύχονται εδώ σήμερα και τι μπορεί να περιμένει ένας επισκέπτης."
-            },
-            {
-              "en": "Services are sung in Greek and English in the Byzantine chant tradition. Families from many backgrounds now call this parish home.",
-              "el": "Οι ακολουθίες ψάλλονται στα ελληνικά και στα αγγλικά, κατά τη βυζαντινή παράδοση. Οικογένειες από πολλές καταγωγές θεωρούν σήμερα την ενορία σπίτι τους."
+              "en": "About text goes here. One or two lines on the parish and its community.",
+              "el": "Εδώ μπαίνει το κείμενο για την ενορία. Μία ή δύο γραμμές για την ενορία και την κοινότητά της."
             }
           ]
         },
@@ -303,8 +307,8 @@
                 "el": "Κλήρος και συνεργάτες"
               },
               "intro": {
-                "en": "Our clergy are glad to meet with you for confession, a house blessing or simply a conversation.",
-                "el": "Οι κληρικοί μας χαίρονται να σας συναντήσουν για εξομολόγηση, αγιασμό του σπιτιού ή απλώς για μια συζήτηση."
+                "en": "Sample clergy and staff.",
+                "el": "Δείγμα κλήρου και προσωπικού."
               }
             },
             {
@@ -317,8 +321,8 @@
                 "el": "Χρειάζεστε ιερέα;"
               },
               "text": {
-                "en": "For hospital visits, Holy Unction or an urgent pastoral need, call the office any time.",
-                "el": "Για επισκέψεις σε νοσοκομείο, Ευχέλαιο ή επείγουσα ποιμαντική ανάγκη, καλέστε το γραφείο οποιαδήποτε ώρα."
+                "en": "Call the parish office.",
+                "el": "Καλέστε το γραφείο της ενορίας."
               },
               "cta": {
                 "page": "request-a-service",
@@ -462,65 +466,6 @@
             "en": "Service schedule",
             "el": "Πρόγραμμα ακολουθιών"
           }
-        },
-        {
-          "id": "services-expect",
-          "type": "pictogramCards",
-          "enabled": true,
-          "heading": {
-            "en": "What to expect",
-            "el": "Τι να περιμένετε"
-          },
-          "items": [
-            {
-              "id": "e-candle",
-              "pictogram": "candle",
-              "title": {
-                "en": "Light a candle",
-                "el": "Ανάψτε ένα κερί"
-              },
-              "text": {
-                "en": "On entering, many people light a candle and venerate the icons in the narthex.",
-                "el": "Μπαίνοντας, πολλοί ανάβουν ένα κερί και προσκυνούν τις εικόνες στον νάρθηκα."
-              }
-            },
-            {
-              "id": "e-gospel",
-              "pictogram": "gospel",
-              "title": {
-                "en": "Follow along",
-                "el": "Παρακολουθήστε"
-              },
-              "text": {
-                "en": "Service books in English and Greek are in the pews. Join in the hymns when you are ready.",
-                "el": "Στα στασίδια υπάρχουν λειτουργικά βιβλία στα ελληνικά και στα αγγλικά. Ψάλλετε μαζί όταν νιώσετε έτοιμοι."
-              }
-            },
-            {
-              "id": "e-chalice",
-              "pictogram": "chalice",
-              "title": {
-                "en": "Holy Communion",
-                "el": "Θεία Κοινωνία"
-              },
-              "text": {
-                "en": "Communion is offered to prepared Orthodox Christians. Everyone is welcome to receive the blessed bread at the end.",
-                "el": "Η Θεία Κοινωνία προσφέρεται σε προετοιμασμένους Ορθόδοξους Χριστιανούς. Όλοι μπορούν να λάβουν το αντίδωρο στο τέλος."
-              }
-            },
-            {
-              "id": "e-censer",
-              "pictogram": "censer",
-              "title": {
-                "en": "Incense and chant",
-                "el": "Θυμίαμα και ψαλμωδία"
-              },
-              "text": {
-                "en": "Incense, icons and Byzantine chant are part of how we pray with the whole person.",
-                "el": "Το θυμίαμα, οι εικόνες και η βυζαντινή μουσική είναι μέρος της προσευχής με όλο μας το είναι."
-              }
-            }
-          ]
         }
       ],
       "children": [
@@ -580,8 +525,8 @@
                 "el": "Χαρτάκια μνημόνευσης"
               },
               "intro": {
-                "en": "Fill in a note the same way you would at the candle stand. The clergy read every name at the service you choose.",
-                "el": "Συμπληρώστε το χαρτάκι όπως θα κάνατε στο παγκάρι. Οι κληρικοί διαβάζουν κάθε όνομα στην ακολουθία που θα επιλέξετε."
+                "en": "Names to be remembered in prayer.",
+                "el": "Ονόματα για μνημόνευση στην προσευχή."
               }
             }
           ]
@@ -750,8 +695,8 @@
             "el": "Βιβλιοπωλείο της ενορίας"
           },
           "intro": {
-            "en": "Every purchase supports the life of the parish. Ship to your door or pick up at church.",
-            "el": "Κάθε αγορά στηρίζει τη ζωή της ενορίας. Αποστολή στο σπίτι σας ή παραλαβή από τον ναό."
+            "en": "Ship to your door or pick up at church.",
+            "el": "Αποστολή στο σπίτι ή παραλαβή από τον ναό."
           }
         }
       ],

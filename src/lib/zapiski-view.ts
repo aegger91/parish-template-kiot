@@ -40,7 +40,7 @@ export function slip(idx: number, type: string, d: ZapData, f: ZapFmt): string {
     .map(
       (c, i) => `<label class="opt-row" data-applies="${esc(c.appliesTo.join(' '))}" ${c.appliesTo.includes(type) ? '' : 'hidden'}>
     <input type="radio" name="${name('comm')}" value="${esc(c.id)}" data-price="${c.suggested}" ${i === 0 ? 'checked' : ''} ${c.appliesTo.includes(type) ? '' : 'disabled'} />
-    <span class="opt-main"><span class="opt-label">${esc(c.label)}</span><span class="opt-desc">${esc(c.description)}</span></span>
+    <span class="opt-main"><span class="opt-label">${esc(c.label)}</span>${c.description ? `<span class="opt-desc">${esc(c.description)}</span>` : ''}</span>
     <span class="opt-price">${esc(f.t('zap.suggested', { amount: f.money(c.suggested) }))}</span>
   </label>`,
     )

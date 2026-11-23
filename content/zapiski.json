@@ -30,10 +30,6 @@
       "label": {
         "en": "Proskomide",
         "el": "Προσκομιδή"
-      },
-      "description": {
-        "en": "A particle is taken from the prosphora for each name before the Liturgy.",
-        "el": "Για κάθε όνομα αφαιρείται μερίδα από το πρόσφορο πριν από τη Λειτουργία."
       }
     },
     {
@@ -46,10 +42,6 @@
       "label": {
         "en": "At the Divine Liturgy",
         "el": "Στη Θεία Λειτουργία"
-      },
-      "description": {
-        "en": "Names are read aloud during the litanies.",
-        "el": "Τα ονόματα διαβάζονται στις δεήσεις."
       }
     },
     {
@@ -61,10 +53,6 @@
       "label": {
         "en": "Moleben (Paraklesis)",
         "el": "Παράκληση"
-      },
-      "description": {
-        "en": "Names are read at the next prayer service.",
-        "el": "Τα ονόματα διαβάζονται στην επόμενη Παράκληση."
       }
     },
     {
@@ -76,10 +64,6 @@
       "label": {
         "en": "Panikhida (Trisagion)",
         "el": "Τρισάγιο"
-      },
-      "description": {
-        "en": "Names are read at the next memorial service.",
-        "el": "Τα ονόματα διαβάζονται στο επόμενο Τρισάγιο."
       }
     },
     {
@@ -92,10 +76,6 @@
       "label": {
         "en": "Sorokoust (40 days)",
         "el": "Σαρανταλείτουργο (40 ημέρες)"
-      },
-      "description": {
-        "en": "Names are remembered at forty Liturgies in a row.",
-        "el": "Τα ονόματα μνημονεύονται σε σαράντα συνεχόμενες Λειτουργίες."
       }
     }
   ],
@@ -217,18 +197,5 @@
       }
     }
   ],
-  "hint": [
-    {
-      "en": "Write first names only, as given at Baptism, for example Catherine rather than Katie. Surnames are not read.",
-      "el": "Γράψτε μόνο βαπτιστικά ονόματα, για παράδειγμα Αικατερίνη και όχι Κατερίνα ή Κέιτ. Τα επώνυμα δεν διαβάζονται."
-    },
-    {
-      "en": "Only Orthodox Christians are named at the Proskomide. For others, choose the Divine Liturgy or a prayer service, and the priest will pray for them too.",
-      "el": "Στην Προσκομιδή μνημονεύονται μόνο Ορθόδοξοι Χριστιανοί. Για τους άλλους επιλέξτε τη Θεία Λειτουργία ή την Παράκληση, και ο ιερέας θα προσευχηθεί και για αυτούς."
-    },
-    {
-      "en": "In parishes that pray in Church Slavonic, names are read in the genitive case. Write them as usual and the clergy will read them correctly.",
-      "el": "Στις ενορίες που προσεύχονται στα εκκλησιαστικά σλαβονικά, τα ονόματα διαβάζονται σε γενική πτώση. Γράψτε τα κανονικά και οι κληρικοί θα τα διαβάσουν σωστά."
-    }
-  ]
+  "hint": []
 }
