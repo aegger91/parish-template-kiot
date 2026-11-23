@@ -1,0 +1,63 @@
+---
+import PageHeader from './PageHeader.astro';
+import Icon from './Icon.astro';
+import Cross from './Cross.astro';
+import { galleryImage, news } from '../lib/content';
+import { formatDay, parseIsoDay } from '../lib/calendar';
+import { asset, getLanguage, t, tr } from '../lib/i18n';
+import { findPage, pageHref } from '../lib/pages';
+interface Props { lang: string; article: any }
+const { lang, article: a } = Astro.props;
+const L = getLanguage(lang);
+const f = findPage('news')!;
+const img = galleryImage(a.image);
+const cat = news.categories.find((c: any) => c.id === a.category);
+const more = [...news.articles].filter((x: any) => x.id !== a.id).sort((x: any, y: any) => y.date.localeCompare(x.date)).slice(0, 2);
+---
+<PageHeader
+  lang={lang}
+  title={tr(a.title, lang)}
+  summary={tr(a.excerpt, lang)}
+  crumbs={[
+    { label: t('home', lang), href: pageHref(lang, 'home') },
+    ...f.parents.map((p) => ({ label: tr(p.title, lang), href: pageHref(lang, p.id) })),
+    { label: tr(f.page.title, lang), href: pageHref(lang, 'news') },
+  ]}
+/>
+<article class="section">
+  <div class="container narrow article">
+    <p class="article-meta" data-reveal>
+      <time datetime={a.date}>{formatDay(parseIsoDay(a.date), L.locale, { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+      {cat && <span class="news-cat">{tr(cat.label, lang)}</span>}
+    </p>
+    {img && (
+      <figure class="article-figure" data-reveal>
+        <div class="arch-frame"><img src={asset(img.src)} alt={tr(img.alt, lang)} width={img.width} height={img.height} decoding="async" /></div>
+      </figure>
+    )}
+    <div class="prose" data-reveal>
+      {a.body.map((p: any) => <p>{tr(p, lang)}</p>)}
+    </div>
+    <p class="article-end" aria-hidden="true"><Cross size={22} class="text-gold" /></p>
+    <a class="text-link" href={pageHref(lang, 'news')}><Icon name="arrow-left" size={15} directional /> {t('allNews', lang)}</a>
+  </div>
+  {more.length > 0 && (
+    <div class="container article-more">
+      <div class="card-grid card-grid--2">
+        {more.map((m: any) => {
+          const mi = galleryImage(m.image);
+          return (
+            <a class="news-card news-card-link" href={pageHref(lang, 'news', m.slug)} data-reveal>
+              {mi && <div class="news-card-media"><img src={asset(mi.src)} alt="" loading="lazy" /></div>}
+              <div class="news-card-body">
+                <time datetime={m.date}>{formatDay(parseIsoDay(m.date), L.locale, { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+                <h3>{tr(m.title, lang)}</h3>
+                <p>{tr(m.excerpt, lang)}</p>
+              </div>
+            </a>
+          );
+        })}
+      </div>
+    </div>
+  )}
+</article>

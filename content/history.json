@@ -1,0 +1,11 @@
+{
+  "$schema": "../schemas/history.schema.json",
+  "events": [
+    { "id": "h-1924", "year": "1924", "title": { "en": "First Liturgy in a rented hall", "el": "Πρώτη Λειτουργία σε νοικιασμένη αίθουσα" }, "text": { "en": "Sample milestone. A handful of families gather with a visiting priest and borrow icons from home.", "el": "Ενδεικτικός σταθμός. Λίγες οικογένειες συγκεντρώνονται με έναν επισκέπτη ιερέα και φέρνουν εικόνες από τα σπίτια τους." } },
+    { "id": "h-1931", "year": "1931", "title": { "en": "The first church is built", "el": "Χτίζεται ο πρώτος ναός" }, "text": { "en": "Sample milestone. Parishioners raise a small brick church with a single dome on Example Street.", "el": "Ενδεικτικός σταθμός. Οι ενορίτες χτίζουν έναν μικρό πλίνθινο ναό με έναν τρούλο στην Example Street." }, "image": "church" },
+    { "id": "h-1958", "year": "1958", "title": { "en": "Consecration of the present church", "el": "Εγκαίνια του σημερινού ναού" }, "text": { "en": "Sample milestone. The cross-in-square church with its central dome is consecrated.", "el": "Ενδεικτικός σταθμός. Τελούνται τα εγκαίνια του σταυροειδούς ναού με τον κεντρικό τρούλο." } },
+    { "id": "h-1987", "year": "1987", "title": { "en": "Iconography completed", "el": "Ολοκληρώνεται η αγιογράφηση" }, "text": { "en": "Sample milestone. The Platytera is painted in the apse and the iconostasis is finished.", "el": "Ενδεικτικός σταθμός. Αγιογραφείται η Πλατυτέρα στην κόγχη του ιερού και ολοκληρώνεται το τέμπλο." }, "image": "iconostasis" },
+    { "id": "h-2012", "year": "2012", "title": { "en": "New parish hall and Greek school", "el": "Νέα αίθουσα και ελληνικό σχολείο" }, "text": { "en": "Sample milestone. Classrooms and a kitchen open for Greek school, youth groups and feast day meals.", "el": "Ενδεικτικός σταθμός. Αίθουσες διδασκαλίας και κουζίνα για το ελληνικό σχολείο, τη νεολαία και τις τράπεζες των εορτών." } },
+    { "id": "h-today", "year": { "en": "Today", "el": "Σήμερα" }, "title": { "en": "A parish of many families", "el": "Μια ενορία πολλών οικογενειών" }, "text": { "en": "Sample milestone. Services in Greek and English, a food pantry and a growing choir.", "el": "Ενδεικτικός σταθμός. Ακολουθίες στα ελληνικά και στα αγγλικά, τράπεζα τροφίμων και μια χορωδία που μεγαλώνει." } }
+  ]
+}

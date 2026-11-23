@@ -1,0 +1,80 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import { galleryImage, imageSources } from '../../lib/content';
+import { asset, t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const slides = (s.items as string[]).map((id) => galleryImage(id)).filter(Boolean);
+const src = (id: string) => imageSources.sources.find((x: any) => x.id === id);
+---
+<section class="section section--burgundy carousel-section" id={s.id}>
+  <div class="container">
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <div class="carousel" data-carousel role="region" aria-roledescription="carousel" aria-label={t('carouselLabel', lang)} data-reveal>
+      <button type="button" class="carousel-btn carousel-btn--prev" data-prev aria-label={t('previousIcon', lang)}><Icon name="chevron-left" size={24} directional /></button>
+      <ul class="carousel-track" data-track>
+        {slides.map((img: any, i: number) => (
+          <li class="carousel-slide" role="group" aria-roledescription="slide" aria-label={t('imageOf', lang, { n: i + 1, total: slides.length })} data-slide>
+            <figure>
+              <div class="carousel-arch">
+                <img src={asset(img.src)} alt={tr(img.alt, lang)} width={img.width} height={img.height} loading={i < 3 ? 'eager' : 'lazy'} decoding="async" draggable="false" />
+              </div>
+              <figcaption>
+                <span class="carousel-title">{tr(img.title, lang)}</span>
+                {src(img.source) && <span class="carousel-credit">{src(img.source).author}</span>}
+              </figcaption>
+            </figure>
+          </li>
+        ))}
+      </ul>
+      <button type="button" class="carousel-btn carousel-btn--next" data-next aria-label={t('nextIcon', lang)}><Icon name="chevron-right" size={24} directional /></button>
+      <div class="carousel-dots" data-dots>
+        {slides.map((_: any, i: number) => (
+          <button type="button" class="carousel-dot" aria-label={t('goToSlide', lang, { n: i + 1 })} aria-current={i === 0 ? 'true' : undefined} data-dot={i}></button>
+        ))}
+      </div>
+    </div>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-carousel]').forEach((root) => {
+    const track = root.querySelector<HTMLElement>('[data-track]')!;
+    const slides = [...root.querySelectorAll<HTMLElement>('[data-slide]')];
+    const dots = [...root.querySelectorAll<HTMLButtonElement>('[data-dot]')];
+    const rtl = getComputedStyle(root).direction === 'rtl';
+    const current = () => {
+      const center = track.getBoundingClientRect().left + track.clientWidth / 2;
+      let best = 0;
+      let bestDist = Infinity;
+      slides.forEach((s, i) => {
+        const r = s.getBoundingClientRect();
+        const d = Math.abs(r.left + r.width / 2 - center);
+        if (d < bestDist) { bestDist = d; best = i; }
+      });
+      return best;
+    };
+    const go = (i: number) => {
+      const n = (i + slides.length) % slides.length;
+      const s = slides[n];
+      track.scrollTo({ left: s.offsetLeft - (track.clientWidth - s.clientWidth) / 2, behavior: 'smooth' });
+    };
+    root.querySelector('[data-prev]')!.addEventListener('click', () => go(current() - 1));
+    root.querySelector('[data-next]')!.addEventListener('click', () => go(current() + 1));
+    dots.forEach((d) => d.addEventListener('click', () => go(Number(d.dataset.dot))));
+    root.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight') go(current() + (rtl ? -1 : 1));
+      if (e.key === 'ArrowLeft') go(current() + (rtl ? 1 : -1));
+    });
+    let raf = 0;
+    track.addEventListener('scroll', () => {
+      cancelAnimationFrame(raf);
+      raf = requestAnimationFrame(() => {
+        const c = current();
+        slides.forEach((s, i) => s.classList.toggle('is-active', i === c));
+        dots.forEach((d, i) => (i === c ? d.setAttribute('aria-current', 'true') : d.removeAttribute('aria-current')));
+      });
+    });
+    slides[0]?.classList.add('is-active');
+  });
+</script>

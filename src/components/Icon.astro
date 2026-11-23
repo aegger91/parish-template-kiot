@@ -1,0 +1,31 @@
+---
+/* Generic utility icons (Lucide, ISC licence) plus simple social marks. Not for religious meaning. */
+import * as lucide from 'lucide-static';
+
+interface Props {
+  name: string;
+  size?: number;
+  class?: string;
+  /** Flip in right-to-left layouts (arrows and chevrons only). */
+  directional?: boolean;
+}
+const { name, size = 20, class: cls = '', directional = false } = Astro.props;
+
+const social: Record<string, string> = {
+  facebook: '<path d="M14 8h3V4h-3c-2.8 0-4.5 1.8-4.5 4.6V11H7v4h2.5v6h4v-6h3l.5-4h-3.5V8.8c0-.5.3-.8.5-.8Z"/>',
+  youtube: '<rect x="2.5" y="5.5" width="19" height="13" rx="3.5"/><path d="m10.2 9.2 4.8 2.8-4.8 2.8Z" fill="currentColor"/>',
+  instagram: '<rect x="3.5" y="3.5" width="17" height="17" rx="4.5"/><circle cx="12" cy="12" r="4"/><circle cx="17.1" cy="6.9" r=".9" fill="currentColor"/>',
+};
+
+const pascal = name.replace(/(^|-)(\w)/g, (_, __, c) => c.toUpperCase());
+let svg = '';
+if (social[name]) {
+  svg = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${social[name]}</svg>`;
+} else {
+  svg = (lucide as Record<string, string>)[pascal] ?? '';
+}
+svg = svg
+  .replace(/\s(class|width|height)="[^"]*"/g, '')
+  .replace('<svg', `<svg width="${size}" height="${size}" aria-hidden="true" focusable="false" class="ui-icon ${directional ? 'dir-icon ' : ''}${cls}"`);
+---
+<Fragment set:html={svg} />

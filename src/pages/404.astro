@@ -1,0 +1,35 @@
+---
+import Base from '../layouts/Base.astro';
+import Cross from '../components/Cross.astro';
+import { defaultLanguage, languages } from '../lib/content';
+import { t, withBase } from '../lib/i18n';
+const lang = defaultLanguage;
+const messages = Object.fromEntries(
+  languages.map((l) => [l.code, { title: t('notFoundTitle', l.code), text: t('notFoundText', l.code), back: t('backHome', l.code), href: withBase(`/${l.code}/`) }]),
+);
+---
+<Base lang={lang} path="" title={t('notFoundTitle', lang)}>
+  <section class="section not-found">
+    <div class="container narrow center">
+      <Cross size={44} class="text-gold" />
+      <h1 data-nf="title">{messages[lang].title}</h1>
+      <p data-nf="text">{messages[lang].text}</p>
+      <a class="btn btn-burgundy" data-nf="back" href={messages[lang].href}>{messages[lang].back}</a>
+      <ul class="nf-langs">
+        {languages.map((l) => <li><a href={withBase(`/${l.code}/`)} lang={l.code}>{l.nativeLabel}</a></li>)}
+      </ul>
+    </div>
+  </section>
+  <script is:inline define:vars={{ messages, base: withBase('/') }}>
+    var seg = location.pathname.slice(base.length).split('/')[0];
+    var m = messages[seg];
+    if (m) {
+      document.documentElement.lang = seg;
+      document.querySelector('[data-nf="title"]').textContent = m.title;
+      document.querySelector('[data-nf="text"]').textContent = m.text;
+      var b = document.querySelector('[data-nf="back"]');
+      b.textContent = m.back;
+      b.href = m.href;
+    }
+  </script>
+</Base>

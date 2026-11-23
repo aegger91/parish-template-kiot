@@ -1,0 +1,56 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHeader from '../../components/PageHeader.astro';
+import SectionRenderer from '../../components/SectionRenderer.astro';
+import NewsArticle from '../../components/NewsArticle.astro';
+import ProductDetail from '../../components/ProductDetail.astro';
+import { featureOn, languages, news, store } from '../../lib/content';
+import { tr } from '../../lib/i18n';
+import { findPage, flatPages } from '../../lib/pages';
+
+export function getStaticPaths() {
+  const out: any[] = [];
+  const newsPage = findPage('news');
+  const storePage = findPage('store');
+  for (const l of languages) {
+    for (const f of flatPages) {
+      out.push({ params: { lang: l.code, path: f.path || undefined }, props: { pageId: f.page.id, path: f.path } });
+    }
+    if (newsPage) {
+      for (const a of news.articles) {
+        const path = `${newsPage.path}/${a.slug}`;
+        out.push({ params: { lang: l.code, path }, props: { pageId: 'news', path, articleId: a.id } });
+      }
+    }
+    if (storePage && featureOn('store')) {
+      for (const p of store.products) {
+        const path = `${storePage.path}/${p.slug}`;
+        out.push({ params: { lang: l.code, path }, props: { pageId: 'store', path, productId: p.id } });
+      }
+    }
+  }
+  return out;
+}
+
+const { lang } = Astro.params as { lang: string };
+const { pageId, path, articleId, productId } = Astro.props as { pageId: string; path: string; articleId?: string; productId?: string };
+const f = findPage(pageId)!;
+const page = f.page;
+const trail = f.parents.map((p) => p.id);
+const article = articleId ? news.articles.find((a: any) => a.id === articleId) : undefined;
+const product = productId ? store.products.find((p: any) => p.id === productId) : undefined;
+const title = article ? tr(article.title, lang) : product ? tr(product.title, lang) : page.id === 'home' ? undefined : tr(page.title, lang);
+const description = article ? tr(article.excerpt, lang) : product ? tr(product.summary, lang) : tr(page.seo?.description ?? page.summary, lang);
+---
+<Base lang={lang} path={path} title={title} description={description} currentId={page.id} trail={trail}>
+  {article ? (
+    <NewsArticle lang={lang} article={article} />
+  ) : product ? (
+    <ProductDetail lang={lang} product={product} />
+  ) : (
+    <>
+      {page.id !== 'home' && <PageHeader lang={lang} page={page} parents={f.parents} />}
+      <SectionRenderer lang={lang} page={page} />
+    </>
+  )}
+</Base>

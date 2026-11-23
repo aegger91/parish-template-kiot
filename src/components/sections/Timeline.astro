@@ -1,0 +1,29 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Cross from '../Cross.astro';
+import { galleryImage, history } from '../../lib/content';
+import { asset, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+---
+<section class="section" id={s.id}>
+  <div class="container">
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <ol class="timeline">
+      {history.events.map((e: any) => {
+        const img = galleryImage(e.image);
+        return (
+          <li class="tl-item" data-reveal>
+            <span class="tl-marker" aria-hidden="true"><Cross size={16} /></span>
+            <div class="tl-card">
+              <p class="tl-year">{tr(e.year, lang)}</p>
+              <h3>{tr(e.title, lang)}</h3>
+              <p>{tr(e.text, lang)}</p>
+              {img && <img class="tl-img" src={asset(img.src)} alt={tr(img.alt, lang)} width={img.width} height={img.height} loading="lazy" />}
+            </div>
+          </li>
+        );
+      })}
+    </ol>
+  </div>
+</section>

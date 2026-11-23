@@ -1,0 +1,132 @@
+---
+import PageHeader from './PageHeader.astro';
+import Icon from './Icon.astro';
+import Cross from './Cross.astro';
+import { site, store } from '../lib/content';
+import { asset, getLanguage, t, tr } from '../lib/i18n';
+import { findPage, pageHref } from '../lib/pages';
+import { categoryOf } from '../lib/store';
+interface Props { lang: string; product: any }
+const { lang, product: p } = Astro.props;
+const L = getLanguage(lang);
+const money = (n: number) => new Intl.NumberFormat(L.locale, { style: 'currency', currency: site.currency, minimumFractionDigits: n % 1 ? 2 : 0 }).format(n);
+const variants = p.variants.map((v: any) => ({ id: v.id, label: tr(v.label, lang), price: v.price, stock: v.stock ?? 0 }));
+const first = variants.find((v: any) => v.stock > 0) ?? variants[0];
+const payload = { id: p.id, title: tr(p.title, lang), image: asset(p.images[0]), variants };
+const related = store.products.filter((x: any) => x.category === p.category && x.id !== p.id).slice(0, 3);
+---
+<PageHeader
+  lang={lang}
+  title={tr(p.title, lang)}
+  summary={tr(p.summary, lang)}
+  crumbs={[
+    { label: t('home', lang), href: pageHref(lang, 'home') },
+    { label: tr(findPage('store')?.page.title, lang), href: pageHref(lang, 'store') },
+  ]}
+/>
+<section class="section">
+  <div class="container product-detail" data-product>
+    <div class:list={['pd-media', { 'pd-media--icon': p.category === 'icons' }]} data-reveal>
+      <img src={asset(p.images[0])} alt={tr(p.title, lang)} decoding="async" />
+    </div>
+    <div class="pd-info" data-reveal>
+      <p class="product-cat"><a href={`${pageHref(lang, 'store')}?category=${p.category}`}>{tr(categoryOf(p)?.label, lang)}</a></p>
+      <p class="pd-price" data-price>{money(first.price)}</p>
+      <div class="prose">{p.description.map((d: any) => <p>{tr(d, lang)}</p>)}</div>
+      <form class="pd-form" data-add-form novalidate>
+        {variants.length > 1 ? (
+          <fieldset class="fieldset">
+            <legend>{t('store.option', lang)}</legend>
+            <div class="variant-grid">
+              {variants.map((v: any) => (
+                <label class="variant-option">
+                  <input type="radio" name="variant" value={v.id} checked={v.id === first.id} disabled={v.stock === 0} />
+                  <span><span>{v.label}</span><small>{v.stock === 0 ? t('store.outOfStock', lang) : money(v.price)}</small></span>
+                </label>
+              ))}
+            </div>
+          </fieldset>
+        ) : (
+          <input type="hidden" name="variant" value={first.id} />
+        )}
+        <p class="stock" data-stock></p>
+        <div class="pd-buy">
+          <div class="qty" data-qty>
+            <button type="button" class="icon-btn" data-qty-step="-1" aria-label={t('store.decrease', lang)}><Icon name="minus" size={16} /></button>
+            <label class="visually-hidden" for="pd-qty">{t('store.quantity', lang)}</label>
+            <input id="pd-qty" type="number" name="qty" min="1" value="1" inputmode="numeric" />
+            <button type="button" class="icon-btn" data-qty-step="1" aria-label={t('store.increase', lang)}><Icon name="plus" size={16} /></button>
+          </div>
+          <button class="btn btn-gold btn-lg" type="submit" data-add>{t('store.addToCart', lang)}</button>
+        </div>
+        <p class="form-status" role="status" data-status hidden>
+          <Icon name="check" size={16} /> <span>{t('store.added', lang)}</span>
+          <a class="text-link" href={pageHref(lang, 'cart')}>{t('store.viewCart', lang)}</a>
+        </p>
+      </form>
+      <ul class="pd-perks">
+        {site.features.store.pickup?.enabled && <li><Cross size={14} class="text-gold" /> {t('store.pickup', lang)}</li>}
+        {site.features.store.shipping?.enabled && <li><Cross size={14} class="text-gold" /> {t('store.shipToAddress', lang)}</li>}
+      </ul>
+      <a class="text-link" href={pageHref(lang, 'store')}><Icon name="arrow-left" size={15} directional /> {t('store.backToStore', lang)}</a>
+    </div>
+  </div>
+  {related.length > 0 && (
+    <div class="container">
+      <ul class="product-grid product-grid--related">
+        {related.map((r: any) => (
+          <li class="product-card" data-reveal>
+            <a href={pageHref(lang, 'store', r.slug)}>
+              <div class:list={['product-media', { 'product-media--icon': r.category === 'icons' }]}><img src={asset(r.images[0])} alt="" loading="lazy" /></div>
+              <div class="product-body"><h3 class="product-title">{tr(r.title, lang)}</h3></div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </div>
+  )}
+  <script type="application/json" data-product-json set:html={JSON.stringify(payload)} />
+</section>
+<script>
+  import { addLine } from '../lib/cart';
+  import { announce, money, t } from '../lib/client';
+  const root = document.querySelector<HTMLElement>('[data-product]');
+  if (root) {
+    const p = JSON.parse(document.querySelector('[data-product-json]')!.textContent!);
+    const form = root.querySelector<HTMLFormElement>('[data-add-form]')!;
+    const qty = form.querySelector<HTMLInputElement>('[name=qty]')!;
+    const price = root.querySelector<HTMLElement>('[data-price]')!;
+    const stockEl = form.querySelector<HTMLElement>('[data-stock]')!;
+    const add = form.querySelector<HTMLButtonElement>('[data-add]')!;
+    const status = form.querySelector<HTMLElement>('[data-status]')!;
+    const variant = () => {
+      const id = (form.querySelector<HTMLInputElement>('[name=variant]:checked') ?? form.querySelector<HTMLInputElement>('[name=variant]'))!.value;
+      return p.variants.find((v: any) => v.id === id);
+    };
+    const sync = () => {
+      const v = variant();
+      price.textContent = money(v.price);
+      qty.max = String(Math.max(1, v.stock));
+      if (Number(qty.value) > v.stock) qty.value = String(Math.max(1, v.stock));
+      stockEl.textContent = v.stock === 0 ? t('store.outOfStock') : v.stock <= 5 ? t('store.lowStock', { count: v.stock }) : t('store.inStock');
+      stockEl.className = 'stock ' + (v.stock === 0 ? 'stock--out' : v.stock <= 5 ? 'stock--low' : 'stock--in');
+      add.disabled = v.stock === 0;
+    };
+    form.addEventListener('change', sync);
+    form.querySelectorAll<HTMLButtonElement>('[data-qty-step]').forEach((b) =>
+      b.addEventListener('click', () => {
+        const v = variant();
+        qty.value = String(Math.min(Math.max(1, Number(qty.value) + Number(b.dataset.qtyStep)), Math.max(1, v.stock)));
+      }),
+    );
+    form.addEventListener('submit', (e) => {
+      e.preventDefault();
+      const v = variant();
+      const n = Math.max(1, Math.min(Number(qty.value) || 1, v.stock));
+      addLine({ key: `${p.id}:${v.id}`, kind: 'product', id: p.id, label: p.title, detail: p.variants.length > 1 ? v.label : undefined, quantity: n, unitPrice: v.price, image: p.image, maxQuantity: v.stock });
+      status.hidden = false;
+      announce(t('store.added'));
+    });
+    sync();
+  }
+</script>

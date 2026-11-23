@@ -1,0 +1,51 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Cross from '../Cross.astro';
+import Icon from '../Icon.astro';
+import { clergy } from '../../lib/content';
+import { asset, t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+---
+<section class="section" id={s.id}>
+  <div class="container">
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <ul class="card-grid card-grid--4" data-reveal-group>
+      {clergy.people.map((p: any) => (
+        <li class="clergy-card" data-reveal>
+          <div class="clergy-portrait">
+            {p.image ? (
+              <img src={asset(p.image)} alt={p.name} loading="lazy" />
+            ) : (
+              <div class="clergy-monogram" aria-hidden="true">
+                <Cross size={18} />
+                <span>{p.initials}</span>
+              </div>
+            )}
+          </div>
+          <h3 class="clergy-name">{p.name}</h3>
+          <p class="clergy-role">{tr(p.role, lang)}</p>
+          <button type="button" class="btn btn-ghost btn-sm" data-bio-open={p.id}>{t('readBio', lang)}</button>
+          <dialog class="dialog" data-bio={p.id} aria-labelledby={`bio-${p.id}`}>
+            <div class="dialog-inner">
+              <button type="button" class="icon-btn dialog-close" data-dialog-close aria-label={t('close', lang)}><Icon name="x" size={20} /></button>
+              <p class="eyebrow"><Cross size={11} /><span>{tr(p.role, lang)}</span></p>
+              <h2 id={`bio-${p.id}`}>{p.name}</h2>
+              {p.bio.map((para: any) => <p>{tr(para, lang)}</p>)}
+              {p.email && <a class="text-link" href={`mailto:${p.email}`}><Icon name="mail" size={16} /> {p.email}</a>}
+            </div>
+          </dialog>
+        </li>
+      ))}
+    </ul>
+  </div>
+</section>
+<script>
+  import { setupDialog } from '../../lib/client';
+  document.querySelectorAll<HTMLButtonElement>('[data-bio-open]').forEach((btn) => {
+    const dlg = document.querySelector<HTMLDialogElement>(`[data-bio="${btn.dataset.bioOpen}"]`);
+    if (!dlg) return;
+    const d = setupDialog(dlg);
+    btn.addEventListener('click', () => d.open(btn));
+  });
+</script>

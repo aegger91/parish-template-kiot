@@ -1,0 +1,28 @@
+---
+import { defaultLanguage, languages, site } from '../lib/content';
+import { tr, withBase } from '../lib/i18n';
+const target = withBase(`/${defaultLanguage}/`);
+const codes = languages.map((l) => l.code);
+---
+<!doctype html>
+<html lang={defaultLanguage}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{tr(site.name, defaultLanguage)}</title>
+    <meta http-equiv="refresh" content={`0; url=${target}`} />
+    <link rel="canonical" href={target} />
+    <script is:inline define:vars={{ codes, fallback: defaultLanguage, base: withBase('/') }}>
+      var saved = null;
+      try { saved = localStorage.getItem('kiot-lang'); } catch (e) {}
+      var browser = (navigator.languages || [navigator.language || '']).map(function (l) { return l.slice(0, 2).toLowerCase(); });
+      var pick = codes.indexOf(saved) >= 0 ? saved : (browser.find(function (l) { return codes.indexOf(l) >= 0; }) || fallback);
+      location.replace(base + pick + '/');
+    </script>
+  </head>
+  <body style="font-family: Georgia, serif; background: #fdfaf3; color: #2b1d17; padding: 2rem;">
+    <ul>
+      {languages.map((l) => <li><a href={withBase(`/${l.code}/`)} lang={l.code}>{l.nativeLabel}</a></li>)}
+    </ul>
+  </body>
+</html>

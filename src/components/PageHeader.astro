@@ -1,0 +1,51 @@
+---
+import Icon from './Icon.astro';
+import Cross from './Cross.astro';
+import type { PageNode } from '../lib/content';
+import { galleryImage } from '../lib/content';
+import { asset, t, tr } from '../lib/i18n';
+import { pageHref } from '../lib/pages';
+
+interface Props {
+  lang: string;
+  page?: PageNode;
+  parents?: PageNode[];
+  title?: string;
+  summary?: string;
+  image?: string;
+  crumbs?: { label: string; href: string }[];
+}
+const { lang, page, parents = [], title, summary, image, crumbs } = Astro.props;
+const heading = title ?? tr(page?.title, lang);
+const lead = summary ?? tr(page?.summary, lang);
+const img = galleryImage(image ?? page?.headerImage ?? parents.at(-1)?.headerImage);
+const trail = crumbs ?? [
+  { label: t('home', lang), href: pageHref(lang, 'home') },
+  ...parents.map((p) => ({ label: tr(p.title, lang), href: pageHref(lang, p.id) })),
+];
+---
+<section class:list={['page-header', { 'page-header--image': !!img }]}>
+  <div class="container page-header-grid">
+    <div class="page-header-copy" data-reveal>
+      <nav aria-label={t('breadcrumb', lang)} class="breadcrumb">
+        <ol>
+          {trail.map((c) => (
+            <li><a href={c.href}>{c.label}</a><Icon name="chevron-right" size={14} directional /></li>
+          ))}
+          <li aria-current="page">{heading}</li>
+        </ol>
+      </nav>
+      <h1 class="page-title">{heading}</h1>
+      {lead && <p class="page-lead">{lead}</p>}
+    </div>
+    {img && (
+      <div class="page-header-arch" data-reveal>
+        <div class="arch-frame arch-frame--sm">
+          <img src={asset(img.src)} alt="" width={img.width} height={img.height} loading="eager" decoding="async" />
+        </div>
+        <Cross size={20} class="arch-cross" />
+      </div>
+    )}
+  </div>
+  <div class="meander" aria-hidden="true"></div>
+</section>

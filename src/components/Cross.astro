@@ -1,0 +1,11 @@
+---
+import { crossSvg, type CrossVariant } from '../lib/cross';
+interface Props {
+  variant?: CrossVariant;
+  size?: number | string;
+  class?: string;
+  title?: string;
+}
+const { variant = 'byzantine', size = 24, class: cls = '', title } = Astro.props;
+---
+<Fragment set:html={crossSvg(variant, size, cls, title)} />

@@ -1,0 +1,91 @@
+{
+  "$schema": "../schemas/parish-services.schema.json",
+  "services": [
+    {
+      "id": "commemoration-note",
+      "illustration": "/images/illustrations/commemoration-note.svg",
+      "title": { "en": "Submit a Commemoration Note", "el": "Ονόματα για μνημόνευση" },
+      "subtitle": { "en": "Names for health or repose (Zapiska)", "el": "Υπέρ υγείας ή υπέρ αναπαύσεως" },
+      "price": "donation",
+      "duration": { "en": "Read at the next Liturgy", "el": "Στην επόμενη Λειτουργία" },
+      "description": { "en": "Send the baptismal names of the living and the departed to be read at the Proskomide and the Divine Liturgy.", "el": "Στείλτε τα βαπτιστικά ονόματα ζώντων και κεκοιμημένων για να μνημονευθούν στην Προσκομιδή και στη Θεία Λειτουργία." },
+      "link": { "page": "zapiski" }
+    },
+    {
+      "id": "moleben",
+      "illustration": "/images/illustrations/moleben.svg",
+      "title": { "en": "Prayer Service", "el": "Παράκληση ή Αγιασμός" },
+      "subtitle": { "en": "Paraklesis or Agiasmos (Moleben)", "el": "Ιδιωτική παράκληση ή αγιασμός" },
+      "price": "donation",
+      "duration": { "en": "About 30 minutes", "el": "Περίπου 30 λεπτά" },
+      "description": { "en": "A service of supplication to Christ, the Theotokos or a saint, for a need, a thanksgiving or a new beginning.", "el": "Ακολουθία ικεσίας προς τον Χριστό, τη Θεοτόκο ή έναν άγιο, για μια ανάγκη, μια ευχαριστία ή ένα νέο ξεκίνημα." }
+    },
+    {
+      "id": "baptism",
+      "illustration": "/images/illustrations/baptism.svg",
+      "title": { "en": "Baptism", "el": "Βάπτιση" },
+      "price": "donation",
+      "duration": { "en": "About 1 hour", "el": "Περίπου 1 ώρα" },
+      "description": { "en": "Begin with a meeting with the priest about the godparent, the name and the date.", "el": "Ξεκινήστε με μια συνάντηση με τον ιερέα για τον ανάδοχο, το όνομα και την ημερομηνία." }
+    },
+    {
+      "id": "confession",
+      "illustration": "/images/illustrations/confession.svg",
+      "title": { "en": "Confession", "el": "Εξομολόγηση" },
+      "price": "free",
+      "duration": { "en": "15 to 30 minutes", "el": "15 έως 30 λεπτά" },
+      "description": { "en": "Offered after Saturday Vespers and by appointment at a time that suits you.", "el": "Μετά τον Εσπερινό του Σαββάτου και κατόπιν ραντεβού, σε ώρα που σας εξυπηρετεί." }
+    },
+    {
+      "id": "chrismation",
+      "illustration": "/images/illustrations/chrismation.svg",
+      "title": { "en": "Chrismation", "el": "Χρίσμα" },
+      "subtitle": { "en": "Receiving converts into the Church", "el": "Υποδοχή στην Ορθόδοξη Εκκλησία" },
+      "price": "free",
+      "duration": { "en": "About 45 minutes", "el": "Περίπου 45 λεπτά" },
+      "description": { "en": "For those already baptized in another Christian tradition, after a time of catechism with the priest.", "el": "Για όσους έχουν βαπτιστεί σε άλλη χριστιανική παράδοση, μετά από κατήχηση με τον ιερέα." }
+    },
+    {
+      "id": "wedding",
+      "illustration": "/images/illustrations/wedding.svg",
+      "title": { "en": "Wedding (Crowning)", "el": "Γάμος (Στέψη)" },
+      "price": "donation",
+      "duration": { "en": "About 1 hour", "el": "Περίπου 1 ώρα" },
+      "description": { "en": "Please contact us at least six months ahead. Weddings are not held during fasting periods.", "el": "Επικοινωνήστε μαζί μας τουλάχιστον έξι μήνες νωρίτερα. Γάμοι δεν τελούνται σε περιόδους νηστείας." }
+    },
+    {
+      "id": "unction",
+      "illustration": "/images/illustrations/unction.svg",
+      "title": { "en": "Holy Unction", "el": "Ευχέλαιο" },
+      "subtitle": { "en": "Anointing of the sick", "el": "Μυστήριο του Ευχελαίου" },
+      "price": "free",
+      "duration": { "en": "About 1 hour, shorter at a bedside", "el": "Περίπου 1 ώρα, συντομότερο δίπλα σε ασθενή" },
+      "description": { "en": "At church, at home or in the hospital, for healing of soul and body.", "el": "Στον ναό, στο σπίτι ή στο νοσοκομείο, για ίαση ψυχής και σώματος." }
+    },
+    {
+      "id": "house-blessing",
+      "illustration": "/images/illustrations/house-blessing.svg",
+      "title": { "en": "House or Car Blessing", "el": "Αγιασμός σπιτιού ή αυτοκινήτου" },
+      "price": "donation",
+      "duration": { "en": "About 20 minutes", "el": "Περίπου 20 λεπτά" },
+      "description": { "en": "Homes are blessed with holy water after Theophany, and any time you move or buy a car.", "el": "Τα σπίτια αγιάζονται μετά τα Θεοφάνεια, αλλά και όποτε μετακομίζετε ή αγοράζετε αυτοκίνητο." }
+    },
+    {
+      "id": "funeral",
+      "illustration": "/images/illustrations/memorial.svg",
+      "title": { "en": "Funeral and Memorial Services", "el": "Κηδεία και μνημόσυνα" },
+      "subtitle": { "en": "Funeral service, Trisagion, Mnemosyno (Slavic use: Otpevanie, Panikhida)", "el": "Εξόδιος Ακολουθία, Τρισάγιο, Μνημόσυνο" },
+      "price": "donation",
+      "duration": { "en": "Funeral about 1 hour, Trisagion about 15 minutes", "el": "Εξόδιος περίπου 1 ώρα, Τρισάγιο περίπου 15 λεπτά" },
+      "description": { "en": "Call the office as soon as you can. We will help with the funeral home, kollyva and memorial dates.", "el": "Καλέστε το γραφείο το συντομότερο. Θα σας βοηθήσουμε με το γραφείο τελετών, τα κόλλυβα και τις ημερομηνίες των μνημοσύνων." }
+    },
+    {
+      "id": "counseling",
+      "illustration": "/images/illustrations/counseling.svg",
+      "title": { "en": "Pastoral Counseling", "el": "Πνευματική συζήτηση" },
+      "price": "free",
+      "duration": { "en": "About 45 minutes", "el": "Περίπου 45 λεπτά" },
+      "description": { "en": "A quiet conversation with the priest about faith, family or a hard season of life.", "el": "Μια ήσυχη συζήτηση με τον ιερέα για την πίστη, την οικογένεια ή μια δύσκολη περίοδο της ζωής." }
+    }
+  ]
+}

@@ -1,0 +1,73 @@
+{
+  "$schema": "../schemas/sermons.schema.json",
+  "series": [
+    { "id": "sunday", "label": { "en": "Sunday homilies", "el": "Κυριακάτικες ομιλίες" } },
+    { "id": "feasts", "label": { "en": "Feast days", "el": "Εορτές" } },
+    { "id": "lent", "label": { "en": "Lenten talks", "el": "Ομιλίες της Σαρακοστής" } }
+  ],
+  "sermons": [
+    {
+      "id": "s-good-samaritan",
+      "date": "2026-11-15",
+      "type": "audio",
+      "series": "sunday",
+      "speaker": "Fr. Nicholas Example",
+      "scripture": { "en": "Luke 10:25-37", "el": "Λουκάς 10:25-37" },
+      "title": { "en": "Who is my neighbor?", "el": "Ποιος είναι ο πλησίον μου;" },
+      "summary": { "en": "Sample sermon on the parable of the Good Samaritan.", "el": "Ενδεικτικό κήρυγμα για την παραβολή του Καλού Σαμαρείτη." },
+      "audio": "/media/sample-ison.mp3",
+      "duration": "0:30"
+    },
+    {
+      "id": "s-entry",
+      "date": "2026-11-21",
+      "type": "text",
+      "series": "feasts",
+      "speaker": "Fr. Nicholas Example",
+      "scripture": { "en": "Hebrews 9:1-7", "el": "Εβραίους 9:1-7" },
+      "title": { "en": "A temple made ready", "el": "Ένας ναός έτοιμος" },
+      "summary": { "en": "Sample homily for the Entry of the Theotokos into the Temple.", "el": "Ενδεικτική ομιλία για τα Εισόδια της Θεοτόκου." },
+      "text": [
+        { "en": "Sample text. Today the Theotokos enters the temple as a child, and the Church sings that she herself is being made ready as the living temple of God.", "el": "Ενδεικτικό κείμενο. Σήμερα η Θεοτόκος εισέρχεται παιδί στον ναό, και η Εκκλησία ψάλλει ότι η ίδια ετοιμάζεται ως ζωντανός ναός του Θεού." },
+        { "en": "We prepare the same way: a little prayer each day, a kind word, a fast kept with joy.", "el": "Κι εμείς ετοιμαζόμαστε με τον ίδιο τρόπο: λίγη προσευχή κάθε μέρα, ένας καλός λόγος, μια νηστεία με χαρά." }
+      ]
+    },
+    {
+      "id": "s-rich-fool",
+      "date": "2026-11-08",
+      "type": "video",
+      "series": "sunday",
+      "speaker": "Dn. Stephen Sample",
+      "scripture": { "en": "Luke 12:16-21", "el": "Λουκάς 12:16-21" },
+      "title": { "en": "Rich toward God", "el": "Πλούσιοι στον Θεό" },
+      "summary": { "en": "Sample video homily on the parable of the rich fool.", "el": "Ενδεικτική βιντεοσκοπημένη ομιλία για την παραβολή του άφρονος πλουσίου." },
+      "video": "",
+      "duration": "12:40"
+    },
+    {
+      "id": "s-archangels",
+      "date": "2026-11-08",
+      "type": "audio",
+      "series": "feasts",
+      "speaker": "Fr. Nicholas Example",
+      "scripture": { "en": "Hebrews 2:2-10", "el": "Εβραίους 2:2-10" },
+      "title": { "en": "The bodiless powers", "el": "Οι ασώματες δυνάμεις" },
+      "summary": { "en": "Sample sermon for the Synaxis of the Archangels.", "el": "Ενδεικτικό κήρυγμα για τη Σύναξη των Αρχαγγέλων." },
+      "audio": "/media/sample-ison.mp3",
+      "duration": "0:30"
+    },
+    {
+      "id": "s-lent-prayer",
+      "date": "2026-03-04",
+      "type": "text",
+      "series": "lent",
+      "speaker": "Fr. Nicholas Example",
+      "scripture": { "en": "Matthew 6:5-15", "el": "Ματθαίος 6:5-15" },
+      "title": { "en": "Praying in secret", "el": "Η προσευχή στο ταμείο" },
+      "summary": { "en": "Sample Lenten talk on daily prayer at home.", "el": "Ενδεικτική ομιλία της Σαρακοστής για την καθημερινή προσευχή στο σπίτι." },
+      "text": [
+        { "en": "Sample text. Set a corner of your home for prayer: an icon, a lamp and a few minutes each morning and evening.", "el": "Ενδεικτικό κείμενο. Ορίστε μια γωνιά του σπιτιού για προσευχή: μια εικόνα, ένα καντήλι και λίγα λεπτά κάθε πρωί και βράδυ." }
+      ]
+    }
+  ]
+}

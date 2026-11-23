@@ -1,0 +1,60 @@
+{
+  "$schema": "../schemas/news.schema.json",
+  "categories": [
+    { "id": "announcements", "label": { "en": "Announcements", "el": "Ανακοινώσεις" } },
+    { "id": "events", "label": { "en": "Events", "el": "Εκδηλώσεις" } },
+    { "id": "youth", "label": { "en": "Youth", "el": "Νεολαία" } },
+    { "id": "philanthropy", "label": { "en": "Philanthropy", "el": "Φιλανθρωπία" } }
+  ],
+  "articles": [
+    {
+      "id": "nativity-fast-2026",
+      "slug": "nativity-fast-schedule",
+      "date": "2026-11-15",
+      "category": "announcements",
+      "image": "hodegetria",
+      "title": { "en": "The Nativity Fast has begun", "el": "Άρχισε η νηστεία των Χριστουγέννων" },
+      "excerpt": { "en": "Extra Paraklesis services, confession times and a note on preparing together for the feast.", "el": "Επιπλέον Παρακλήσεις, ώρες εξομολόγησης και λίγα λόγια για την κοινή μας προετοιμασία για την εορτή." },
+      "body": [
+        { "en": "Sample article. The forty days before the Nativity of Christ are a time of prayer, fasting and almsgiving. Fr. Nicholas will hear confessions after every Saturday Vespers until the feast.", "el": "Ενδεικτικό άρθρο. Οι σαράντα ημέρες πριν από τη Γέννηση του Χριστού είναι καιρός προσευχής, νηστείας και ελεημοσύνης. Ο π. Νικόλαος θα εξομολογεί μετά από κάθε Εσπερινό του Σαββάτου έως την εορτή." },
+        { "en": "Paraklesis to the Theotokos continues on Wednesday evenings at 6:00 PM. Booklets are available at the candle stand.", "el": "Η Παράκληση στην Υπεραγία Θεοτόκο συνεχίζεται κάθε Τετάρτη στις 18:00. Φυλλάδια υπάρχουν στο παγκάρι." }
+      ]
+    },
+    {
+      "id": "food-pantry-2026",
+      "slug": "winter-food-drive",
+      "date": "2026-11-08",
+      "category": "philanthropy",
+      "image": "hospitality-abraham",
+      "title": { "en": "Winter food drive for the city pantry", "el": "Χειμερινή συλλογή τροφίμων για την τράπεζα της πόλης" },
+      "excerpt": { "en": "Bring canned goods and warm socks to the narthex through December.", "el": "Φέρτε κονσέρβες και ζεστές κάλτσες στον νάρθηκα έως τον Δεκέμβριο." },
+      "body": [
+        { "en": "Sample article. Our Philoptochos ministry is collecting food and winter clothing for families in Springfield. Look for the baskets by the candle stand.", "el": "Ενδεικτικό άρθρο. Το Φιλόπτωχο της ενορίας συλλέγει τρόφιμα και χειμερινά ρούχα για οικογένειες του Springfield. Θα βρείτε τα καλάθια δίπλα στο παγκάρι." }
+      ]
+    },
+    {
+      "id": "youth-retreat-2026",
+      "slug": "youth-retreat",
+      "date": "2026-10-28",
+      "category": "youth",
+      "image": "transfiguration",
+      "title": { "en": "Youth retreat on the Transfiguration", "el": "Συνάντηση νεολαίας για τη Μεταμόρφωση" },
+      "excerpt": { "en": "Teens spent a weekend on prayer, hiking and conversation about the light of Tabor.", "el": "Οι έφηβοι πέρασαν ένα Σαββατοκύριακο με προσευχή, πεζοπορία και συζήτηση για το φως του Θαβώρ." },
+      "body": [
+        { "en": "Sample article. Twenty young people joined the fall retreat. Thank you to the parents who drove and cooked.", "el": "Ενδεικτικό άρθρο. Είκοσι νέοι συμμετείχαν στη φθινοπωρινή συνάντηση. Ευχαριστούμε τους γονείς που οδήγησαν και μαγείρεψαν." }
+      ]
+    },
+    {
+      "id": "st-nicholas-2026",
+      "slug": "st-nicholas-day",
+      "date": "2026-10-20",
+      "category": "events",
+      "image": "nicholas-sinai",
+      "title": { "en": "St. Nicholas Day program for children", "el": "Γιορτή του Αγίου Νικολάου για τα παιδιά" },
+      "excerpt": { "en": "Greek school students will sing and present the life of the saint after Liturgy.", "el": "Οι μαθητές του ελληνικού σχολείου θα ψάλουν και θα παρουσιάσουν τον βίο του αγίου μετά τη Λειτουργία." },
+      "body": [
+        { "en": "Sample article. Join us in the parish hall after the Divine Liturgy for songs, a short play and a lenten lunch.", "el": "Ενδεικτικό άρθρο. Ελάτε στην αίθουσα της ενορίας μετά τη Θεία Λειτουργία για τραγούδια, ένα σύντομο θεατρικό και νηστίσιμο γεύμα." }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,37 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import Cross from '../Cross.astro';
+import { galleryImage } from '../../lib/content';
+import { asset, tr } from '../../lib/i18n';
+import { childrenOf, pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const kids = childrenOf(s.of);
+---
+{kids.length > 0 && (
+  <section class="section" id={s.id}>
+    <div class="container">
+      <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+      <ul class:list={['card-grid', kids.length >= 4 ? 'card-grid--4' : kids.length === 2 ? 'card-grid--2' : 'card-grid--3']} data-reveal-group>
+        {kids.map((p) => {
+          const img = galleryImage(p.cardImage ?? p.headerImage);
+          return (
+            <li class="arch-card arch-card--image" data-reveal>
+              <a href={pageHref(lang, p.id)}>
+                <div class="arch-card-media">
+                  {img ? <img src={asset(img.src)} alt="" width={img.width} height={img.height} loading="lazy" decoding="async" /> : <Cross size={40} />}
+                </div>
+                <div class="arch-card-body">
+                  <h3 class="arch-card-title">{tr(p.title, lang)}</h3>
+                  {p.summary && <p>{tr(p.summary, lang)}</p>}
+                  <span class="text-link" aria-hidden="true"><Icon name="arrow-right" size={16} directional /></span>
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </section>
+)}

@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import { languages } from '../lib/content';
+import { t } from '../lib/i18n';
+import { pathHref } from '../lib/pages';
+
+interface Props {
+  lang: string;
+  path: string;
+  variant?: 'header' | 'list';
+}
+const { lang, path, variant = 'header' } = Astro.props;
+const others = languages.filter((l) => l.code !== lang);
+const current = languages.find((l) => l.code === lang)!;
+---
+{languages.length > 1 && variant === 'list' && (
+  <ul class="lang-list" aria-label={t('language', lang)}>
+    {languages.map((l) => (
+      <li>
+        <a href={pathHref(l.code, path)} hreflang={l.code} lang={l.code} aria-current={l.code === lang ? 'true' : undefined} data-lang-link={l.code}>
+          {l.nativeLabel}
+        </a>
+      </li>
+    ))}
+  </ul>
+)}
+{languages.length === 2 && variant === 'header' && (
+  <a class="lang-switch" href={pathHref(others[0].code, path)} hreflang={others[0].code} lang={others[0].code} data-lang-link={others[0].code}>
+    <Icon name="globe" size={17} />
+    <span>{others[0].nativeLabel}</span>
+  </a>
+)}
+{languages.length > 2 && variant === 'header' && (
+  <details class="lang-menu" data-lang-menu>
+    <summary class="lang-switch" aria-label={t('language', lang)}>
+      <Icon name="globe" size={17} />
+      <span>{current.nativeLabel}</span>
+      <Icon name="chevron-down" size={14} />
+    </summary>
+    <ul class="dropdown lang-dropdown">
+      {languages.map((l) => (
+        <li>
+          <a href={pathHref(l.code, path)} hreflang={l.code} lang={l.code} aria-current={l.code === lang ? 'true' : undefined} data-lang-link={l.code}>
+            {l.nativeLabel}
+          </a>
+        </li>
+      ))}
+    </ul>
+  </details>
+)}

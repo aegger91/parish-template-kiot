@@ -1,0 +1,17 @@
+---
+import { tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+---
+<section class="section section--tight" id={s.id}>
+  <div class="container">
+    <dl class="facts" data-reveal-group>
+      {s.items.map((f: any) => (
+        <div class="fact" data-reveal>
+          <dt>{tr(f.label, lang)}</dt>
+          <dd>{tr(f.value, lang)}</dd>
+        </div>
+      ))}
+    </dl>
+  </div>
+</section>

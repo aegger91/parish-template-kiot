@@ -1,0 +1,123 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import { feasts, services, site } from '../../lib/content';
+import { formatDay, formatDayRange, formatTime, nowIn, parseTime, weekday } from '../../lib/calendar';
+import { getLanguage, t, tr } from '../../lib/i18n';
+import { occurrences } from '../../lib/schedule';
+import { weekView } from '../../lib/views';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const now = nowIn(site.timeZone);
+const weekStart = now.day - weekday(now.day);
+const occ = occurrences(weekStart, weekStart + 6, services, feasts, site.calendar);
+const fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, t: (k: string, v?: any) => t(k, lang, v), tr: (v: any) => tr(v, lang) };
+const paschalion = site.calendar.style === 'gregorian' ? 'gregorian' : 'orthodox';
+const note = t('calendarNote', lang, { calendar: t(`calendar.${site.calendar.style}`, lang), paschalion: t(`paschalion.${paschalion}`, lang) });
+const weekly = [...services.weekly].sort((a, b) => (a.day ?? 0) - (b.day ?? 0) || a.time.localeCompare(b.time));
+const label = formatDayRange(weekStart, weekStart + 6, L.locale);
+---
+<section class="section" id={s.id}>
+  <div class="container">
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <div class="schedule" data-schedule data-reveal>
+      <div class="sched-toolbar">
+        <div class="seg" role="group" aria-label={t('scheduleView', lang)}>
+          <button type="button" class="seg-btn" aria-pressed="true" data-view="week"><Icon name="calendar-days" size={16} /> {t('viewWeek', lang)}</button>
+          <button type="button" class="seg-btn" aria-pressed="false" data-view="month"><Icon name="layout-grid" size={16} /> {t('viewMonth', lang)}</button>
+        </div>
+        <div class="sched-nav">
+          <button type="button" class="icon-btn" data-step="-1" aria-label={t('previousWeek', lang)} data-label-week={t('previousWeek', lang)} data-label-month={t('previousMonth', lang)}><Icon name="chevron-left" size={20} directional /></button>
+          <h3 class="sched-label" aria-live="polite" data-label>{label}</h3>
+          <button type="button" class="icon-btn" data-step="1" aria-label={t('nextWeek', lang)} data-label-week={t('nextWeek', lang)} data-label-month={t('nextMonth', lang)}><Icon name="chevron-right" size={20} directional /></button>
+          <button type="button" class="btn btn-ghost btn-sm" data-today>{t('goToToday', lang)}</button>
+        </div>
+      </div>
+      <div class="sched-legend">
+        <span><i class="legend-dot legend-dot--great"></i>{t('legendGreat', lang)}</span>
+        <span><i class="legend-dot legend-dot--feast"></i>{t('legendFeast', lang)}</span>
+        <span><Icon name="radio" size={14} /> {t('streamed', lang)}</span>
+      </div>
+      <div class="sched-body" data-body set:html={weekView(weekStart, occ, now.day, fmt)} />
+      <p class="sched-note">{note}</p>
+    </div>
+
+    <div class="weekly-summary" data-reveal>
+      <h3 class="weekly-title">{t('weeklyServices', lang)}</h3>
+      <ul>
+        {weekly.map((w) => (
+          <li><span class="ws-d">{formatDay(3 + (w.day ?? 0), L.locale, { weekday: 'long' })}</span><span class="ws-t">{formatTime(parseTime(w.time), L.locale, L.hourCycle)}</span><span class="ws-n">{tr(w.title, lang)}</span></li>
+        ))}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { dayNum, formatDay, formatDayRange, fromDayNum, nowIn, weekday } from '../../lib/calendar';
+  import { ctx, readJson, t, tr } from '../../lib/client';
+  import { occurrences } from '../../lib/schedule';
+  import { monthView, weekView } from '../../lib/views';
+
+  document.querySelectorAll<HTMLElement>('[data-schedule]').forEach((root) => {
+    const c = ctx();
+    const data = readJson('kiot-schedule');
+    const fmt = { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, t, tr };
+    const body = root.querySelector<HTMLElement>('[data-body]')!;
+    const label = root.querySelector<HTMLElement>('[data-label]')!;
+    const steps = root.querySelectorAll<HTMLButtonElement>('[data-step]');
+    const today = nowIn(c.timeZone).day;
+    let view: 'week' | 'month' = (sessionStorage.getItem('kiot-sched-view') as any) || 'week';
+    let weekStart = today - weekday(today);
+    let { y, m } = fromDayNum(today);
+
+    const range = (a: number, b: number) => formatDayRange(a, b, c.locale);
+
+    const render = () => {
+      root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === view)));
+      steps.forEach((b) => b.setAttribute('aria-label', (view === 'week' ? b.dataset.labelWeek : b.dataset.labelMonth)!));
+      root.dataset.view = view;
+      if (view === 'week') {
+        const occ = occurrences(weekStart, weekStart + 6, data, data.feasts, c.calendar);
+        body.innerHTML = weekView(weekStart, occ, today, fmt);
+        label.textContent = range(weekStart, weekStart + 6);
+      } else {
+        const first = dayNum(y, m, 1);
+        const last = dayNum(m === 12 ? y + 1 : y, m === 12 ? 1 : m + 1, 1) - 1;
+        const occ = occurrences(first, last, data, data.feasts, c.calendar);
+        body.innerHTML = monthView(y, m, occ, today, fmt, 0);
+        label.textContent = formatDay(first, c.locale, { month: 'long', year: 'numeric' });
+      }
+    };
+
+    root.querySelectorAll<HTMLButtonElement>('[data-view]').forEach((b) =>
+      b.addEventListener('click', () => {
+        view = b.dataset.view as any;
+        sessionStorage.setItem('kiot-sched-view', view);
+        render();
+      }),
+    );
+    steps.forEach((b) =>
+      b.addEventListener('click', () => {
+        const dir = Number(b.dataset.step);
+        if (view === 'week') weekStart += 7 * dir;
+        else {
+          m += dir;
+          if (m < 1) { m = 12; y--; }
+          if (m > 12) { m = 1; y++; }
+        }
+        render();
+      }),
+    );
+    root.querySelector('[data-today]')!.addEventListener('click', () => {
+      weekStart = today - weekday(today);
+      ({ y, m } = fromDayNum(today));
+      render();
+    });
+    const params = new URLSearchParams(location.search);
+    if (params.get('view') === 'month') view = 'month';
+    if (params.get('view') === 'week') view = 'week';
+    render();
+  });
+</script>

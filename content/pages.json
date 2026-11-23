@@ -1,0 +1,923 @@
+{
+  "$schema": "../schemas/pages.schema.json",
+  "pages": [
+    {
+      "id": "home",
+      "slug": "",
+      "title": {
+        "en": "Home",
+        "el": "Αρχική"
+      },
+      "seo": {
+        "description": {
+          "en": "Service times, feast of the day and parish life at St. Example.",
+          "el": "Ώρες ακολουθιών, εορτή της ημέρας και ενοριακή ζωή στον Άγιο Example."
+        }
+      },
+      "sections": [
+        {
+          "id": "home-hero",
+          "type": "hero",
+          "enabled": true,
+          "eyebrow": {
+            "en": "Greek Orthodox Church",
+            "el": "Ελληνορθόδοξος Ναός"
+          },
+          "lead": {
+            "en": "Come and see. Our doors are open for every service, and visitors are always welcome to pray with us.",
+            "el": "Έλα και δες. Οι πόρτες μας είναι ανοιχτές σε κάθε ακολουθία και οι επισκέπτες είναι πάντα ευπρόσδεκτοι να προσευχηθούν μαζί μας."
+          },
+          "image": "pantocrator-sinai",
+          "primaryCta": {
+            "label": {
+              "en": "Plan your visit",
+              "el": "Προγραμματίστε την επίσκεψή σας"
+            },
+            "page": "contact"
+          },
+          "secondaryCta": {
+            "label": {
+              "en": "Service schedule",
+              "el": "Πρόγραμμα ακολουθιών"
+            },
+            "page": "services"
+          },
+          "servicesCount": 3,
+          "showCommemorationShortcut": true
+        },
+        {
+          "id": "home-welcome",
+          "type": "pictogramCards",
+          "enabled": true,
+          "eyebrow": {
+            "en": "Welcome",
+            "el": "Καλώς ήρθατε"
+          },
+          "heading": {
+            "en": "A house of prayer for the whole city",
+            "el": "Οίκος προσευχής για όλη την πόλη"
+          },
+          "intro": {
+            "en": "Whether you were baptized Orthodox, are exploring the faith or are simply curious, you are welcome at St. Example.",
+            "el": "Είτε είστε βαπτισμένος Ορθόδοξος, είτε γνωρίζετε τώρα την πίστη, είτε απλώς σας ενδιαφέρει, είστε ευπρόσδεκτοι στον Άγιο Example."
+          },
+          "items": [
+            {
+              "id": "w-visit",
+              "pictogram": "church",
+              "title": {
+                "en": "First visit",
+                "el": "Πρώτη επίσκεψη"
+              },
+              "text": {
+                "en": "Arrive a few minutes early, light a candle and stand or sit wherever you are comfortable.",
+                "el": "Ελάτε λίγα λεπτά νωρίτερα, ανάψτε ένα κερί και σταθείτε ή καθίστε όπου νιώθετε άνετα."
+              },
+              "link": {
+                "page": "contact",
+                "label": {
+                  "en": "Directions",
+                  "el": "Οδηγίες πρόσβασης"
+                }
+              }
+            },
+            {
+              "id": "w-liturgy",
+              "pictogram": "chalice",
+              "title": {
+                "en": "Divine Liturgy",
+                "el": "Θεία Λειτουργία"
+              },
+              "text": {
+                "en": "Every Sunday at 9:45 AM, in English and Greek, with Orthros beforehand.",
+                "el": "Κάθε Κυριακή στις 9:45, στα αγγλικά και στα ελληνικά, με Όρθρο πριν από αυτήν."
+              },
+              "link": {
+                "page": "services",
+                "label": {
+                  "en": "Full schedule",
+                  "el": "Πλήρες πρόγραμμα"
+                }
+              }
+            },
+            {
+              "id": "w-life",
+              "pictogram": "bells",
+              "title": {
+                "en": "Parish life",
+                "el": "Ενοριακή ζωή"
+              },
+              "text": {
+                "en": "Coffee hour, Greek school, youth groups, the choir and the food pantry all need you.",
+                "el": "Καφές μετά τη Λειτουργία, ελληνικό σχολείο, νεολαία, χορωδία και τράπεζα τροφίμων σας περιμένουν."
+              },
+              "link": {
+                "page": "get-involved",
+                "label": {
+                  "en": "Get involved",
+                  "el": "Συμμετοχή"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "home-week",
+          "type": "schedulePreview",
+          "enabled": true,
+          "heading": {
+            "en": "This week at St. Example",
+            "el": "Αυτή την εβδομάδα στον Άγιο Example"
+          },
+          "days": 7
+        },
+        {
+          "id": "home-live",
+          "type": "livestreamPromo",
+          "enabled": true,
+          "requires": "livestream",
+          "heading": {
+            "en": "Pray with us from home",
+            "el": "Προσευχηθείτε μαζί μας από το σπίτι"
+          },
+          "text": {
+            "en": "Sunday Orthros and Divine Liturgy and Saturday Vespers are streamed for those who are sick, traveling or homebound.",
+            "el": "Ο Όρθρος και η Θεία Λειτουργία της Κυριακής και ο Εσπερινός του Σαββάτου μεταδίδονται για όσους είναι άρρωστοι, ταξιδεύουν ή δεν μπορούν να βγουν από το σπίτι."
+          }
+        },
+        {
+          "id": "home-news",
+          "type": "newsList",
+          "enabled": true,
+          "heading": {
+            "en": "Parish news",
+            "el": "Νέα της ενορίας"
+          },
+          "limit": 3,
+          "showFilters": false
+        },
+        {
+          "id": "home-quote",
+          "type": "quote",
+          "enabled": true,
+          "text": {
+            "en": "Come and see.",
+            "el": "Ἔρχου καὶ ἴδε."
+          },
+          "source": {
+            "en": "John 1:46",
+            "el": "Ιωάννης 1:46"
+          }
+        },
+        {
+          "id": "home-donate",
+          "type": "ctaBand",
+          "enabled": true,
+          "pictogram": "candle",
+          "heading": {
+            "en": "Keep the lamps burning",
+            "el": "Να μένουν αναμμένα τα καντήλια"
+          },
+          "text": {
+            "en": "Your offering keeps the church open, supports the poor and passes the faith on to our children.",
+            "el": "Η προσφορά σας κρατά τον ναό ανοιχτό, στηρίζει τους φτωχούς και παραδίδει την πίστη στα παιδιά μας."
+          },
+          "cta": {
+            "page": "donate",
+            "label": {
+              "en": "Give online",
+              "el": "Προσφορά online"
+            }
+          }
+        }
+      ]
+    },
+    {
+      "id": "our-parish",
+      "slug": "our-parish",
+      "title": {
+        "en": "Our Parish",
+        "el": "Η Ενορία μας"
+      },
+      "navOverviewLabel": {
+        "en": "About the parish",
+        "el": "Σχετικά με την ενορία"
+      },
+      "summary": {
+        "en": "Who we are and how we pray.",
+        "el": "Ποιοι είμαστε και πώς προσευχόμαστε."
+      },
+      "headerImage": "theotokos-apse",
+      "sections": [
+        {
+          "id": "parish-intro",
+          "type": "richText",
+          "enabled": true,
+          "pictogram": "icon-frame",
+          "heading": {
+            "en": "A parish family since 1924",
+            "el": "Ενοριακή οικογένεια από το 1924"
+          },
+          "body": [
+            {
+              "en": "St. Example is a sample Greek Orthodox parish. This text shows where a parish tells its own story in a few short paragraphs: who founded it, who worships here today and what a visitor can expect.",
+              "el": "Ο Άγιος Example είναι ένα δείγμα ελληνορθόδοξης ενορίας. Αυτό το κείμενο δείχνει πού μια ενορία λέει τη δική της ιστορία σε λίγες σύντομες παραγράφους: ποιοι την ίδρυσαν, ποιοι προσεύχονται εδώ σήμερα και τι μπορεί να περιμένει ένας επισκέπτης."
+            },
+            {
+              "en": "Services are sung in Greek and English in the Byzantine chant tradition. Families from many backgrounds now call this parish home.",
+              "el": "Οι ακολουθίες ψάλλονται στα ελληνικά και στα αγγλικά, κατά τη βυζαντινή παράδοση. Οικογένειες από πολλές καταγωγές θεωρούν σήμερα την ενορία σπίτι τους."
+            }
+          ]
+        },
+        {
+          "id": "parish-facts",
+          "type": "facts",
+          "enabled": true,
+          "items": [
+            {
+              "id": "f-founded",
+              "value": "1924",
+              "label": {
+                "en": "Parish founded (sample)",
+                "el": "Ίδρυση ενορίας (δείγμα)"
+              }
+            },
+            {
+              "id": "f-families",
+              "value": "240",
+              "label": {
+                "en": "Families (sample)",
+                "el": "Οικογένειες (δείγμα)"
+              }
+            },
+            {
+              "id": "f-languages",
+              "value": "2",
+              "label": {
+                "en": "Liturgical languages",
+                "el": "Λειτουργικές γλώσσες"
+              }
+            },
+            {
+              "id": "f-ministries",
+              "value": "12",
+              "label": {
+                "en": "Ministries (sample)",
+                "el": "Διακονίες (δείγμα)"
+              }
+            }
+          ]
+        },
+        {
+          "id": "parish-pages",
+          "type": "subpageCards",
+          "enabled": true,
+          "heading": {
+            "en": "Explore our parish",
+            "el": "Γνωρίστε την ενορία μας"
+          },
+          "of": "our-parish"
+        }
+      ],
+      "children": [
+        {
+          "id": "clergy",
+          "slug": "clergy",
+          "title": {
+            "en": "Clergy",
+            "el": "Κλήρος"
+          },
+          "summary": {
+            "en": "Meet our priest, deacon and parish staff.",
+            "el": "Γνωρίστε τον ιερέα, τον διάκονο και τους συνεργάτες της ενορίας."
+          },
+          "cardImage": "nicholas-sinai",
+          "headerImage": "nicholas-sinai",
+          "sections": [
+            {
+              "id": "clergy-cards",
+              "type": "clergy",
+              "enabled": true,
+              "heading": {
+                "en": "Clergy and staff",
+                "el": "Κλήρος και συνεργάτες"
+              },
+              "intro": {
+                "en": "Our clergy are glad to meet with you for confession, a house blessing or simply a conversation.",
+                "el": "Οι κληρικοί μας χαίρονται να σας συναντήσουν για εξομολόγηση, αγιασμό του σπιτιού ή απλώς για μια συζήτηση."
+              }
+            },
+            {
+              "id": "clergy-cta",
+              "type": "ctaBand",
+              "enabled": true,
+              "pictogram": "prayer-rope",
+              "heading": {
+                "en": "Need a priest?",
+                "el": "Χρειάζεστε ιερέα;"
+              },
+              "text": {
+                "en": "For hospital visits, Holy Unction or an urgent pastoral need, call the office any time.",
+                "el": "Για επισκέψεις σε νοσοκομείο, Ευχέλαιο ή επείγουσα ποιμαντική ανάγκη, καλέστε το γραφείο οποιαδήποτε ώρα."
+              },
+              "cta": {
+                "page": "request-a-service",
+                "label": {
+                  "en": "Request a service",
+                  "el": "Αίτημα ακολουθίας"
+                }
+              }
+            }
+          ]
+        },
+        {
+          "id": "history",
+          "slug": "history",
+          "title": {
+            "en": "History",
+            "el": "Ιστορία"
+          },
+          "summary": {
+            "en": "A century of prayer, told in a short timeline.",
+            "el": "Ένας αιώνας προσευχής, σε ένα σύντομο χρονολόγιο."
+          },
+          "cardImage": "hodegetria",
+          "headerImage": "hodegetria",
+          "sections": [
+            {
+              "id": "history-timeline",
+              "type": "timeline",
+              "enabled": true,
+              "heading": {
+                "en": "Our story",
+                "el": "Η ιστορία μας"
+              },
+              "intro": {
+                "en": "Sample milestones. Each parish replaces these with its own dates and photos.",
+                "el": "Ενδεικτικοί σταθμοί. Κάθε ενορία τους αντικαθιστά με τις δικές της ημερομηνίες και φωτογραφίες."
+              }
+            }
+          ]
+        },
+        {
+          "id": "gallery",
+          "slug": "gallery",
+          "title": {
+            "en": "Gallery",
+            "el": "Πινακοθήκη"
+          },
+          "summary": {
+            "en": "Icons of the church and moments from parish life.",
+            "el": "Εικόνες του ναού και στιγμές από την ενοριακή ζωή."
+          },
+          "cardImage": "annunciation-ohrid",
+          "headerImage": "annunciation-ohrid",
+          "sections": [
+            {
+              "id": "gallery-carousel",
+              "type": "iconCarousel",
+              "enabled": true,
+              "heading": {
+                "en": "Icons of the feasts",
+                "el": "Εικόνες των εορτών"
+              },
+              "intro": {
+                "en": "Public domain icons stand in for the parish's own iconography.",
+                "el": "Εικόνες κοινού κτήματος στη θέση της αγιογραφίας της ενορίας."
+              },
+              "items": [
+                "annunciation-ohrid",
+                "transfiguration",
+                "anastasis-chora",
+                "dormition-cretan",
+                "hospitality-abraham",
+                "hodegetria",
+                "nicholas-sinai"
+              ]
+            },
+            {
+              "id": "gallery-grid",
+              "type": "gallery",
+              "enabled": true,
+              "heading": {
+                "en": "Gallery",
+                "el": "Πινακοθήκη"
+              }
+            }
+          ]
+        },
+        {
+          "id": "news",
+          "slug": "news",
+          "title": {
+            "en": "News",
+            "el": "Νέα"
+          },
+          "summary": {
+            "en": "Announcements, events and parish updates.",
+            "el": "Ανακοινώσεις, εκδηλώσεις και νέα της ενορίας."
+          },
+          "cardImage": "deesis-christ",
+          "sections": [
+            {
+              "id": "news-all",
+              "type": "newsList",
+              "enabled": true,
+              "heading": {
+                "en": "All news",
+                "el": "Όλα τα νέα"
+              },
+              "showFilters": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "services",
+      "slug": "services",
+      "title": {
+        "en": "Services & Schedule",
+        "el": "Ακολουθίες & Πρόγραμμα"
+      },
+      "navLabel": {
+        "en": "Services",
+        "el": "Ακολουθίες"
+      },
+      "navOverviewLabel": {
+        "en": "Schedule",
+        "el": "Πρόγραμμα"
+      },
+      "summary": {
+        "en": "Weekly services, feasts and the parish calendar.",
+        "el": "Εβδομαδιαίες ακολουθίες, εορτές και το ημερολόγιο της ενορίας."
+      },
+      "headerImage": "transfiguration",
+      "sections": [
+        {
+          "id": "services-schedule",
+          "type": "schedule",
+          "enabled": true,
+          "heading": {
+            "en": "Service schedule",
+            "el": "Πρόγραμμα ακολουθιών"
+          }
+        },
+        {
+          "id": "services-expect",
+          "type": "pictogramCards",
+          "enabled": true,
+          "heading": {
+            "en": "What to expect",
+            "el": "Τι να περιμένετε"
+          },
+          "items": [
+            {
+              "id": "e-candle",
+              "pictogram": "candle",
+              "title": {
+                "en": "Light a candle",
+                "el": "Ανάψτε ένα κερί"
+              },
+              "text": {
+                "en": "On entering, many people light a candle and venerate the icons in the narthex.",
+                "el": "Μπαίνοντας, πολλοί ανάβουν ένα κερί και προσκυνούν τις εικόνες στον νάρθηκα."
+              }
+            },
+            {
+              "id": "e-gospel",
+              "pictogram": "gospel",
+              "title": {
+                "en": "Follow along",
+                "el": "Παρακολουθήστε"
+              },
+              "text": {
+                "en": "Service books in English and Greek are in the pews. Join in the hymns when you are ready.",
+                "el": "Στα στασίδια υπάρχουν λειτουργικά βιβλία στα ελληνικά και στα αγγλικά. Ψάλλετε μαζί όταν νιώσετε έτοιμοι."
+              }
+            },
+            {
+              "id": "e-chalice",
+              "pictogram": "chalice",
+              "title": {
+                "en": "Holy Communion",
+                "el": "Θεία Κοινωνία"
+              },
+              "text": {
+                "en": "Communion is offered to prepared Orthodox Christians. Everyone is welcome to receive the blessed bread at the end.",
+                "el": "Η Θεία Κοινωνία προσφέρεται σε προετοιμασμένους Ορθόδοξους Χριστιανούς. Όλοι μπορούν να λάβουν το αντίδωρο στο τέλος."
+              }
+            },
+            {
+              "id": "e-censer",
+              "pictogram": "censer",
+              "title": {
+                "en": "Incense and chant",
+                "el": "Θυμίαμα και ψαλμωδία"
+              },
+              "text": {
+                "en": "Incense, icons and Byzantine chant are part of how we pray with the whole person.",
+                "el": "Το θυμίαμα, οι εικόνες και η βυζαντινή μουσική είναι μέρος της προσευχής με όλο μας το είναι."
+              }
+            }
+          ]
+        }
+      ],
+      "children": [
+        {
+          "id": "request-a-service",
+          "slug": "request-a-service",
+          "requires": "requestService",
+          "title": {
+            "en": "Request a Service",
+            "el": "Αίτημα ακολουθίας"
+          },
+          "summary": {
+            "en": "Baptisms, weddings, blessings, memorials and pastoral care.",
+            "el": "Βαπτίσεις, γάμοι, αγιασμοί, μνημόσυνα και ποιμαντική φροντίδα."
+          },
+          "headerImage": "hospitality-abraham",
+          "sections": [
+            {
+              "id": "rs-grid",
+              "type": "requestService",
+              "enabled": true,
+              "heading": {
+                "en": "How can we help?",
+                "el": "Πώς μπορούμε να βοηθήσουμε;"
+              },
+              "intro": {
+                "en": "Choose a service and send a request. The office or the priest will contact you to confirm a date.",
+                "el": "Επιλέξτε μια ακολουθία και στείλτε αίτημα. Το γραφείο ή ο ιερέας θα επικοινωνήσει μαζί σας για να ορίσετε ημερομηνία."
+              }
+            }
+          ]
+        },
+        {
+          "id": "zapiski",
+          "slug": "commemorations-and-candles",
+          "requires": "zapiski",
+          "title": {
+            "en": "Commemorations and Candles",
+            "el": "Ονόματα και κεριά"
+          },
+          "navLabel": {
+            "en": "Commemorations and Candles",
+            "el": "Ονόματα και κεριά"
+          },
+          "summary": {
+            "en": "Send names to be remembered in prayer and ask for a candle to be lit.",
+            "el": "Στείλτε ονόματα για μνημόνευση και ζητήστε να ανάψει ένα κερί."
+          },
+          "headerImage": "deesis-christ",
+          "sections": [
+            {
+              "id": "zap-form",
+              "type": "zapiski",
+              "enabled": true,
+              "heading": {
+                "en": "Commemoration notes",
+                "el": "Χαρτάκια μνημόνευσης"
+              },
+              "intro": {
+                "en": "Fill in a note the same way you would at the candle stand. The clergy read every name at the service you choose.",
+                "el": "Συμπληρώστε το χαρτάκι όπως θα κάνατε στο παγκάρι. Οι κληρικοί διαβάζουν κάθε όνομα στην ακολουθία που θα επιλέξετε."
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "livestream",
+      "slug": "livestream",
+      "requires": "livestream",
+      "title": {
+        "en": "Livestream & Sermons",
+        "el": "Μετάδοση & Κηρύγματα"
+      },
+      "navLabel": {
+        "en": "Livestream",
+        "el": "Μετάδοση"
+      },
+      "summary": {
+        "en": "Watch services live and catch up on sermons.",
+        "el": "Παρακολουθήστε ζωντανά τις ακολουθίες και ακούστε τα κηρύγματα."
+      },
+      "headerImage": "deesis-christ",
+      "sections": [
+        {
+          "id": "ls-player",
+          "type": "livestream",
+          "enabled": true,
+          "heading": {
+            "en": "Livestream",
+            "el": "Ζωντανή μετάδοση"
+          }
+        },
+        {
+          "id": "ls-sermons",
+          "type": "sermons",
+          "enabled": true,
+          "heading": {
+            "en": "Sermon archive",
+            "el": "Αρχείο κηρυγμάτων"
+          },
+          "intro": {
+            "en": "Listen, watch or read recent homilies.",
+            "el": "Ακούστε, δείτε ή διαβάστε πρόσφατες ομιλίες."
+          }
+        }
+      ]
+    },
+    {
+      "id": "get-involved",
+      "slug": "get-involved",
+      "requires": "getInvolved",
+      "title": {
+        "en": "Get Involved",
+        "el": "Συμμετοχή"
+      },
+      "navOverview": false,
+      "summary": {
+        "en": "Events, volunteering and parish needs, organized on OrthodoxConnect.",
+        "el": "Εκδηλώσεις, εθελοντισμός και ανάγκες της ενορίας, μέσω του OrthodoxConnect."
+      },
+      "headerImage": "hospitality-abraham",
+      "sections": [
+        {
+          "id": "gi-overview",
+          "type": "subpageCards",
+          "enabled": true,
+          "heading": {
+            "en": "Find your place",
+            "el": "Βρείτε τη θέση σας"
+          },
+          "of": "get-involved"
+        },
+        {
+          "id": "gi-events",
+          "type": "events",
+          "enabled": true,
+          "heading": {
+            "en": "Coming up",
+            "el": "Προσεχώς"
+          },
+          "limit": 3
+        },
+        {
+          "id": "gi-needs",
+          "type": "volunteer",
+          "enabled": true,
+          "heading": {
+            "en": "Where help is needed",
+            "el": "Πού χρειάζεται βοήθεια"
+          },
+          "limit": 3
+        }
+      ],
+      "children": [
+        {
+          "id": "events",
+          "slug": "events",
+          "title": {
+            "en": "Events",
+            "el": "Εκδηλώσεις"
+          },
+          "summary": {
+            "en": "Feast day meals, talks, youth nights and more. RSVP in a tap.",
+            "el": "Τράπεζες εορτών, ομιλίες, βραδιές νεολαίας και άλλα. Δηλώστε συμμετοχή με ένα πάτημα."
+          },
+          "cardImage": "anastasis-chora",
+          "sections": [
+            {
+              "id": "ev-all",
+              "type": "events",
+              "enabled": true,
+              "heading": {
+                "en": "Parish events",
+                "el": "Εκδηλώσεις της ενορίας"
+              }
+            }
+          ]
+        },
+        {
+          "id": "volunteer",
+          "slug": "volunteer",
+          "title": {
+            "en": "Volunteer and Needs",
+            "el": "Εθελοντισμός και ανάγκες"
+          },
+          "summary": {
+            "en": "Coffee hour, cleaning, choir, food drives and meals for families.",
+            "el": "Καφές, καθαριότητα, χορωδία, συλλογή τροφίμων και φαγητό για οικογένειες."
+          },
+          "cardImage": "hospitality-abraham",
+          "sections": [
+            {
+              "id": "vol-all",
+              "type": "volunteer",
+              "enabled": true,
+              "heading": {
+                "en": "Volunteer opportunities and needs",
+                "el": "Ευκαιρίες εθελοντισμού και ανάγκες"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "store",
+      "slug": "store",
+      "requires": "store",
+      "title": {
+        "en": "Store",
+        "el": "Πωλητήριο"
+      },
+      "summary": {
+        "en": "Icons, candles, books, prayer ropes and gifts from the church bookstore.",
+        "el": "Εικόνες, κεριά, βιβλία, κομποσκοίνια και δώρα από το βιβλιοπωλείο του ναού."
+      },
+      "headerImage": "hodegetria",
+      "sections": [
+        {
+          "id": "store-grid",
+          "type": "storeGrid",
+          "enabled": true,
+          "heading": {
+            "en": "Parish bookstore",
+            "el": "Βιβλιοπωλείο της ενορίας"
+          },
+          "intro": {
+            "en": "Every purchase supports the life of the parish. Ship to your door or pick up at church.",
+            "el": "Κάθε αγορά στηρίζει τη ζωή της ενορίας. Αποστολή στο σπίτι σας ή παραλαβή από τον ναό."
+          }
+        }
+      ],
+      "children": [
+        {
+          "id": "cart",
+          "slug": "cart",
+          "nav": false,
+          "title": {
+            "en": "Your cart",
+            "el": "Το καλάθι σας"
+          },
+          "sections": [
+            {
+              "id": "cart-view",
+              "type": "cart",
+              "enabled": true
+            }
+          ]
+        },
+        {
+          "id": "checkout",
+          "slug": "checkout",
+          "nav": false,
+          "title": {
+            "en": "Checkout",
+            "el": "Ολοκλήρωση παραγγελίας"
+          },
+          "sections": [
+            {
+              "id": "checkout-form",
+              "type": "checkout",
+              "enabled": true
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "id": "donate",
+      "slug": "donate",
+      "title": {
+        "en": "Donate",
+        "el": "Δωρεά"
+      },
+      "summary": {
+        "en": "Give once or monthly to support the parish.",
+        "el": "Προσφέρετε εφάπαξ ή μηνιαία για να στηρίξετε την ενορία."
+      },
+      "headerImage": "theotokos-apse",
+      "sections": [
+        {
+          "id": "donate-form",
+          "type": "donate",
+          "enabled": true,
+          "heading": {
+            "en": "Make an offering",
+            "el": "Κάντε μια προσφορά"
+          },
+          "intro": {
+            "en": "Choose an amount and a fund. Monthly gifts help the parish plan the year ahead.",
+            "el": "Επιλέξτε ποσό και σκοπό. Οι μηνιαίες προσφορές βοηθούν την ενορία να σχεδιάσει τη χρονιά."
+          }
+        },
+        {
+          "id": "donate-other",
+          "type": "pictogramCards",
+          "enabled": true,
+          "heading": {
+            "en": "Other ways to give",
+            "el": "Άλλοι τρόποι προσφοράς"
+          },
+          "items": [
+            {
+              "id": "d-tray",
+              "pictogram": "candle",
+              "title": {
+                "en": "In church",
+                "el": "Στον ναό"
+              },
+              "text": {
+                "en": "Use the offering tray on Sunday or the candle stand box at any service.",
+                "el": "Στον δίσκο την Κυριακή ή στο παγκάρι σε κάθε ακολουθία."
+              }
+            },
+            {
+              "id": "d-mail",
+              "pictogram": "gospel",
+              "title": {
+                "en": "By check",
+                "el": "Με επιταγή"
+              },
+              "text": {
+                "en": "Make checks payable to St. Example and mail them to the church office.",
+                "el": "Επιταγές στο όνομα St. Example, ταχυδρομικά στο γραφείο του ναού."
+              }
+            },
+            {
+              "id": "d-stewardship",
+              "pictogram": "church",
+              "title": {
+                "en": "Stewardship pledge",
+                "el": "Ετήσια συνδρομή"
+              },
+              "text": {
+                "en": "Pledge a yearly offering so the parish council can plan with confidence.",
+                "el": "Δεσμευτείτε για ετήσια προσφορά, ώστε το εκκλησιαστικό συμβούλιο να σχεδιάζει με σιγουριά."
+              }
+            }
+          ]
+        }
+      ],
+      "navButton": true
+    },
+    {
+      "id": "contact",
+      "slug": "contact",
+      "title": {
+        "en": "Contact",
+        "el": "Επικοινωνία"
+      },
+      "summary": {
+        "en": "Address, directions, office hours and a message form.",
+        "el": "Διεύθυνση, οδηγίες, ώρες γραφείου και φόρμα επικοινωνίας."
+      },
+      "headerImage": "hodegetria",
+      "sections": [
+        {
+          "id": "contact-main",
+          "type": "contact",
+          "enabled": true,
+          "heading": {
+            "en": "Get in touch",
+            "el": "Επικοινωνήστε μαζί μας"
+          },
+          "intro": {
+            "en": "Write to the office and we will answer within two working days.",
+            "el": "Γράψτε στο γραφείο και θα σας απαντήσουμε μέσα σε δύο εργάσιμες ημέρες."
+          }
+        },
+        {
+          "id": "contact-directions",
+          "type": "directions",
+          "enabled": true,
+          "heading": {
+            "en": "Finding us",
+            "el": "Πώς θα μας βρείτε"
+          }
+        }
+      ]
+    },
+    {
+      "id": "credits",
+      "slug": "image-credits",
+      "nav": false,
+      "title": {
+        "en": "Image credits",
+        "el": "Πηγές εικόνων"
+      },
+      "sections": [
+        {
+          "id": "credits-list",
+          "type": "credits",
+          "enabled": true
+        }
+      ]
+    }
+  ]
+}

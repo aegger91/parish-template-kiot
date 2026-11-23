@@ -1,0 +1,29 @@
+---
+import Icon from '../Icon.astro';
+import { galleryImage, site } from '../../lib/content';
+import { asset, t, tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const img = galleryImage('deesis-christ');
+---
+{pageExists('livestream') && (
+  <section class="section section--burgundy livestream-promo" id={s.id}>
+    <div class="container promo-grid">
+      <div class="promo-media" data-reveal>
+        <div class="arch-frame">
+          {img && <img src={asset(img.src)} alt="" width={img.width} height={img.height} loading="lazy" decoding="async" />}
+        </div>
+        <span class="live-badge promo-live" data-live-badge hidden={!site.features.livestream.liveNow}><span class="live-dot" aria-hidden="true"></span>{t('liveNow', lang)}</span>
+      </div>
+      <div class="promo-copy" data-reveal>
+        <h2 class="section-title">{tr(s.heading, lang)}</h2>
+        <p>{tr(s.text, lang)}</p>
+        <div class="btn-row">
+          <a class="btn btn-gold" href={pageHref(lang, 'livestream')}><Icon name="play" size={16} /> {t('watchLive', lang)}</a>
+          <a class="btn btn-outline-light" href={`${pageHref(lang, 'livestream')}#ls-sermons`}>{t('sermonArchive', lang)}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+)}

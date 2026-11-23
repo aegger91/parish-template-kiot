@@ -1,0 +1,115 @@
+---
+import Cross from '../Cross.astro';
+import Icon from '../Icon.astro';
+import Pictogram from '../Pictogram.astro';
+import { featureOn, feasts, galleryImage, services, site } from '../../lib/content';
+import { asset, getLanguage, t, tr } from '../../lib/i18n';
+import { pageExists, pageHref } from '../../lib/pages';
+import { nextFeast, nowIn } from '../../lib/calendar';
+import { occurrences, upcoming } from '../../lib/schedule';
+import { feastBlock, serviceRows, type Fmt } from '../../lib/format';
+
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const img = galleryImage(s.image);
+const fmt: Fmt = { lang, locale: L.locale, hourCycle: L.hourCycle, t: (k, v) => t(k, lang, v), tr: (v) => tr(v, lang) };
+const now = nowIn(site.timeZone);
+const { items, feasts: fmap } = occurrences(now.day, now.day + 14, services, feasts, site.calendar);
+const next = upcoming(items, now, s.servicesCount ?? 3);
+const feastHtml = feastBlock(now.day, fmap.get(now.day) ?? [], nextFeast(now.day, feasts, site.calendar), fmt);
+const c = site.contact;
+const directions = `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(c.directionsQuery)}`;
+const live = featureOn('livestream') && pageExists('livestream');
+const showShortcut = s.showCommemorationShortcut && featureOn('zapiski') && pageExists('zapiski');
+const cta = (x: any) => x && pageExists(x.page) && { label: tr(x.label, lang), href: pageHref(lang, x.page) };
+const primary = cta(s.primaryCta);
+const secondary = cta(s.secondaryCta);
+---
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-bg" aria-hidden="true"></div>
+  <div class="container hero-grid">
+    <div class="hero-copy" data-reveal>
+      {s.eyebrow && <p class="hero-eyebrow"><Cross size={12} /><span>{tr(s.eyebrow, lang)}</span></p>}
+      <h1 class="hero-title" id="hero-title">{tr(s.title ?? site.name, lang)}</h1>
+      <div class="hero-rule" aria-hidden="true"><span></span><Cross size={14} /><span></span></div>
+      {s.lead && <p class="hero-lead">{tr(s.lead, lang)}</p>}
+      <div class="hero-ctas">
+        {primary && <a class="btn btn-gold" href={primary.href}>{primary.label}</a>}
+        {secondary && <a class="btn btn-outline-light" href={secondary.href}>{secondary.label}</a>}
+      </div>
+      {showShortcut && (
+        <a class="hero-shortcut" href={pageHref(lang, 'zapiski')}>
+          <Pictogram name="candle" size={22} />
+          <span>{t('submitCommemoration', lang)}</span>
+          <Icon name="arrow-right" size={16} directional />
+        </a>
+      )}
+    </div>
+
+    <div class="hero-icon" data-reveal>
+      <div class="hero-kiot">
+        <Cross size={30} class="hero-kiot-cross" />
+        <div class="kiot-outer">
+          <div class="kiot-inner">
+            {img && <img src={asset(img.src)} alt={tr(img.alt, lang)} width={img.width} height={img.height} fetchpriority="high" decoding="async" />}
+          </div>
+        </div>
+        {live && (
+          <a class="hero-live live-badge" href={pageHref(lang, 'livestream')} data-live-badge hidden={!site.features.livestream.liveNow}>
+            <span class="live-dot" aria-hidden="true"></span>
+            <span>{t('liveNow', lang)}</span>
+            <span class="hero-live-cta">{t('watchLive', lang)}</span>
+          </a>
+        )}
+      </div>
+    </div>
+  </div>
+
+  <div class="container hero-panel-wrap">
+    <div class="hero-panel" data-reveal>
+      <div class="panel-block panel-services">
+        <h2 class="panel-title"><Icon name="clock" size={18} /> {t('nextServices', lang)}</h2>
+        <ul class="svc-list" data-next-services data-count={s.servicesCount ?? 3} set:html={serviceRows(next, now.day, fmt)} />
+        {pageExists('services') && <a class="text-link" href={pageHref(lang, 'services')}>{t('fullSchedule', lang)} <Icon name="arrow-right" size={15} directional /></a>}
+      </div>
+      <div class="panel-block panel-feast">
+        <h2 class="panel-title"><Pictogram name="icon-frame" size={20} /> {t('feastOfDay', lang)}</h2>
+        <div class="feast-slot" data-feast-slot set:html={feastHtml} />
+        <p class="feast-source">{t('feastSourceNote', lang)}</p>
+      </div>
+      <div class="panel-block panel-visit">
+        <h2 class="panel-title"><Icon name="map-pin" size={18} /> {t('visitUs', lang)}</h2>
+        <address class="visit-address">
+          <span>{c.address.street}</span>
+          <span>{c.address.city}, {c.address.region} {c.address.postalCode}</span>
+        </address>
+        <a class="btn btn-burgundy btn-sm" href={directions} rel="noopener">{t('getDirections', lang)} <Icon name="navigation" size={15} /></a>
+        <a class="text-link" href={`tel:${c.phone.replace(/[^\d+]/g, '')}`}><Icon name="phone" size={15} /> {c.phone}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import { nextFeast, nowIn } from '../../lib/calendar';
+  import { ctx, readJson, t, tr } from '../../lib/client';
+  import { occurrences, upcoming } from '../../lib/schedule';
+  import { feastBlock, serviceRows } from '../../lib/format';
+
+  const list = document.querySelector<HTMLElement>('[data-next-services]');
+  const slot = document.querySelector<HTMLElement>('[data-feast-slot]');
+  if (list && slot) {
+    const c = ctx();
+    const data = readJson('kiot-schedule');
+    const fmt = { lang: c.lang, locale: c.locale, hourCycle: c.hourCycle, t, tr };
+    const paint = () => {
+      const now = nowIn(c.timeZone);
+      const { items, feasts } = occurrences(now.day, now.day + 14, data, data.feasts, c.calendar);
+      list.innerHTML = serviceRows(upcoming(items, now, Number(list.dataset.count) || 3), now.day, fmt);
+      slot.innerHTML = feastBlock(now.day, feasts.get(now.day) ?? [], nextFeast(now.day, data.feasts, c.calendar), fmt);
+    };
+    paint();
+    setInterval(paint, 5 * 60_000);
+  }
+</script>

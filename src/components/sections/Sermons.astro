@@ -1,0 +1,133 @@
+---
+import SectionHead from '../SectionHead.astro';
+import Icon from '../Icon.astro';
+import { sermons } from '../../lib/content';
+import { formatDay, parseIsoDay } from '../../lib/calendar';
+import { asset, getLanguage, t, tr } from '../../lib/i18n';
+interface Props { lang: string; section: any }
+const { lang, section: s } = Astro.props;
+const L = getLanguage(lang);
+const list = [...sermons.sermons].sort((a: any, b: any) => b.date.localeCompare(a.date));
+const typeIcon: Record<string, string> = { audio: 'headphones', video: 'video', text: 'file-text' };
+const series = (id: string) => sermons.series.find((x: any) => x.id === id);
+---
+<section class="section section--muted" id={s.id}>
+  <div class="container" data-sermons>
+    <SectionHead lang={lang} heading={s.heading} intro={s.intro} />
+    <div class="sermon-filters" data-reveal>
+      <div class="field field--inline">
+        <label class="visually-hidden" for="sermon-q">{t('searchSermons', lang)}</label>
+        <span class="input-icon"><Icon name="search" size={18} /></span>
+        <input id="sermon-q" type="search" placeholder={t('searchSermons', lang)} data-q />
+      </div>
+      <div class="seg seg--wrap" role="group" aria-label={t('filterBy', lang)}>
+        <button type="button" class="seg-btn" aria-pressed="true" data-type="">{t('allTypes', lang)}</button>
+        {['audio', 'video', 'text'].map((ty) => <button type="button" class="seg-btn" aria-pressed="false" data-type={ty}><Icon name={typeIcon[ty]} size={16} /> {t(`type.${ty}`, lang)}</button>)}
+      </div>
+      <div class="field field--inline">
+        <label class="visually-hidden" for="sermon-series">{t('allSeries', lang)}</label>
+        <select id="sermon-series" data-series>
+          <option value="">{t('allSeries', lang)}</option>
+          {sermons.series.map((x: any) => <option value={x.id}>{tr(x.label, lang)}</option>)}
+        </select>
+      </div>
+    </div>
+    <ul class="sermon-list">
+      {list.map((m: any) => (
+        <li class="sermon" data-reveal data-type={m.type} data-series={m.series} data-text={`${tr(m.title, lang)} ${m.speaker} ${tr(m.scripture, lang)} ${tr(m.summary, lang)}`.toLowerCase()}>
+          <div class="sermon-icon" aria-hidden="true"><Icon name={typeIcon[m.type]} size={22} /></div>
+          <div class="sermon-main">
+            <p class="sermon-meta">
+              <time datetime={m.date}>{formatDay(parseIsoDay(m.date), L.locale, { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+              <span>{m.speaker}</span>
+              <span>{tr(series(m.series)?.label, lang)}</span>
+            </p>
+            <h3 class="sermon-title">{tr(m.title, lang)}</h3>
+            <p class="sermon-scripture">{tr(m.scripture, lang)}</p>
+            <p>{tr(m.summary, lang)}</p>
+            {m.type === 'audio' && (
+              <div class="audio-player" data-audio>
+                <audio preload="none" src={asset(m.audio)}></audio>
+                <button type="button" class="audio-toggle" data-play aria-label={t('play', lang)} data-label-play={t('play', lang)} data-label-pause={t('pause', lang)}>
+                  <span data-icon-play><Icon name="play" size={18} /></span>
+                  <span data-icon-pause hidden><Icon name="pause" size={18} /></span>
+                </button>
+                <input type="range" min="0" max="100" step="0.1" value="0" aria-label={t('seek', lang)} data-seek />
+                <span class="audio-time" data-time>0:00 / {m.duration}</span>
+              </div>
+            )}
+            {m.type === 'audio' && <p class="sermon-note">{t('sampleAudio', lang)}</p>}
+            {m.type === 'video' && (
+              m.video ? (
+                <div class="video-frame"><iframe src={m.video} title={tr(m.title, lang)} loading="lazy" allowfullscreen></iframe></div>
+              ) : (
+                <div class="video-placeholder"><Icon name="video" size={28} /><p>{t('videoPlaceholder', lang)}</p></div>
+              )
+            )}
+            {m.type === 'text' && (
+              <details class="sermon-text">
+                <summary><span>{t('read', lang)}</span><Icon name="chevron-down" size={16} /></summary>
+                <div class="prose">{m.text.map((p: any) => <p>{tr(p, lang)}</p>)}</div>
+              </details>
+            )}
+          </div>
+        </li>
+      ))}
+    </ul>
+    <p class="empty-note" data-empty hidden>{t('noResults', lang)}</p>
+  </div>
+</section>
+<script>
+  document.querySelectorAll<HTMLElement>('[data-sermons]').forEach((root) => {
+    const q = root.querySelector<HTMLInputElement>('[data-q]')!;
+    const series = root.querySelector<HTMLSelectElement>('[data-series]')!;
+    const typeBtns = root.querySelectorAll<HTMLButtonElement>('[data-type]:is(button)');
+    const items = root.querySelectorAll<HTMLElement>('.sermon');
+    const empty = root.querySelector<HTMLElement>('[data-empty]')!;
+    let type = '';
+    const apply = () => {
+      const needle = q.value.trim().toLowerCase();
+      let n = 0;
+      items.forEach((it) => {
+        const ok = (!type || it.dataset.type === type) && (!series.value || it.dataset.series === series.value) && (!needle || it.dataset.text!.includes(needle));
+        it.hidden = !ok;
+        if (ok) { n++; it.classList.add('is-revealed'); }
+      });
+      empty.hidden = n > 0;
+    };
+    typeBtns.forEach((b) => b.addEventListener('click', () => {
+      type = b.dataset.type!;
+      typeBtns.forEach((x) => x.setAttribute('aria-pressed', String(x === b)));
+      apply();
+    }));
+    q.addEventListener('input', apply);
+    series.addEventListener('change', apply);
+
+    const fmt = (s: number) => `${Math.floor(s / 60)}:${String(Math.floor(s % 60)).padStart(2, '0')}`;
+    root.querySelectorAll<HTMLElement>('[data-audio]').forEach((p) => {
+      const audio = p.querySelector('audio')!;
+      const btn = p.querySelector<HTMLButtonElement>('[data-play]')!;
+      const seek = p.querySelector<HTMLInputElement>('[data-seek]')!;
+      const time = p.querySelector<HTMLElement>('[data-time]')!;
+      const sync = () => {
+        const playing = !audio.paused;
+        btn.querySelector<HTMLElement>('[data-icon-play]')!.hidden = playing;
+        btn.querySelector<HTMLElement>('[data-icon-pause]')!.hidden = !playing;
+        btn.setAttribute('aria-label', (playing ? btn.dataset.labelPause : btn.dataset.labelPlay)!);
+      };
+      btn.addEventListener('click', () => {
+        root.querySelectorAll('audio').forEach((a) => a !== audio && a.pause());
+        audio.paused ? audio.play() : audio.pause();
+      });
+      audio.addEventListener('play', sync);
+      audio.addEventListener('pause', sync);
+      audio.addEventListener('timeupdate', () => {
+        if (audio.duration) seek.value = String((audio.currentTime / audio.duration) * 100);
+        time.textContent = `${fmt(audio.currentTime)} / ${fmt(audio.duration || 0)}`;
+      });
+      seek.addEventListener('input', () => {
+        if (audio.duration) audio.currentTime = (Number(seek.value) / 100) * audio.duration;
+      });
+    });
+  });
+</script>

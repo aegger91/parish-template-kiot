@@ -1,0 +1,103 @@
+---
+import Logo from './Logo.astro';
+import Icon from './Icon.astro';
+import { featureOn, services, site } from '../lib/content';
+import { t, tr } from '../lib/i18n';
+import { formatDay, formatTime, parseTime } from '../lib/calendar';
+import { getLanguage } from '../lib/i18n';
+import { navTree, pageExists, pageHref } from '../lib/pages';
+
+interface Props { lang: string }
+const { lang } = Astro.props;
+const L = getLanguage(lang);
+const c = site.contact;
+const newsletter = featureOn('newsletter');
+const nav = navTree(lang);
+// 1970-01-04 was a Sunday: day number 3.
+const dayName = (d: number) => formatDay(3 + d, L.locale, { weekday: 'long' });
+const weekly = [...services.weekly].sort((a, b) => ((a.day ?? 0) - (b.day ?? 0)) || a.time.localeCompare(b.time));
+const year = new Date().getFullYear();
+---
+<footer class="site-footer">
+  <div class="meander meander--light" aria-hidden="true"></div>
+  <div class="container footer-grid">
+    <div class="footer-brand">
+      <Logo lang={lang} inverse />
+      <p class="footer-tagline">{tr(site.tagline, lang)}</p>
+      <address class="footer-address">
+        <span>{c.address.street}</span>
+        <span>{c.address.city}, {c.address.region} {c.address.postalCode}</span>
+        <a href={`tel:${c.phone.replace(/[^\d+]/g, '')}`}><Icon name="phone" size={16} /> {c.phone}</a>
+        <a href={`mailto:${c.email}`}><Icon name="mail" size={16} /> {c.email}</a>
+      </address>
+      {site.socials?.length > 0 && (
+        <div class="footer-social" aria-label={t('followUs', lang)}>
+          {site.socials.map((s: any) => (
+            <a href={s.url} aria-label={s.label} class="social-link"><Icon name={s.network} size={20} /></a>
+          ))}
+        </div>
+      )}
+    </div>
+
+    <div class="footer-col">
+      <h2 class="footer-heading">{t('serviceTimes', lang)}</h2>
+      <ul class="footer-times">
+        {weekly.map((s) => (
+          <li>
+            <span class="ft-day">{dayName(s.day ?? 0)}</span>
+            <span class="ft-time">{formatTime(parseTime(s.time), L.locale, L.hourCycle)}</span>
+            <span class="ft-name">{tr(s.title, lang)}</span>
+          </li>
+        ))}
+      </ul>
+    </div>
+
+    <div class="footer-col">
+      <h2 class="footer-heading">{t('explore', lang)}</h2>
+      <ul class="footer-links">
+        {nav.map((n) => <li><a href={n.href}>{n.label}</a></li>)}
+      </ul>
+    </div>
+
+    {newsletter && (
+      <div class="footer-col footer-newsletter">
+        <h2 class="footer-heading">{t('newsletterTitle', lang)}</h2>
+        <p>{t('newsletterText', lang)}</p>
+        <form class="newsletter-form" data-newsletter novalidate>
+          <div class="field">
+            <label class="visually-hidden" for={`nl-email-${lang}`}>{t('yourEmail', lang)}</label>
+            <input id={`nl-email-${lang}`} type="email" name="email" required autocomplete="email" placeholder={t('yourEmail', lang)} />
+          </div>
+          <button class="btn btn-gold btn-sm" type="submit">{t('subscribe', lang)}</button>
+          <p class="form-status" role="status" data-status></p>
+        </form>
+      </div>
+    )}
+  </div>
+  <div class="container footer-bottom">
+    <p>© {year} {tr(site.name, lang)}. {t('footerSample', lang)}</p>
+    {pageExists('credits') && <a href={pageHref(lang, 'credits')}>{t('imageCredits', lang)}</a>}
+  </div>
+</footer>
+
+<script>
+  import { subscribeNewsletter } from '../lib/handlers';
+  import { t } from '../lib/client';
+  document.querySelectorAll<HTMLFormElement>('[data-newsletter]').forEach((form) => {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const input = form.querySelector<HTMLInputElement>('input[type=email]')!;
+      const status = form.querySelector<HTMLElement>('[data-status]')!;
+      if (!input.checkValidity()) {
+        input.setAttribute('aria-invalid', 'true');
+        input.focus();
+        return;
+      }
+      input.removeAttribute('aria-invalid');
+      const ctx = JSON.parse(document.getElementById('kiot-ctx')!.textContent!);
+      await subscribeNewsletter(input.value, ctx.newsletterListId, ctx.parishId);
+      status.textContent = t('subscribed');
+      form.reset();
+    });
+  });
+</script>
