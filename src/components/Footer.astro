@@ -14,7 +14,7 @@ const c = site.contact;
 const newsletter = featureOn('newsletter');
 const nav = navTree(lang);
 // 1970-01-04 was a Sunday: day number 3.
-const dayName = (d: number) => formatDay(3 + d, L.locale, { weekday: 'long' });
+const dayName = (d: number, weekday: 'long' | 'short' = 'long') => formatDay(3 + d, L.locale, { weekday });
 const weekly = [...services.weekly].sort((a, b) => ((a.day ?? 0) - (b.day ?? 0)) || a.time.localeCompare(b.time));
 const year = new Date().getFullYear();
 ---
@@ -44,7 +44,7 @@ const year = new Date().getFullYear();
       <ul class="footer-times">
         {weekly.map((s) => (
           <li>
-            <span class="ft-day">{dayName(s.day ?? 0)}</span>
+            <abbr class="ft-day" title={dayName(s.day ?? 0)}>{dayName(s.day ?? 0, 'short')}</abbr>
             <span class="ft-time">{formatTime(parseTime(s.time), L.locale, L.hourCycle)}</span>
             <span class="ft-name">{tr(s.title, lang)}</span>
           </li>
